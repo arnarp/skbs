@@ -1,0 +1,40 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "predeploy": [
+      "rm -rf dist/functions",
+      "tsc --project tsconfig.functions.json",
+      "cp src/functions/package.json dist/functions/"
+    ],
+    "source": "dist/functions"
+  },
+  "hosting": [
+    {
+      "target": "admin",
+      "public": "dist/admin",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "predeploy": ["npm run build:admin"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "bus",
+      "public": "dist/admin",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "predeploy": ["npm run build:admin"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

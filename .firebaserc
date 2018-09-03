@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "skbs-b0e5b"
+  },
+  "targets": {
+    "skbs-b0e5b": {
+      "hosting": {
+        "bus": [
+          "skbs-bus"
+        ],
+        "admin": [
+          "skbs-admin"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+service cloud.firestore {
+
+  function isSignedIn() {
+    return request.auth.uid != null
+  }
+
+  match /databases/{database}/documents {
+    match /userMetas/{id} {
+      allow read: if isSignedIn();
+      allow update: if request.auth.token.isAdmin
+    }
+  }
+}
