@@ -24,6 +24,7 @@ type ModalProps = {
    */
   focusAfterClose: () => void
   header: string
+  hideHeader: boolean
   contentClassName?: string
 }
 const initialState = {}
@@ -117,6 +118,7 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     id={this.headingId}
                     tabIndex={-1}
                     ref={el => (this.h2 = el)}
+                    style={{ opacity: this.props.hideHeader ? 0 : 1 }}
                   >
                     {header}
                   </h2>
@@ -142,4 +144,6 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
       </Transition>
     )
   }
+
+  static defaultProps = { hideHeader: false }
 }

@@ -39,3 +39,28 @@
   width: 32px;
   border-radius: 17px;
 }
+.userModalContent {
+  display: flex;
+  flex-direction: column;
+}
+.userModalContent .name {
+  font-weight: bold;
+}
+.userModalContent .avatarPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+.userModalContent .avatarPanel > * + * {
+  margin-top: 6px;
+}
+.userModalContent .footerPanel {
+  display: flex;
+  height: 60px;
+  justify-content: flex-end;
+  align-items: center;
+  background: var(--default-color-alpha02);
+  border-top: 1px solid var(--default-color);
+  padding: 0 18px;
+}

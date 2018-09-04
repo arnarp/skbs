@@ -32,7 +32,12 @@ export class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <div className="App">
-        <AppBar userInfo={this.state.userInfo} />
+        <AppBar
+          userInfo={this.state.userInfo}
+          signOut={() => {
+            auth().signOut()
+          }}
+        />
         {this.state.userInfo === null && <LoginPage />}
       </div>
     )
