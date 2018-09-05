@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:admin": "parcel src/admin/index.html",
     "build:admin": "parcel build src/admin/index.html --out-dir dist/admin",
+    "start:bus": "parcel src/bus/index.html",
+    "build:bus": "parcel build src/bus/index.html --out-dir dist/bus",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
     "deploy": "firebase deploy"

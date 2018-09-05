@@ -26,9 +26,9 @@
     },
     {
       "target": "bus",
-      "public": "dist/admin",
+      "public": "dist/bus",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "predeploy": ["npm run build:admin"],
+      "predeploy": ["npm run build:bus"],
       "rewrites": [
         {
           "source": "**",

@@ -1,0 +1,66 @@
+.AppBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  width: 100vw;
+  padding: 0 12px;
+}
+.AppBar .UserBtn {
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  background: transparent;
+  height: 48px;
+  width: 60px;
+  padding: 0 12px;
+  display: flex;
+  justify-content: flex-end;
+  outline: none;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.AppBar .UserBtn:active {
+  transform: scale(0.9);
+}
+.AppBar .UserBtn:before {
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  content: '';
+  position: absolute;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  top: 6px;
+  left: 13px;
+}
+.AppBar .UserBtn:focus:before {
+  box-shadow: inset 1px 0px 0px 2px var(--primary-color-alpha02);
+}
+.AppBar .UserImg {
+  height: 32px;
+  width: 32px;
+  border-radius: 17px;
+}
+.userModalContent {
+  display: flex;
+  flex-direction: column;
+}
+.userModalContent .name {
+  font-weight: bold;
+}
+.userModalContent .avatarPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+.userModalContent .avatarPanel > * + * {
+  margin-top: 6px;
+}
+.userModalContent .footerPanel {
+  display: flex;
+  height: 60px;
+  justify-content: flex-end;
+  align-items: center;
+  background: var(--default-color-alpha02);
+  border-top: 1px solid var(--default-color);
+  padding: 0 18px;
+}
