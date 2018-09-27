@@ -8,6 +8,8 @@ import { UserMeta } from '../../shared/types/User/UserMeta'
 import { AppBar } from './AppBar'
 import './App.css'
 import { LoginPage } from './LoginPage'
+import { ExcelReader } from '../Dashboard/ExcelReader'
+import { Dashboard } from '../Dashboard'
 
 type AppProps = {}
 
@@ -39,6 +41,7 @@ export class App extends React.Component<AppProps, AppState> {
           }}
         />
         {this.state.userInfo === null && <LoginPage />}
+        {this.state.userInfo && <Dashboard />}
       </div>
     )
   }

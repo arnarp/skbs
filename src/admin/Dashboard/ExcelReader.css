@@ -1,0 +1,22 @@
+.excelReader {
+  position: relative;
+  width: 296px;
+  height: 96px;
+}
+.excelReader input {
+  opacity: 0;
+  position: absolute;
+  width: 296px;
+  height: 96px;
+}
+.excelReader label {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--default-color);
+}
+.excelReader input:focus + label {
+  outline: 1px solid var(--primary-color);
+}
