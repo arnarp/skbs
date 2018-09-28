@@ -26,6 +26,7 @@ type ModalProps = {
   header: string
   hideHeader: boolean
   contentClassName?: string
+  fullscreen: boolean
 }
 const initialState = {}
 type ModalState = Readonly<typeof initialState>
@@ -108,7 +109,9 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
             <div
               onKeyDown={this.onKeyDown}
               aria-labelledby={this.headingId}
-              className={classnames('dialog', state)}
+              className={classnames('dialog', state, {
+                fullscreen: this.props.fullscreen,
+              })}
               role="dialog"
               onClick={onClose}
             >
@@ -130,7 +133,7 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     color="default"
                     style="flat"
                   >
-                    Loka
+                    Close dialog
                   </Button>
                 </div>
                 <div className={classnames('content', contentClassName)}>
@@ -145,5 +148,5 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
     )
   }
 
-  static defaultProps = { hideHeader: false }
+  static defaultProps = { hideHeader: false, fullscreen: false }
 }

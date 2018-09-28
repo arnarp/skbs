@@ -42,7 +42,7 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
               show={this.state.userModalIsOpen}
               onClose={() => this.toggleUserModal()}
               focusAfterClose={() => this.toggleUserModalButton.focus()}
-              header={`Innskráður sem ${this.props.userInfo.displayName}`}
+              header={`Logged in as ${this.props.userInfo.displayName}`}
               contentClassName="userModalContent"
             >
               <div className="avatarPanel">
@@ -62,7 +62,7 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
                     )
                   }}
                 >
-                  Útskrá
+                  Logout
                 </Button>
               </div>
             </Modal>
