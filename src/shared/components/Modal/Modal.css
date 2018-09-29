@@ -32,7 +32,7 @@
   max-width: 100%;
   width: 100%;
 }
-.header {
+.modal .header {
   height: 60px;
   padding: 0 18px;
   display: flex;
@@ -40,18 +40,21 @@
   justify-content: space-between;
   align-items: center;
 }
-.header > * {
+.modal .header > * {
   flex-grow: 1;
 }
-.header > * + * {
+.modal .header > * + * {
   margin-left: 24px;
 }
-.header h2 {
+.modal .header h2 {
   color: var(--black);
   font-size: 16px;
   margin: 0;
 }
-.header button {
+.dialog.fullscreen .modal .header h2 {
+  font-size: 24px;
+}
+.dialog.fullscreen .modal .header button {
   max-width: 168px;
 }
 .content {

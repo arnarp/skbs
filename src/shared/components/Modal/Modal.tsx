@@ -89,7 +89,14 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
   }
 
   render() {
-    const { show, header, onClose, children, contentClassName } = this.props
+    const {
+      show,
+      header,
+      onClose,
+      children,
+      contentClassName,
+      fullscreen,
+    } = this.props
     return (
       <Transition in={show} timeout={500} unmountOnExit mountOnEnter>
         {/*
@@ -133,7 +140,7 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     color="default"
                     style="flat"
                   >
-                    Close dialog
+                    {fullscreen ? 'Close dialog' : 'Close'}
                   </Button>
                 </div>
                 <div className={classnames('content', contentClassName)}>

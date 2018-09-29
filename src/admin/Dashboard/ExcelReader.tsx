@@ -1,30 +1,19 @@
 import * as React from 'react'
 import readXlsxFile, { parseExcelDate } from 'read-excel-file'
 import uuid from 'uuid/v4'
+import { Modal } from '../../shared/components/Modal'
 import './ExcelReader.css'
-
-type Booking = {
-  date: Date
-  tour: string
-  pickUp: string
-  bookingRef: string
-  extBookingRef?: string
-  pax: number
-  paxDescription: string
-  mainContact: string
-  phoneNumber?: string
-  email: string
-  seller: string
-  channel: string
-  paymentStatus: string
-  arrival: string
-  operationsNote?: string
-}
+import { Booking, groupBookinsByPickUp } from '../../shared/types/Booking'
+import { BookingsInputModal } from './BookingsInputModal'
 
 type ExcelReaderTestProps = {}
-type ExcelReaderTestState = Readonly<{}>
+type ExcelReaderTestState = Readonly<{
+  bookings?: Booking[]
+}>
 
-const initialState: ExcelReaderTestState = {}
+const initialState: ExcelReaderTestState = {
+  bookings: undefined,
+}
 
 export class ExcelReader extends React.PureComponent<
   ExcelReaderTestProps,
@@ -67,11 +56,24 @@ export class ExcelReader extends React.PureComponent<
                     }
                   })
                 console.log(bookings)
+                this.setState(() => ({ bookings }))
+                this.input.value = null
               })
               .catch(err => console.log(err))
           }}
         />
         <label htmlFor={this.inputId}>Choose a file</label>
+        <Modal
+          fullscreen
+          show={this.state.bookings !== undefined}
+          onClose={() => this.setState(() => ({ bookings: undefined }))}
+          focusAfterClose={() => {
+            this.input.focus()
+          }}
+          header="Confirm data import"
+        >
+          <BookingsInputModal bookings={this.state.bookings} />
+        </Modal>
       </div>
     )
   }
