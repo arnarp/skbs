@@ -1,0 +1,38 @@
+.groups {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonsRow {
+  display: flex;
+  padding: 12px 0;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.buttonsRow > * + * {
+  margin-left: 12px;
+}
+
+.groupsForm {
+  flex-grow: 1;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+.groupsForm > * + * {
+  margin-top: 12px;
+}
+.groupsForm button {
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-top: auto;
+}
+.groupsForm label {
+  display: flex;
+  justify-content: space-between;
+}
+.groupsForm label input {
+  margin-left: 24px;
+  flex-grow: 1;
+}

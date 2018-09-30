@@ -2,24 +2,27 @@ import * as React from 'react'
 import readXlsxFile, { parseExcelDate } from 'read-excel-file'
 import uuid from 'uuid/v4'
 import { Modal } from '../../shared/components/Modal'
-import './ExcelReader.css'
+import './ImportDataFromExcel.css'
 import { Booking, groupBookinsByPickUp } from '../../shared/types/Booking'
-import { BookingsInputModal } from './BookingsInputModal'
+import { BookingsInput } from './BookingsInput'
+import { Button } from '../../shared/components/Button'
+import { firestore } from '../firebase'
+import { removeUndefinedFromObject } from '../../shared/utils/removeUndefinedFromObject'
 
-type ExcelReaderTestProps = {}
-type ExcelReaderTestState = Readonly<{
+type ImportDataFromExcelProps = {}
+type ImportDataFromExcelState = Readonly<{
   bookings?: Booking[]
 }>
 
-const initialState: ExcelReaderTestState = {
+const initialState: ImportDataFromExcelState = {
   bookings: undefined,
 }
 
-export class ExcelReader extends React.PureComponent<
-  ExcelReaderTestProps,
-  ExcelReaderTestState
+export class ImportDataFromExcel extends React.PureComponent<
+  ImportDataFromExcelProps,
+  ImportDataFromExcelState
 > {
-  readonly state: ExcelReaderTestState = initialState
+  readonly state: ImportDataFromExcelState = initialState
   input: HTMLInputElement
   inputId = uuid()
 
@@ -62,8 +65,9 @@ export class ExcelReader extends React.PureComponent<
               .catch(err => console.log(err))
           }}
         />
-        <label htmlFor={this.inputId}>Choose a file</label>
+        <label htmlFor={this.inputId}>Import data</label>
         <Modal
+          contentClassName="bookingsInputModal"
           fullscreen
           show={this.state.bookings !== undefined}
           onClose={() => this.setState(() => ({ bookings: undefined }))}
@@ -72,7 +76,39 @@ export class ExcelReader extends React.PureComponent<
           }}
           header="Confirm data import"
         >
-          <BookingsInputModal bookings={this.state.bookings} />
+          <BookingsInput bookings={this.state.bookings} />
+          <div className="buttons">
+            <Button
+              color="default"
+              style="flat"
+              onClick={() => {
+                this.setState(() => ({ bookings: undefined }))
+                this.input.focus()
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              style="flat"
+              onClick={() => {
+                if (this.state.bookings === undefined) {
+                  return
+                }
+                const batch = firestore.batch()
+                this.state.bookings.forEach(value => {
+                  const id = `${value.date.toISOString()}_${value.bookingRef}`
+                  removeUndefinedFromObject(value)
+                  batch.set(firestore.collection('bookings').doc(id), value)
+                })
+                batch
+                  .commit()
+                  .then(() => this.setState(() => ({ bookings: undefined })))
+              }}
+            >
+              Import data
+            </Button>
+          </div>
         </Modal>
       </div>
     )

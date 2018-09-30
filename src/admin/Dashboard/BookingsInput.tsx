@@ -6,20 +6,18 @@ import {
 } from '../../shared/types/Booking'
 import { Button } from '../../shared/components/Button'
 
-type BookingsInputModalProps = {
+type BookingsInputProps = {
   bookings?: Booking[]
 }
 
-export const BookingsInputModal: React.SFC<BookingsInputModalProps> = ({
-  bookings,
-}) => {
+export const BookingsInput: React.SFC<BookingsInputProps> = ({ bookings }) => {
   if (bookings === undefined) {
     return null
   }
 
   const bookingsGroupedByDateAndPickUp = groupBookinsByDateAndPickUp(bookings)
   return (
-    <div className="bookingsInputModal">
+    <div className="bookingsInput">
       {Object.keys(bookingsGroupedByDateAndPickUp).map(d => (
         <div key={d}>
           <h3>
@@ -47,14 +45,6 @@ export const BookingsInputModal: React.SFC<BookingsInputModalProps> = ({
         </div>
       ))}
       <div className="total">Total PAX: {countPax(bookings)}</div>
-      <div className="buttons">
-        <Button color="secondary" style="flat">
-          Cancel
-        </Button>
-        <Button color="default" style="flat">
-          Import data
-        </Button>
-      </div>
     </div>
   )
 }

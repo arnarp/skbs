@@ -58,6 +58,7 @@
   max-width: 168px;
 }
 .content {
+  display: flex;
   flex-grow: 1;
   overflow: scroll;
   max-height: calc(100vh - 12px - 60px);

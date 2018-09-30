@@ -11,7 +11,19 @@ service cloud.firestore {
     }
     match /bookings/{id} {
       allow read: if isSignedIn();
-      allow update: if request.auth.token.isAdmin;
+      allow write: if isSignedIn();
+    }
+    match /drivers/{id} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+    match /buses/{id} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+    match /groups/{id} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
     }
   }
 }
