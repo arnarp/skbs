@@ -3,7 +3,11 @@ import readXlsxFile, { parseExcelDate } from 'read-excel-file'
 import uuid from 'uuid/v4'
 import { Modal } from '../../shared/components/Modal'
 import './ImportDataFromExcel.css'
-import { Booking, groupBookinsByPickUp } from '../../shared/types/Booking'
+import {
+  Booking,
+  groupBookinsByPickUp,
+  bookingId,
+} from '../../shared/types/Booking'
 import { BookingsInput } from './BookingsInput'
 import { Button } from '../../shared/components/Button'
 import { firestore } from '../firebase'
@@ -36,7 +40,12 @@ export class ImportDataFromExcel extends React.PureComponent<
           onChange={e => {
             readXlsxFile(this.input.files[0])
               .then((rows: any[]) => {
-                const date = parseExcelDate(rows[0][0]) as Date
+                const excelDate = parseExcelDate(rows[0][0]) as Date
+                const date = new Date(
+                  excelDate.getUTCFullYear(),
+                  excelDate.getUTCMonth(),
+                  excelDate.getUTCDate(),
+                )
                 const bookings = rows
                   .slice(3, -1)
                   .map(function(i: string[]): Booking {
@@ -97,7 +106,7 @@ export class ImportDataFromExcel extends React.PureComponent<
                 }
                 const batch = firestore.batch()
                 this.state.bookings.forEach(value => {
-                  const id = `${value.date.toISOString()}_${value.bookingRef}`
+                  const id = bookingId(value)
                   removeUndefinedFromObject(value)
                   batch.set(firestore.collection('bookings').doc(id), value)
                 })

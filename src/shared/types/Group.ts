@@ -2,6 +2,8 @@ import { Omit } from './utils'
 
 export type Group = {
   id: string
+  // Should be unique per day
+  friendlyKey: number
   date: Date
   driverId?: string
   driverName?: string

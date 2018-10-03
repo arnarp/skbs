@@ -5,10 +5,11 @@ import { Modal } from '../../shared/components/Modal'
 import { DriverDocument, Driver } from '../../shared/types/Driver'
 import { firestore } from '../firebase'
 import { BusDocument, Bus } from '../../shared/types/Bus'
-import { GroupDocument } from '../../shared/types/Group'
+import { GroupDocument, Group } from '../../shared/types/Group'
 
 type GroupsProps = {
   date: Date
+  groups: Group[]
 }
 
 type GroupsState = Readonly<{
@@ -20,9 +21,6 @@ type GroupsState = Readonly<{
   newBusName: string
   newBusMaxPax: number
   // group modal
-  showAddGroupModal: boolean
-  newGroupDriver?: Driver
-  newGroupBus?: Bus
   drivers: Driver[]
   buses: Bus[]
 }>
@@ -35,9 +33,6 @@ const initialState: GroupsState = {
   newBusName: '',
   newBusMaxPax: 0,
   // group modal
-  showAddGroupModal: false,
-  newGroupDriver: undefined,
-  newGroupBus: undefined,
   drivers: [],
   buses: [],
 }
@@ -73,12 +68,11 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
           ...(d.data() as BusDocument),
         }))
         console.log('fetched buses', buses)
-        this.setState(() => ({
-          buses,
-        }))
+        this.setState(() => ({ buses }))
       })
     this.subscriptions.push(busesSubscription)
   }
+
   componentWillUnmount() {
     this.subscriptions.forEach(u => u())
   }
@@ -87,6 +81,76 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
     return (
       <div className="groups">
         <h3>Groups</h3>
+        <table>
+          <tbody>
+            {this.props.groups.map(g => (
+              <tr key={g.id}>
+                <td>{g.friendlyKey}</td>
+                <td>
+                  <select
+                    value={g.driverId || ''}
+                    onChange={event => {
+                      const newGroupDriverId = event.target.value
+                      console.log('onChange', { newGroupDriverId })
+                      const newGroupDriver = this.state.drivers.find(
+                        value => value.id === newGroupDriverId,
+                      )
+                      const groupUpdate: Partial<GroupDocument> = {
+                        driverId: newGroupDriver
+                          ? newGroupDriver.id
+                          : undefined,
+                        driverName: newGroupDriver
+                          ? newGroupDriver.name
+                          : undefined,
+                      }
+                      firestore
+                        .collection('groups')
+                        .doc(g.id)
+                        .update(groupUpdate)
+                    }}
+                  >
+                    <option value=""> - Choose driver - </option>
+                    {this.state.drivers.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    value={g.busId || ''}
+                    onChange={event => {
+                      const newGroupBusId = event.target.value
+                      const newGroupBus = this.state.buses.find(
+                        value => value.id === newGroupBusId,
+                      )
+                      const groupUpdate: Partial<GroupDocument> = {
+                        busId: newGroupBus ? newGroupBus.id : undefined,
+                        busName: newGroupBus ? newGroupBus.name : undefined,
+                        maxPax: newGroupBus ? newGroupBus.maxPax : undefined,
+                      }
+                      firestore
+                        .collection('groups')
+                        .doc(g.id)
+                        .update(groupUpdate)
+                    }}
+                  >
+                    <option value=""> - Choose bus - </option>
+                    {this.state.buses.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  {g.pax}/{g.maxPax || '?'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <div className="buttonsRow">
           <Button
             color="default"
@@ -108,7 +172,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
             color="default"
             style="flat"
             inputRef={el => (this.addGroupBtn = el)}
-            onClick={() => this.setState(() => ({ showAddGroupModal: true }))}
+            onClick={this.addGroup}
           >
             Add group
           </Button>
@@ -136,9 +200,11 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                 }}
               />
             </label>
-            <Button type="submit" color="primary" style="flat">
-              Add driver
-            </Button>
+            <div>
+              <Button type="submit" color="primary" style="flat">
+                Add driver
+              </Button>
+            </div>
           </form>
         </Modal>
         <Modal
@@ -176,73 +242,11 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                 }}
               />
             </label>
-            <Button type="submit" color="primary" style="flat">
-              Add bus
-            </Button>
-          </form>
-        </Modal>
-        <Modal
-          show={this.state.showAddGroupModal}
-          onClose={() =>
-            this.setState(() => ({
-              showAddGroupModal: false,
-              newGroupDriver: undefined,
-              newGroupBus: undefined,
-            }))
-          }
-          focusAfterClose={() => this.addGroupBtn.focus()}
-          header="Add new group"
-        >
-          <form onSubmit={this.submitAddGroupForm} className="groupsForm">
-            <label>
-              Driver
-              <select
-                value={
-                  this.state.newGroupDriver ? this.state.newGroupDriver.id : ''
-                }
-                onChange={event => {
-                  const newGroupDriverId = event.target.value
-                  console.log('onChange', { newGroupDriverId })
-                  this.setState(() => ({
-                    newGroupDriver: this.state.drivers.find(
-                      value => value.id === newGroupDriverId,
-                    ),
-                  }))
-                }}
-              >
-                <option value="">Choose later</option>
-                {this.state.drivers.map(d => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Bus
-              <select
-                value={this.state.newGroupBus ? this.state.newGroupBus.id : ''}
-                onChange={event => {
-                  const newGroupBusId = event.target.value
-                  this.setState(() => ({
-                    newGroupBus: this.state.buses.find(
-                      value => value.id === newGroupBusId,
-                    ),
-                  }))
-                }}
-              >
-                <option value="">Choose later</option>
-                {this.state.buses.map(d => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <Button type="submit" color="primary" style="flat">
-              Add group
-            </Button>
+            <div>
+              <Button type="submit" color="primary" style="flat">
+                Add bus
+              </Button>
+            </div>
           </form>
         </Modal>
       </div>
@@ -277,31 +281,17 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
         }))
       })
   }
-  private submitAddGroupForm = (event: React.FormEvent<{}>) => {
-    event.preventDefault()
+  private addGroup = () => {
     const newGroupDoc: GroupDocument = {
       date: this.props.date,
       pax: 0,
+      friendlyKey: this.props.groups.length + 1,
     }
-    if (this.state.newGroupBus) {
-      newGroupDoc.busId = this.state.newGroupBus.id
-      newGroupDoc.busName = this.state.newGroupBus.name
-      newGroupDoc.maxPax = this.state.newGroupBus.maxPax
-    }
-    if (this.state.newGroupDriver) {
-      newGroupDoc.driverId = this.state.newGroupDriver.id
-      newGroupDoc.driverName = this.state.newGroupDriver.name
-    }
-    console.log('newGroup', newGroupDoc)
-    // firestore
-    //   .collection('groups')
-    //   .add(newGroupDoc)
-    //   .then(() => {
-    //     this.setState(() => ({
-    //       showAddGroupModal: false,
-    //       newGroupDriver: undefined,
-    //       newGroupBus: undefined,
-    //     }))
-    //   })
+    firestore
+      .collection('groups')
+      .add(newGroupDoc)
+      .then(() => {
+        console.log('Saved group')
+      })
   }
 }

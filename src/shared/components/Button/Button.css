@@ -92,7 +92,7 @@
   color: var(--black-alpha025);
 }
 .Button.Style-flat.default:focus {
-  outline: 1px solid var(--default-color-alpha07);
+  outline: 1px solid var(--primary-color);
 }
 
 .Button.primary {

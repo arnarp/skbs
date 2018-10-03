@@ -14,6 +14,15 @@ export type Booking = {
   paymentStatus: string
   arrival: string
   operationsNote?: string
+  groupId?: string
+}
+
+export function bookingId(booking: Booking) {
+  return `${booking.date.toISOString()}_${booking.bookingRef}`
+}
+
+export function totalPax(bookings: Booking[]) {
+  return bookings.reduce((acc, val) => acc + val.pax, 0)
 }
 
 export function groupBookinsByPickUp(bookings: Booking[]) {

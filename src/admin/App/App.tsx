@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as firebase from 'firebase/app'
 import { auth } from '../firebase'
 import { UserInfo } from '../../shared/types/User/UserInfo'
 import { getClaims } from '../../shared/auth/getClaims'
@@ -8,7 +7,6 @@ import { UserMeta } from '../../shared/types/User/UserMeta'
 import { AppBar } from './AppBar'
 import './App.css'
 import { LoginPage } from './LoginPage'
-import { ExcelReader } from '../Dashboard/ExcelReader'
 import { Dashboard } from '../Dashboard'
 
 type AppProps = {}

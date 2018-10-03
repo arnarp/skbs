@@ -6,7 +6,7 @@ import { Avatar } from '../../shared/components/Avatar'
 import { Button } from '../../shared/components/Button'
 
 type AppBarProps = {
-  userInfo: UserInfo | null
+  userInfo?: UserInfo | null
   signOut: () => void
 }
 
@@ -17,11 +17,13 @@ type AppBarState = Readonly<typeof initialState>
 
 export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
   readonly state: AppBarState = initialState
-  toggleUserModalButton: HTMLButtonElement
-  signOutTimeout: NodeJS.Timer
+  toggleUserModalButton: HTMLButtonElement | null = null
+  signOutTimeout: NodeJS.Timer | undefined
 
   componentWillUnmount() {
-    clearTimeout(this.signOutTimeout)
+    if (this.signOutTimeout) {
+      clearTimeout(this.signOutTimeout)
+    }
   }
 
   render() {
@@ -41,7 +43,11 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
               hideHeader={true}
               show={this.state.userModalIsOpen}
               onClose={() => this.toggleUserModal()}
-              focusAfterClose={() => this.toggleUserModalButton.focus()}
+              focusAfterClose={() => {
+                if (this.toggleUserModalButton) {
+                  this.toggleUserModalButton.focus()
+                }
+              }}
               header={`Logged in as ${this.props.userInfo.displayName}`}
               contentClassName="userModalContent"
             >

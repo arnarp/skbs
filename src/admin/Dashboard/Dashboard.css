@@ -8,3 +8,42 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.dashboard .pickUpContainer {
+  display: flex;
+  flex-direction: column;
+  background: var(--default-color-alpha02);
+  padding: 12px;
+}
+.dashboard .pickUpContainer + .pickUpContainer {
+  margin-top: 12px;
+}
+.dashboard .pickupHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.dashboard .pickupHeader h4 {
+  flex-grow: 1;
+}
+.dashboard .pickupHeader > span {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+.dashboard .pickUpContainer table {
+  margin-left: 24px;
+  table-layout: fixed;
+}
+.dashboard .pickUpContainer table tr :nth-child(1) {
+  width: 35%;
+}
+.dashboard .pickUpContainer table tr :nth-child(2) {
+  width: 10%;
+}
+.dashboard .pickUpContainer table tr :nth-child(3) {
+  width: 25%;
+}
+.dashboard .pickUpContainer table tr :nth-child(4) {
+  text-align: right;
+}
