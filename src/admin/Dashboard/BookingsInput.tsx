@@ -1,10 +1,5 @@
 import * as React from 'react'
-import {
-  Booking,
-  groupBookinsByDateAndPickUp,
-  countPax,
-} from '../../shared/types/Booking'
-import { Button } from '../../shared/components/Button'
+import { Booking, groupBookinsByDateAndPickUp, countPax } from '../../shared/types/Booking'
 
 type BookingsInputProps = {
   bookings?: Booking[]
@@ -34,8 +29,8 @@ export const BookingsInput: React.SFC<BookingsInputProps> = ({ bookings }) => {
                 <h4>{i}</h4>
                 <ul>
                   {bookingsGroupedByDateAndPickUp[d][i].map(b => (
-                    <li key={b.bookingRef}>
-                      {b.pax} PAX - {b.mainContact}
+                    <li key={b.import.bookingRef}>
+                      {b.pax} PAX - {b.import.mainContact}
                     </li>
                   ))}
                 </ul>

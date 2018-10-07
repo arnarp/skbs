@@ -23,7 +23,7 @@
   flex-direction: row;
   justify-content: space-between;
 }
-.dashboard .pickupHeader h4 {
+.dashboard .pickupHeader h3 {
   flex-grow: 1;
 }
 .dashboard .pickupHeader > span {

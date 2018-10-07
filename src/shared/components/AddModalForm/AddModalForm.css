@@ -1,0 +1,22 @@
+.AddModalForm {
+  flex-grow: 1;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+.AddModalForm > * + * {
+  margin-top: 12px;
+}
+.AddModalForm button {
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-top: auto;
+}
+.AddModalForm label {
+  display: flex;
+  justify-content: space-between;
+}
+.AddModalForm label input {
+  margin-left: 24px;
+  flex-grow: 1;
+}

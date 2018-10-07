@@ -1,19 +1,23 @@
 import * as React from 'react'
 import readXlsxFile, { parseExcelDate } from 'read-excel-file'
-import uuid from 'uuid/v4'
+import { v4 } from 'uuid'
 import { Modal } from '../../shared/components/Modal'
 import './ImportDataFromExcel.css'
-import {
-  Booking,
-  groupBookinsByPickUp,
-  bookingId,
-} from '../../shared/types/Booking'
+import { Booking, groupBookinsByPickUp, bookingId } from '../../shared/types/Booking'
 import { BookingsInput } from './BookingsInput'
 import { Button } from '../../shared/components/Button'
 import { firestore } from '../firebase'
 import { removeUndefinedFromObject } from '../../shared/utils/removeUndefinedFromObject'
+import {
+  PickUpLocation,
+  generatePickUpLocationSynonymPickUpLocationMap,
+} from '../../shared/types/PickUpLocation'
+import { Tour, generateTourSynonymTourMap } from '../../shared/types/Tour'
 
-type ImportDataFromExcelProps = {}
+type ImportDataFromExcelProps = {
+  pickUpLocations: PickUpLocation[]
+  tours: Tour[]
+}
 type ImportDataFromExcelState = Readonly<{
   bookings?: Booking[]
 }>
@@ -27,8 +31,8 @@ export class ImportDataFromExcel extends React.PureComponent<
   ImportDataFromExcelState
 > {
   readonly state: ImportDataFromExcelState = initialState
-  input: HTMLInputElement
-  inputId = uuid()
+  input: HTMLInputElement | null = null
+  inputId = v4()
 
   render() {
     return (
@@ -37,7 +41,10 @@ export class ImportDataFromExcel extends React.PureComponent<
           ref={ref => (this.input = ref)}
           type="file"
           id={this.inputId}
-          onChange={e => {
+          onChange={() => {
+            if (this.input === null || this.input.files === null) {
+              return
+            }
             readXlsxFile(this.input.files[0])
               .then((rows: any[]) => {
                 const excelDate = parseExcelDate(rows[0][0]) as Date
@@ -46,13 +53,37 @@ export class ImportDataFromExcel extends React.PureComponent<
                   excelDate.getUTCMonth(),
                   excelDate.getUTCDate(),
                 )
-                const bookings = rows
-                  .slice(3, -1)
-                  .map(function(i: string[]): Booking {
-                    return {
-                      date,
-                      tour: i[0],
-                      pickUp: i[1],
+                const tourSynonymTourIdMap = generateTourSynonymTourMap(this.props.tours)
+                const pickUpLocationSynonymPickUpLocationIdMap = generatePickUpLocationSynonymPickUpLocationMap(
+                  this.props.pickUpLocations,
+                )
+                const bookings = rows.slice(3, -1).map(function(i: string[]): Booking {
+                  const importedTour = i[0]
+                  const importedPickUp = i[1]
+                  const pickUpLocation = pickUpLocationSynonymPickUpLocationIdMap.get(
+                    importedPickUp,
+                  )
+                  const tour = tourSynonymTourIdMap.get(importedTour)
+                  return {
+                    date,
+                    pax: Number(i[4]),
+                    pickUp:
+                      pickUpLocation === undefined
+                        ? undefined
+                        : {
+                            id: pickUpLocation.id,
+                            name: pickUpLocation.name,
+                          },
+                    tour:
+                      tour === undefined
+                        ? undefined
+                        : {
+                            id: tour.id,
+                            name: tour.name,
+                          },
+                    import: {
+                      tour: importedTour,
+                      pickUp: importedPickUp,
                       bookingRef: i[2],
                       extBookingRef: i[3] || undefined,
                       pax: Number(i[4]),
@@ -65,13 +96,16 @@ export class ImportDataFromExcel extends React.PureComponent<
                       paymentStatus: i[14],
                       arrival: i[15],
                       operationsNote: i[16] || undefined,
-                    }
-                  })
+                    },
+                  }
+                })
                 console.log(bookings)
                 this.setState(() => ({ bookings }))
-                this.input.value = null
+                if (this.input) {
+                  this.input.value = ''
+                }
               })
-              .catch(err => console.log(err))
+              .catch((err: any) => console.log(err))
           }}
         />
         <label htmlFor={this.inputId}>Import data</label>
@@ -81,7 +115,7 @@ export class ImportDataFromExcel extends React.PureComponent<
           show={this.state.bookings !== undefined}
           onClose={() => this.setState(() => ({ bookings: undefined }))}
           focusAfterClose={() => {
-            this.input.focus()
+            this.input && this.input.focus()
           }}
           header="Confirm data import"
         >
@@ -92,7 +126,7 @@ export class ImportDataFromExcel extends React.PureComponent<
               style="flat"
               onClick={() => {
                 this.setState(() => ({ bookings: undefined }))
-                this.input.focus()
+                this.input && this.input.focus()
               }}
             >
               Cancel
@@ -110,9 +144,7 @@ export class ImportDataFromExcel extends React.PureComponent<
                   removeUndefinedFromObject(value)
                   batch.set(firestore.collection('bookings').doc(id), value)
                 })
-                batch
-                  .commit()
-                  .then(() => this.setState(() => ({ bookings: undefined })))
+                batch.commit().then(() => this.setState(() => ({ bookings: undefined })))
               }}
             >
               Import data

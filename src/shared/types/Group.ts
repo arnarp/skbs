@@ -5,10 +5,14 @@ export type Group = {
   // Should be unique per day
   friendlyKey: number
   date: Date
-  driverId?: string
-  driverName?: string
-  busId?: string
-  busName?: string
+  driver?: {
+    id: string
+    name: string
+  }
+  bus?: {
+    id: string
+    name: string
+  }
   pax: number
   maxPax?: number
 }

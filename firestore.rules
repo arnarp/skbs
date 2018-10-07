@@ -25,5 +25,13 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow write: if isSignedIn();
     }
+    match /tours/{id} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+    match /pickUpLocations/{id} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
   }
 }
