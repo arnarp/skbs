@@ -1,0 +1,37 @@
+.Svg.Fill-default {
+  fill: var(--default-text-color-alpha07);
+}
+.Svg.Fill-white {
+  fill: white;
+}
+.Svg.Fill-primary {
+  fill: var(--primary-color);
+}
+.Svg.Fill-secondary {
+  fill: var(--secondary-color);
+}
+.Svg.Fill-error {
+  fill: var(--error-color);
+}
+.Svg.Stroke-default {
+  stroke: var(--default-text-color-alpha07);
+}
+.Svg.Stroke-primary {
+  stroke: var(--primary-color);
+}
+.Svg.Size-small {
+  height: 18px;
+  width: 18px;
+}
+.Svg.Size-medium {
+  height: 24px;
+  width: 24px;
+}
+.Svg.Size-large {
+  height: 36px;
+  width: 36px;
+}
+.Svg.Size-xLarge {
+  height: 48px;
+  width: 48px;
+}

@@ -1,0 +1,18 @@
+.dropdown {
+  display: flex;
+  flex-direction: column;
+}
+.dropdown .headerrow h2 button {
+  font-weight: 300;
+  font-size: 24px;
+  padding: 6px;
+  margin-left: -6px;
+  color: var(--default-text-color);
+}
+.dropdown .headerrow {
+  display: flex;
+  justify-content: flex-start;
+}
+.dropdown .headerrow > * + * {
+  margin-left: 12px;
+}

@@ -1,0 +1,1 @@
+export const FIRESTOR_MAX_BATCH_SIZE = 500

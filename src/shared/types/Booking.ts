@@ -1,15 +1,15 @@
 export type Booking = {
   date: Date
-  groupId?: string
+  groupId: string | null
   pax: number
-  tour?: {
+  tour: {
     name: string
     id: string
-  }
-  pickUp?: {
+  } | null
+  pickUp: {
     name: string
     id: string
-  }
+  } | null
   import: {
     tour: string
     pickUp: string
@@ -83,7 +83,7 @@ export function groupBookinsByDateAndPickUp(bookings: Booking[]): BookingsByDate
       accumulator[currentValue.date.toISOString()] = {}
     }
     const pickUp =
-      currentValue.pickUp === undefined ? currentValue.import.pickUp : currentValue.pickUp.name
+      currentValue.pickUp === null ? currentValue.import.pickUp : currentValue.pickUp.name
     if (accumulator[currentValue.date.toISOString()][pickUp] === undefined) {
       accumulator[currentValue.date.toISOString()][pickUp] = []
     }
@@ -136,4 +136,10 @@ export function groupBookingsByTourAndPickup(bookings: Booking[]): BookingsByTou
     r.bookingsByPickUp = groupBookinsByPickUp(tourBookings)
   })
   return Object.values(result)
+}
+
+export function countPaxByTour(input: BookingByTourAndPickUp) {
+  return input.bookingsByPickUp.reduce((acc, val) => {
+    return acc + countPax(val.bookings)
+  }, 0)
 }

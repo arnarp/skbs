@@ -3,7 +3,7 @@ import readXlsxFile, { parseExcelDate } from 'read-excel-file'
 import { v4 } from 'uuid'
 import { Modal } from '../../shared/components/Modal'
 import './ImportDataFromExcel.css'
-import { Booking, groupBookinsByPickUp, bookingId } from '../../shared/types/Booking'
+import { Booking, bookingId } from '../../shared/types/Booking'
 import { BookingsInput } from './BookingsInput'
 import { Button } from '../../shared/components/Button'
 import { firestore } from '../firebase'
@@ -69,18 +69,19 @@ export class ImportDataFromExcel extends React.PureComponent<
                     pax: Number(i[4]),
                     pickUp:
                       pickUpLocation === undefined
-                        ? undefined
+                        ? null
                         : {
                             id: pickUpLocation.id,
                             name: pickUpLocation.name,
                           },
                     tour:
                       tour === undefined
-                        ? undefined
+                        ? null
                         : {
                             id: tour.id,
                             name: tour.name,
                           },
+                    groupId: null,
                     import: {
                       tour: importedTour,
                       pickUp: importedPickUp,

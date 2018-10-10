@@ -10,6 +10,7 @@ type AddModalProps = {
   onSubmit: (event: React.FormEvent<{}>) => void
   header: string
   submitBtnLabel: string
+  submitDisabled: boolean
 }
 
 const initialState = {}
@@ -17,7 +18,9 @@ type AddModalState = Readonly<typeof initialState>
 
 export class AddModalForm extends React.PureComponent<AddModalProps, AddModalState> {
   readonly state: AddModalState = initialState
-
+  static defaultProps = {
+    submitDisabled: false
+  }
   render() {
     return (
       <Modal
@@ -29,7 +32,7 @@ export class AddModalForm extends React.PureComponent<AddModalProps, AddModalSta
         <form onSubmit={this.props.onSubmit} className="AddModalForm">
           {this.props.children}
           <div>
-            <Button type="submit" color="primary" style="flat">
+            <Button type="submit" color="primary" style="flat" disabled={this.props.submitDisabled}>
               {this.props.submitBtnLabel}
             </Button>
           </div>

@@ -3,7 +3,7 @@ export function removeUndefinedFromObject(obj: any) {
     if (obj[key] === undefined) {
       delete obj[key]
     }
-    if (typeof obj[key] === 'object') {
+    if (obj[key] !== null && typeof obj[key] === 'object') {
       removeUndefinedFromObject(obj[key])
     }
   })

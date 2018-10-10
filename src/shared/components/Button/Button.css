@@ -27,7 +27,7 @@
   outline: 1px solid var(--primary-color);
 }
 
-.Button.Style-Raised {
+.Button.Style-raised {
   box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
     0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
@@ -35,29 +35,29 @@
   min-height: 36px;
   min-width: 88px;
 }
-.Button.Style-Raised:active {
+.Button.Style-raised:active {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
 
-.Button.Style-Action {
+.Button.Style-action {
   height: 56px;
   width: 56px;
   border-radius: 50%;
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
     0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
 }
-.Button.Style-Action:active {
+.Button.Style-action:active {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
-.Button.Style-Action:focus {
+.Button.Style-action:focus {
   outline: none;
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
     0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12),
     inset 1px 1px 0px 2px white;
 }
-.Button.Style-Action:active:focus {
+.Button.Style-action:active:focus {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12),
     inset 1px 1px 0px 2px white;

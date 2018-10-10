@@ -8,10 +8,13 @@ import {
   groupBookingsByTourAndPickup,
   bookingId,
   totalPax,
+  countPaxByTour,
 } from '../../shared/types/Booking'
 import { Group, GroupDocument } from '../../shared/types/Group'
 import { Tour, TourDocument } from '../../shared/types/Tour'
 import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
+import { LinkTourModalButton } from './LinkTourModalButton'
+import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
 
 type DashboardProps = {}
 
@@ -28,10 +31,14 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
   readonly state: DashboardState = initialState
   cancelBookingsSnapshots: () => void = () => {}
   cancelGroupsSnapshots: () => void = () => {}
+  cancelToursSubscriptions: () => void = () => {}
+  cancelPickupLocationSubscription: () => void = () => {}
 
   componentDidMount() {
     this.cancelBookingsSnapshots = this.createBookingsSubcription()
     this.cancelGroupsSnapshots = this.createGroupsSubscription()
+    this.cancelToursSubscriptions = this.createToursSubscription()
+    this.cancelPickupLocationSubscription = this.createPickUpLocationsSubscription()
   }
 
   componentDidUpdate(_prevProps: DashboardProps, prevState: DashboardState) {
@@ -46,6 +53,8 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
   componentWillUnmount() {
     this.cancelBookingsSnapshots()
     this.cancelGroupsSnapshots()
+    this.cancelToursSubscriptions()
+    this.cancelPickupLocationSubscription()
   }
 
   render() {
@@ -80,74 +89,103 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
           />
         </label>
         <Groups date={this.state.chosenDate} groups={this.state.groups} />
-        {groupedBookings.map(g => (
-          <div key={g.tourName}>
-            <h2>{g.tourName}</h2>
-            {g.bookingsByPickUp.map(pickup => (
-              <div key={pickup.pickUpName} className="pickUpContainer">
-                <div className="pickupHeader">
-                  <h3>{pickup.pickUpName}</h3>
-                  <span>{totalPax(pickup.bookings)} PAX</span>
-                  <select
-                    value={pickup.bookings[0].groupId || ''}
-                    onChange={event => {
-                      const newGroupId = event.target.value || undefined
-                      const batch = firestore.batch()
-                      const pickupTotalPax = totalPax(pickup.bookings)
-                      const oldGroupId = pickup.bookings[0].groupId
-                      pickup.bookings.forEach(b => {
-                        const id = bookingId(b)
-                        const bookingUpdate: Partial<Booking> = {
-                          groupId: newGroupId,
-                        }
-                        console.log({ bookingUpdate })
-                        batch.update(firestore.collection('bookings').doc(id), bookingUpdate)
-                      })
-                      const oldGroup = this.state.groups.find(i => i.id === oldGroupId)
-                      if (oldGroup) {
-                        const oldGroupUpdate: Partial<Group> = {
-                          pax: oldGroup.pax - pickupTotalPax,
-                        }
-                        console.log({ oldGroupUpdate })
-                        batch.update(firestore.collection('groups').doc(oldGroupId), oldGroupUpdate)
+        {groupedBookings.map(g => {
+          const tour = this.state.tours.find(i => i.id === g.tourId)
+          return (
+            <div key={g.tourName}>
+              <Dropdown
+                buttonInlineStyle={
+                  g.tourId !== undefined
+                    ? {
+                        textDecoration: 'underline',
+                        textDecorationColor: tour && tour.color,
                       }
-                      const newGroup = this.state.groups.find(i => i.id === newGroupId)
-                      if (newGroup) {
-                        const newGroupUpdate: Partial<Group> = {
-                          pax: newGroup.pax + pickupTotalPax,
-                        }
-                        console.log({ newGroupUpdate })
-                        batch.update(firestore.collection('groups').doc(newGroupId), newGroupUpdate)
-                      }
-                      console.log({ newGroupId, pickupTotalPax, oldGroupId })
-                      batch.commit().then(() => console.log('pickup loc updated'))
-                    }}
-                  >
-                    <option value=""> - Choose pickup group - </option>
-                    {this.state.groups.map(g => (
-                      <option key={g.id} value={g.id}>
-                        #{g.friendlyKey} - {g.driver ? g.driver.name : '    '} -{' '}
-                        {g.bus ? g.bus.name : '    '}
-                      </option>
-                    ))}
-                  </select>
+                    : {}
+                }
+                btnLabel={g.tourName}
+                headerAside={<div className='dropdownAside'>
+                  {g.tourId === undefined && (
+                    <LinkTourModalButton synonym={g.tourName} tours={this.state.tours} />
+                  )}
+                  <span className='paxCount'>
+                  {countPaxByTour(g)} PAX
+                  </span>
                 </div>
-                <table>
-                  <tbody>
-                    {pickup.bookings.map(b => (
-                      <tr key={b.import.bookingRef}>
-                        <td>{b.import.mainContact}</td>
-                        <td>{b.pax}</td>
-                        <td>{b.import.seller}</td>
-                        <td>{b.import.paymentStatus}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
-          </div>
-        ))}
+                }
+              >
+                {g.bookingsByPickUp.map(pickup => (
+                  <div key={pickup.pickUpName} className="pickUpContainer">
+                    <div className="pickupHeader">
+                      <h3>{pickup.pickUpName}</h3>
+                      <span>{totalPax(pickup.bookings)} PAX</span>
+                      <select
+                        value={pickup.bookings[0].groupId || ''}
+                        onChange={event => {
+                          const newGroupId = event.target.value || undefined
+                          const batch = firestore.batch()
+                          const pickupTotalPax = totalPax(pickup.bookings)
+                          const oldGroupId = pickup.bookings[0].groupId
+                          pickup.bookings.forEach(b => {
+                            const id = bookingId(b)
+                            const bookingUpdate: Partial<Booking> = {
+                              groupId: newGroupId,
+                            }
+                            console.log({ bookingUpdate })
+                            batch.update(firestore.collection('bookings').doc(id), bookingUpdate)
+                          })
+                          const oldGroup = this.state.groups.find(i => i.id === oldGroupId)
+                          if (oldGroup && oldGroupId) {
+                            const oldGroupUpdate: Partial<Group> = {
+                              pax: oldGroup.pax - pickupTotalPax,
+                            }
+                            console.log({ oldGroupUpdate })
+                            batch.update(
+                              firestore.collection('groups').doc(oldGroupId),
+                              oldGroupUpdate,
+                            )
+                          }
+                          const newGroup = this.state.groups.find(i => i.id === newGroupId)
+                          if (newGroup) {
+                            const newGroupUpdate: Partial<Group> = {
+                              pax: newGroup.pax + pickupTotalPax,
+                            }
+                            console.log({ newGroupUpdate })
+                            batch.update(
+                              firestore.collection('groups').doc(newGroupId),
+                              newGroupUpdate,
+                            )
+                          }
+                          console.log({ newGroupId, pickupTotalPax, oldGroupId })
+                          batch.commit().then(() => console.log('pickup loc updated'))
+                        }}
+                      >
+                        <option value=""> - Choose pickup group - </option>
+                        {this.state.groups.map(g => (
+                          <option key={g.id} value={g.id}>
+                            #{g.friendlyKey} - {g.driver ? g.driver.name : '    '} -{' '}
+                            {g.bus ? g.bus.name : '    '}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <table>
+                      <tbody>
+                        {pickup.bookings.map(b => (
+                          <tr key={b.import.bookingRef}>
+                            <td>{b.import.mainContact}</td>
+                            <td>{b.pax}</td>
+                            <td>{b.import.seller}</td>
+                            <td>{b.import.paymentStatus}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+              </Dropdown>
+            </div>
+          )
+        })}
       </main>
     )
   }

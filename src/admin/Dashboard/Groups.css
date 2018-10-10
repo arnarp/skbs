@@ -8,10 +8,13 @@
   display: flex;
   padding: 12px 0;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 .buttonsRow > * + * {
   margin-left: 12px;
+}
+.buttonsRow > *:last-child {
+  margin-left: auto;
 }
 
 .groupsForm {

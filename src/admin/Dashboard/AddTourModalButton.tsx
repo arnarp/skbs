@@ -1,23 +1,28 @@
 import * as React from 'react'
+import randomColor = require('randomcolor')
 import { Button } from '../../shared/components/Button'
 import { AddModalForm } from '../../shared/components/AddModalForm'
 import { firestore } from '../firebase'
-import { BusDocument } from '../../shared/types/Bus';
+import { TourDocument } from '../../shared/types/Tour'
 
-type AddBusModalButtonButtonProps = {}
+type AddTourModalButtonProps = {}
 
-const initialState = {
+const initialState = () => ({
   show: false,
   name: '',
-  maxPax: 0,
-}
-type AddBusModalButtonButtonState = Readonly<typeof initialState>
+  color: randomColor(),
+})
+type AddTourModalButtonState = Readonly<{
+  show: boolean
+  name: string
+  color: string
+}>
 
-export class AddBusModalButtonButton extends React.PureComponent<
-  AddBusModalButtonButtonProps,
-  AddBusModalButtonButtonState
+export class AddTourModalButton extends React.PureComponent<
+  AddTourModalButtonProps,
+  AddTourModalButtonState
 > {
-  readonly state: AddBusModalButtonButtonState = initialState
+  readonly state: AddTourModalButtonState = initialState()
   btn: HTMLButtonElement | null = null
 
   render() {
@@ -29,15 +34,15 @@ export class AddBusModalButtonButton extends React.PureComponent<
           inputRef={el => (this.btn = el)}
           onClick={() => this.setState(() => ({ show: true }))}
         >
-          Add bus
+          Add tour
         </Button>
         <AddModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
-          onClose={() => this.setState(() => initialState)}
+          onClose={() => this.setState(initialState())}
           focusAfterClose={() => this.btn && this.btn.focus()}
-          header="Add new bus"
-          submitBtnLabel="Add bus"
+          header="Add new tour"
+          submitBtnLabel="Add tour"
         >
           <label>
             Name
@@ -51,15 +56,22 @@ export class AddBusModalButtonButton extends React.PureComponent<
             />
           </label>
           <label>
-            Max PAX
+            color
             <input
-              type="number"
-              value={this.state.maxPax}
+              type="color"
+              value={this.state.color}
               onChange={event => {
-                const maxPax = Number(event.target.value)
-                this.setState(() => ({ maxPax }))
+                const color = event.target.value
+                this.setState(() => ({ color }))
               }}
             />
+            <Button
+              color="default"
+              style="flat"
+              onClick={() => this.setState(() => ({ color: randomColor() }))}
+            >
+              Random
+            </Button>
           </label>
         </AddModalForm>
       </React.Fragment>
@@ -68,15 +80,16 @@ export class AddBusModalButtonButton extends React.PureComponent<
 
   onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
-    const newBusDoc: BusDocument = {
+    const newDoc: TourDocument = {
       name: this.state.name,
-      maxPax: this.state.maxPax,
+      synonyms: [],
+      color: this.state.color,
     }
     firestore
-      .collection('buses')
-      .add(newBusDoc)
+      .collection('tours')
+      .add(newDoc)
       .then(() => {
-        this.setState(() => initialState)
+        this.setState(() => initialState())
       })
   }
 }

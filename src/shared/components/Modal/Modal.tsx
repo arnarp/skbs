@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Transition } from 'react-transition-group'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import classnames from 'classnames'
 import { Button } from '../Button'
 import './Modal.css'
@@ -39,15 +39,15 @@ type ModalState = Readonly<typeof initialState>
  */
 export class Modal extends React.PureComponent<ModalProps, ModalState> {
   headingId: string
-  h2: HTMLHeadingElement
+  h2: HTMLHeadingElement | null = null
   closeButton: any
-  constructor(props) {
+  constructor(props: ModalProps) {
     super(props)
     this.onKeyDown = this.onKeyDown.bind(this)
     this.headingId = uuid()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: ModalProps) {
     if (prevProps.show === false && this.props.show === true) {
       this.onOpen()
     }
@@ -60,19 +60,19 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
     this.cleanup()
   }
 
-  /**
-   * @param {KeyboardEvent} ev
-   */
-  onKeyDown(ev) {
+  onKeyDown(ev: React.KeyboardEvent<HTMLDivElement> | KeyboardEvent) {
     if (ev.key === 'Escape') {
       this.props.onClose()
     }
   }
 
   onOpen() {
-    this.h2.focus()
+    this.h2 && this.h2.focus()
     document.addEventListener('keydown', this.onKeyDown)
-    document.getElementById('root').inert = true
+    const root = document.getElementById('root')
+    if (root !== null) {
+      root.inert = true
+    }
     document.body.style.overflow = 'hidden'
     document.body.style.position = 'fixed'
   }
@@ -83,20 +83,16 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
 
   cleanup() {
     document.removeEventListener('keydown', this.onKeyDown)
-    document.getElementById('root').inert = false
+    const root = document.getElementById('root')
+    if (root !== null) {
+      root.inert = false
+    }
     document.body.style.overflow = 'visible'
     document.body.style.position = 'static'
   }
 
   render() {
-    const {
-      show,
-      header,
-      onClose,
-      children,
-      contentClassName,
-      fullscreen,
-    } = this.props
+    const { show, header, onClose, children, contentClassName, fullscreen } = this.props
     return (
       <Transition in={show} timeout={500} unmountOnExit mountOnEnter>
         {/*
@@ -143,9 +139,7 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     {fullscreen ? 'Close dialog' : 'Close'}
                   </Button>
                 </div>
-                <div className={classnames('content', contentClassName)}>
-                  {children}
-                </div>
+                <div className={classnames('content', contentClassName)}>{children}</div>
               </div>
             </div>,
             document.body,

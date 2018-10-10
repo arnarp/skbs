@@ -1,22 +1,25 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
 import { AddModalForm } from '../../shared/components/AddModalForm'
-import { DriverDocument } from '../../shared/types/Driver'
 import { firestore } from '../firebase'
+import { PickUpLocationDocument } from '../../shared/types/PickUpLocation';
 
-type AddDriverModalButtonProps = {}
+type AddPickUpLocationModalButtonProps = {}
 
-const initialState = {
+const initialState = () => ({
   show: false,
   name: '',
-}
-type AddDriverModalButtonState = Readonly<typeof initialState>
+})
+type AddPickUpLocationModalButtonState = Readonly<{
+  show: boolean
+  name: string
+}>
 
-export class AddDriverModalButton extends React.PureComponent<
-  AddDriverModalButtonProps,
-  AddDriverModalButtonState
+export class AddPickUpLocationModalButton extends React.PureComponent<
+  AddPickUpLocationModalButtonProps,
+  AddPickUpLocationModalButtonState
 > {
-  readonly state: AddDriverModalButtonState = initialState
+  readonly state: AddPickUpLocationModalButtonState = initialState()
   btn: HTMLButtonElement | null = null
 
   render() {
@@ -28,15 +31,15 @@ export class AddDriverModalButton extends React.PureComponent<
           inputRef={el => (this.btn = el)}
           onClick={() => this.setState(() => ({ show: true }))}
         >
-          Add driver
+          Add pick up location
         </Button>
         <AddModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
-          onClose={() => this.setState(() => initialState)}
+          onClose={() => this.setState(initialState())}
           focusAfterClose={() => this.btn && this.btn.focus()}
-          header="Add new driver"
-          submitBtnLabel="Add driver"
+          header="Add new pickup location"
+          submitBtnLabel="Add pickup location"
         >
           <label>
             Name
@@ -56,14 +59,15 @@ export class AddDriverModalButton extends React.PureComponent<
 
   onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
-    const newDriverDoc: DriverDocument = {
+    const newDoc: PickUpLocationDocument = {
       name: this.state.name,
+      synonyms: [],
     }
     firestore
-      .collection('drivers')
-      .add(newDriverDoc)
+      .collection('pickUpLocations')
+      .add(newDoc)
       .then(() => {
-        this.setState(() => initialState)
+        this.setState(() => initialState())
       })
   }
 }

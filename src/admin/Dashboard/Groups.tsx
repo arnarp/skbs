@@ -7,6 +7,8 @@ import { BusDocument, Bus } from '../../shared/types/Bus'
 import { GroupDocument, Group } from '../../shared/types/Group'
 import { AddDriverModalButton } from './AddDriverModalButton'
 import { AddBusModalButtonButton } from './AddBusModalButton'
+import { AddTourModalButton } from './AddTourModalButton';
+import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton';
 
 type GroupsProps = {
   date: Date
@@ -141,6 +143,8 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
         <div className="buttonsRow">
           <AddDriverModalButton />
           <AddBusModalButtonButton />
+          <AddTourModalButton />
+          <AddPickUpLocationModalButton />
           <Button
             color="default"
             style="flat"

@@ -9,6 +9,23 @@
   justify-content: space-between;
 }
 
+.dashboard h2 {
+  display: flex;
+  justify-content: flex-start;
+}
+.dashboard h2 > button {
+  margin-left: 12px;
+}
+.dashboard .dropdownAside {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+}
+.dashboard .dropdownAside .paxCount {
+  margin-left: 12px;
+}
+
 .dashboard .pickUpContainer {
   display: flex;
   flex-direction: column;
