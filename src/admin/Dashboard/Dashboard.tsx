@@ -5,7 +5,7 @@ import { Groups } from './Groups'
 import { firestore } from '../firebase'
 import {
   Booking,
-  groupBookingsByTourAndPickup,
+  groupBookingsByTours,
   bookingId,
   totalPax,
   countPaxByTour,
@@ -59,7 +59,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
 
   render() {
     console.log('Dashboard render', this.state)
-    const groupedBookings = groupBookingsByTourAndPickup(this.state.bookings)
+    const bookingsByTour = groupBookingsByTours(this.state.bookings)
     return (
       <main className="dashboard">
         <div className="header-row">
@@ -89,7 +89,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
           />
         </label>
         <Groups date={this.state.chosenDate} groups={this.state.groups} />
-        {groupedBookings.map(g => {
+        {bookingsByTour.map(g => {
           const tour = this.state.tours.find(i => i.id === g.tourId)
           return (
             <div key={g.tourName}>
@@ -113,7 +113,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                 </div>
                 }
               >
-                {g.bookingsByPickUp.map(pickup => (
+                {g.bookingsByPickUps.map(pickup => (
                   <div key={pickup.pickUpName} className="pickUpContainer">
                     <div className="pickupHeader">
                       <h3>{pickup.pickUpName}</h3>

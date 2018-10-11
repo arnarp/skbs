@@ -36,7 +36,7 @@ export function totalPax(bookings: Booking[]) {
   return bookings.reduce((acc, val) => acc + val.pax, 0)
 }
 
-type BookingsByPickUp = {
+interface BookingsByPickUp {
   // If undefined then not a know pickup
   pickUpId?: string
   pickUpName: string
@@ -96,35 +96,30 @@ export function countPax(bookings: Booking[]) {
   return bookings.reduce((acc, currentValue) => acc + currentValue.pax, 0)
 }
 
-type BookingByTourAndPickUp = {
+type BookingsByTour = {
   // If undefined then not a known tour
   tourId?: string
   tourName: string
-  bookingsByPickUp: {
-    // If undefined then not a know pickup
-    pickUpId?: string
-    pickUpName: string
-    bookings: Booking[]
-  }[]
+  bookingsByPickUps: BookingsByPickUp[]
 }
-type BookingsByTourAndPickUp = BookingByTourAndPickUp[]
+type BookingsByTours = BookingsByTour[]
 
-export function groupBookingsByTourAndPickup(bookings: Booking[]): BookingsByTourAndPickUp {
-  const result: { [name: string]: BookingByTourAndPickUp } = {}
+export function groupBookingsByTours(bookings: Booking[]): BookingsByTours {
+  const result: { [name: string]: BookingsByTour } = {}
   bookings.forEach(b => {
     if (b.tour) {
       if (result[b.tour.name] === undefined) {
         result[b.tour.name] = {
           tourId: b.tour.id,
           tourName: b.tour.name,
-          bookingsByPickUp: [],
+          bookingsByPickUps: [],
         }
       }
     } else {
       if (result[b.import.tour] === undefined) {
         result[b.import.tour] = {
           tourName: b.import.tour,
-          bookingsByPickUp: [],
+          bookingsByPickUps: [],
         }
       }
     }
@@ -133,13 +128,13 @@ export function groupBookingsByTourAndPickup(bookings: Booking[]): BookingsByTou
     const tourBookings = bookings.filter(
       b => (b.tour ? b.tour.name === r.tourName : b.import.tour === r.tourName),
     )
-    r.bookingsByPickUp = groupBookinsByPickUp(tourBookings)
+    r.bookingsByPickUps = groupBookinsByPickUp(tourBookings)
   })
   return Object.values(result)
 }
 
-export function countPaxByTour(input: BookingByTourAndPickUp) {
-  return input.bookingsByPickUp.reduce((acc, val) => {
+export function countPaxByTour(input: BookingsByTour) {
+  return input.bookingsByPickUps.reduce((acc, val) => {
     return acc + countPax(val.bookings)
   }, 0)
 }
