@@ -1,26 +1,27 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
 import { LinkIcon } from '../../shared/icons/LinkIcon'
-import { Tour, TourDocument } from '../../shared/types/Tour'
 import { AddModalForm } from '../../shared/components/AddModalForm'
 import { firestore } from '../firebase'
+import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
+import { Collections } from '../../shared/constants'
 
-type LinkTourModalButtonProps = {
-  tours: Tour[]
+type LinkPickupLocModalButtonProps = {
+  pickupLocations: PickUpLocation[]
   synonym: string
 }
 
 const initialState = {
   show: false,
-  selected: undefined as Tour | undefined,
+  selected: undefined as PickUpLocation | undefined,
 }
-type LinkTourModalButtonState = Readonly<typeof initialState>
+type LinkPickupLocModalButtonState = Readonly<typeof initialState>
 
-export class LinkTourModalButton extends React.PureComponent<
-  LinkTourModalButtonProps,
-  LinkTourModalButtonState
+export class LinkPickupLocModalButton extends React.PureComponent<
+  LinkPickupLocModalButtonProps,
+  LinkPickupLocModalButtonState
 > {
-  readonly state: LinkTourModalButtonState = initialState
+  readonly state: LinkPickupLocModalButtonState = initialState
   btn: HTMLButtonElement | null = null
 
   render() {
@@ -38,24 +39,24 @@ export class LinkTourModalButton extends React.PureComponent<
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
           focusAfterClose={() => this.btn && this.btn.focus()}
-          header="Link tour"
-          submitBtnLabel="Link tour"
+          header="Link pickup location"
+          submitBtnLabel="Link pickup location"
           onSubmit={this.onSubmit}
           submitDisabled={this.state.selected === undefined}
         >
           <p>Link {this.props.synonym} to</p>
           <label>
-            Choose tour
+            Choose pickup location
             <select
               value={this.state.selected === undefined ? '' : this.state.selected.id}
               onChange={event => {
                 const selectedId = event.target.value
-                const selected = this.props.tours.find(i => i.id === selectedId)
+                const selected = this.props.pickupLocations.find(i => i.id === selectedId)
                 this.setState(() => ({ selected }))
               }}
             >
-              <option value=""> - Choose tour - </option>
-              {this.props.tours.map(d => (
+              <option value=""> - Choose pickup location - </option>
+              {this.props.pickupLocations.map(d => (
                 <option key={d.id} value={d.id}>
                   {d.name}
                 </option>
@@ -71,12 +72,12 @@ export class LinkTourModalButton extends React.PureComponent<
     if (this.state.selected === undefined) {
       return
     }
-    const update: Partial<TourDocument> = {
+    const update: Partial<PickUpLocationDocument> = {
       synonyms: this.state.selected.synonyms.concat(this.props.synonym),
     }
     console.log(update, this.state.selected)
     firestore
-      .collection('tours')
+      .collection(Collections.PickupLocations)
       .doc(this.state.selected.id)
       .update(update)
       .then(() => this.setState(() => initialState))

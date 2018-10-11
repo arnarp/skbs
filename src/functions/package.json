@@ -1,5 +1,6 @@
 {
   "name": "functions",
+  "engines": { "node": "8" },
   "scripts": {
     "build": "tsc",
     "serve": "npm run build && firebase serve --only functions",

@@ -15,6 +15,7 @@ import { Tour, TourDocument } from '../../shared/types/Tour'
 import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
 import { LinkTourModalButton } from './LinkTourModalButton'
 import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
+import { LinkPickupLocModalButton } from './LinkPickupLocModalButton';
 
 type DashboardProps = {}
 
@@ -117,6 +118,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                   <div key={pickup.pickUpName} className="pickUpContainer">
                     <div className="pickupHeader">
                       <h3>{pickup.pickUpName}</h3>
+                      {pickup.pickUpId === undefined && <LinkPickupLocModalButton synonym={pickup.pickUpName} pickupLocations={this.state.pickUpLocations} />}
                       <span>{totalPax(pickup.bookings)} PAX</span>
                       <select
                         value={pickup.bookings[0].groupId || ''}
