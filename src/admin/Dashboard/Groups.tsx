@@ -156,7 +156,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                   </select>
                   <div className="ratio">
                     {colorPax.map(i => (
-                      <div
+                      <div key={i.color}
                         style={{ backgroundColor: i.color, width: `${(100 * i.pax) / (g.maxPax || g.pax)}px` }}
                       />
                     ))}

@@ -1,3 +1,3 @@
 export type UserClaims = {
-  isAdmin: boolean
+  isAdmin?: boolean
 }

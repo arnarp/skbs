@@ -4,3 +4,8 @@
   flex-direction: column;
   justify-content: flex-start;
 }
+
+.App.Unauthorized {
+  justify-content: center;
+  align-items: center;
+}

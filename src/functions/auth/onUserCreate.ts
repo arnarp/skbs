@@ -1,16 +1,8 @@
-import { auth, firestore } from 'firebase-functions'
+import { auth } from 'firebase-functions'
 import * as admin from 'firebase-admin'
-import { UserMetaDocument } from '../../shared/types/User/UserMeta'
-import { Overwrite } from '../../shared/types/utils'
+import { NewUserMetaDocument } from '../../shared/types/User/UserMeta'
 
-type NewUserMetaDocument = Overwrite<
-  UserMetaDocument,
-  {
-    claimsRefreshTime: admin.firestore.FieldValue
-  }
->
-
-export const onUserCreate = auth.user().onCreate((user, context) => {
+export const onUserCreate = auth.user().onCreate(async user => {
   const newUserMetaDocument: NewUserMetaDocument = {
     claimsRefreshTime: admin.firestore.FieldValue.serverTimestamp(),
     claims: { isAdmin: false },
@@ -18,11 +10,15 @@ export const onUserCreate = auth.user().onCreate((user, context) => {
     photoURL: user.photoURL,
     email: user.email,
   }
-  return admin
-    .firestore()
-    .collection('userMetas')
-    .doc(user.uid)
-    .set(newUserMetaDocument)
-    .then(result => console.log({ result }))
-    .catch(reason => console.log({ reason }))
+  try {
+    const result = await admin
+      .firestore()
+      .collection('userMetas')
+      .doc(user.uid)
+      .set(newUserMetaDocument);
+    return console.log({ result });
+  }
+  catch (reason) {
+    return console.log({ reason });
+  }
 })
