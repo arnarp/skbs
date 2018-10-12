@@ -7,12 +7,16 @@ import { BusDocument, Bus } from '../../shared/types/Bus'
 import { GroupDocument, Group } from '../../shared/types/Group'
 import { AddDriverModalButton } from './AddDriverModalButton'
 import { AddBusModalButtonButton } from './AddBusModalButton'
-import { AddTourModalButton } from './AddTourModalButton';
-import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton';
+import { AddTourModalButton } from './AddTourModalButton'
+import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton'
+import { Booking } from '../../shared/types/Booking'
+import { Tour } from '../../shared/types/Tour'
 
 type GroupsProps = {
   date: Date
   groups: Group[]
+  bookings: Booking[]
+  tours: Tour[]
 }
 
 type GroupsState = Readonly<{
@@ -66,12 +70,32 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
     return (
       <div className="groups">
         <h2>Groups</h2>
-        <table>
-          <tbody>
-            {this.props.groups.map(g => (
-              <tr key={g.id}>
-                <td>{g.friendlyKey}</td>
-                <td>
+        <div className="groupsCol">
+          {this.props.groups.map(g => {
+            const bookingsForGroup = this.props.bookings.filter(b => b.groupId === g.id)
+            const tourPax = bookingsForGroup.reduce(
+              (acc, val) => {
+                const tourId = val.tour === null ? 'unknown' : val.tour.id
+                if (acc[tourId] === undefined) {
+                  acc[tourId] = 0
+                }
+                acc[tourId] = acc[tourId] + val.pax
+                return acc
+              },
+              {} as { [tourId: string]: number },
+            )
+            const colorPax = Object.entries(tourPax).map(i => {
+              const tour = this.props.tours.find(t => t.id === i[0])
+              return {
+                color: tour === undefined ? '#24292eb3' : tour.color,
+                pax: i[1],
+              }
+            })
+            console.log({ bookingsForGroup, tourPax })
+            return (
+              <div className="group" key={g.id}>
+                <div className="groupHeader">
+                  <span className="friendlyKey">{g.friendlyKey}</span>
                   <select
                     value={g.driver === undefined ? '' : g.driver.id}
                     onChange={event => {
@@ -102,8 +126,6 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                       </option>
                     ))}
                   </select>
-                </td>
-                <td>
                   <select
                     value={g.bus === undefined ? '' : g.bus.id}
                     onChange={event => {
@@ -132,14 +154,21 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                       </option>
                     ))}
                   </select>
-                </td>
-                <td>
-                  {g.pax}/{g.maxPax || '?'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <div className="ratio">
+                    {colorPax.map(i => (
+                      <div
+                        style={{ backgroundColor: i.color, width: `${(100 * i.pax) / (g.maxPax || g.pax)}px` }}
+                      />
+                    ))}
+                  </div>
+                  <span>
+                    {g.pax}/{g.maxPax || '?'}
+                  </span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
         <div className="buttonsRow">
           <AddDriverModalButton />
           <AddBusModalButtonButton />

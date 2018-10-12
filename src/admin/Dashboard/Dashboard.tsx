@@ -15,7 +15,7 @@ import { Tour, TourDocument } from '../../shared/types/Tour'
 import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
 import { LinkTourModalButton } from './LinkTourModalButton'
 import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
-import { LinkPickupLocModalButton } from './LinkPickupLocModalButton';
+import { LinkPickupLocModalButton } from './LinkPickupLocModalButton'
 
 type DashboardProps = {}
 
@@ -89,7 +89,12 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
             }}
           />
         </label>
-        <Groups date={this.state.chosenDate} groups={this.state.groups} />
+        <Groups
+          date={this.state.chosenDate}
+          groups={this.state.groups}
+          bookings={this.state.bookings}
+          tours={this.state.tours}
+        />
         {bookingsByTour.map(g => {
           const tour = this.state.tours.find(i => i.id === g.tourId)
           return (
@@ -104,21 +109,25 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                     : {}
                 }
                 btnLabel={g.tourName}
-                headerAside={<div className='dropdownAside'>
-                  {g.tourId === undefined && (
-                    <LinkTourModalButton synonym={g.tourName} tours={this.state.tours} />
-                  )}
-                  <span className='paxCount'>
-                  {countPaxByTour(g)} PAX
-                  </span>
-                </div>
+                headerAside={
+                  <div className="dropdownAside">
+                    {g.tourId === undefined && (
+                      <LinkTourModalButton synonym={g.tourName} tours={this.state.tours} />
+                    )}
+                    <span className="paxCount">{countPaxByTour(g)} PAX</span>
+                  </div>
                 }
               >
                 {g.bookingsByPickUps.map(pickup => (
                   <div key={pickup.pickUpName} className="pickUpContainer">
                     <div className="pickupHeader">
                       <h3>{pickup.pickUpName}</h3>
-                      {pickup.pickUpId === undefined && <LinkPickupLocModalButton synonym={pickup.pickUpName} pickupLocations={this.state.pickUpLocations} />}
+                      {pickup.pickUpId === undefined && (
+                        <LinkPickupLocModalButton
+                          synonym={pickup.pickUpName}
+                          pickupLocations={this.state.pickUpLocations}
+                        />
+                      )}
                       <span>{totalPax(pickup.bookings)} PAX</span>
                       <select
                         value={pickup.bookings[0].groupId || ''}

@@ -3,6 +3,36 @@
   display: flex;
   flex-direction: column;
 }
+.groups .groupsCol {
+  display: flex;
+  flex-direction: column;
+}
+.groups .groupsCol > * + * {
+  margin-top: 12px;
+}
+.groups .groupHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.groups .groupHeader > * + * {
+  margin-left: 12px;
+}
+.groups .groupHeader .friendlyKey {
+  width: 24px;
+}
+.groups .groupHeader select {
+  width: 200px;
+}
+.groups .groupHeader .ratio {
+  width: 100px;
+  height: 24px;
+  border: 1px solid var(--default-color-alpha07);
+}
+.groups .groupHeader .ratio > * {
+  height: 100%;
+}
 
 .buttonsRow {
   display: flex;
@@ -15,27 +45,4 @@
 }
 .buttonsRow > *:last-child {
   margin-left: auto;
-}
-
-.groupsForm {
-  flex-grow: 1;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-}
-.groupsForm > * + * {
-  margin-top: 12px;
-}
-.groupsForm button {
-  align-self: flex-end;
-  justify-self: flex-end;
-  margin-top: auto;
-}
-.groupsForm label {
-  display: flex;
-  justify-content: space-between;
-}
-.groupsForm label input {
-  margin-left: 24px;
-  flex-grow: 1;
 }
