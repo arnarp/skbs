@@ -1,0 +1,16 @@
+.GroupPage .Pickup {
+  break-inside: avoid; 
+}
+.GroupPage .Pickup + .Pickup {
+  margin-top: 12px;
+}
+.GroupPage table {
+  table-layout: fixed;
+  width: 100%;
+}
+.GroupPage table td:first-child {
+  width: 10%;
+}
+.GroupPage table td:nth-child(2) {
+  width: 40%;
+}

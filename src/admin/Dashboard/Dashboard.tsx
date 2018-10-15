@@ -16,6 +16,7 @@ import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickU
 import { LinkTourModalButton } from './LinkTourModalButton'
 import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
 import { LinkPickupLocModalButton } from './LinkPickupLocModalButton'
+import { Collections } from '../../shared/constants'
 
 type DashboardProps = {}
 
@@ -132,7 +133,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                       <select
                         value={pickup.bookings[0].groupId || ''}
                         onChange={event => {
-                          const newGroupId = event.target.value || undefined
+                          const newGroupId = event.target.value || null
                           const batch = firestore.batch()
                           const pickupTotalPax = totalPax(pickup.bookings)
                           const oldGroupId = pickup.bookings[0].groupId
@@ -156,7 +157,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                             )
                           }
                           const newGroup = this.state.groups.find(i => i.id === newGroupId)
-                          if (newGroup) {
+                          if (newGroup && newGroupId) {
                             const newGroupUpdate: Partial<Group> = {
                               pax: newGroup.pax + pickupTotalPax,
                             }
@@ -203,7 +204,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
 
   createGroupsSubscription = () =>
     firestore
-      .collection('groups')
+      .collection(Collections.Groups)
       .where('date', '==', this.state.chosenDate)
       .orderBy('friendlyKey', 'asc')
       .onSnapshot(s => {
@@ -218,7 +219,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
 
   createBookingsSubcription = () =>
     firestore
-      .collection('bookings')
+      .collection(Collections.Bookings)
       .where('date', '==', this.state.chosenDate)
       .onSnapshot(s => {
         const bookings = s.docs.map<Booking>(b => ({
@@ -229,7 +230,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
       })
   createToursSubscription = () =>
     firestore
-      .collection('tours')
+      .collection(Collections.Tours)
       .orderBy('name', 'desc')
       .onSnapshot(s => {
         const tours = s.docs.map<Tour>(t => ({
@@ -239,7 +240,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
         this.setState(() => ({ tours }))
       })
   createPickUpLocationsSubscription = () =>
-    firestore.collection('pickUpLocations').onSnapshot(s => {
+    firestore.collection(Collections.PickupLocations).onSnapshot(s => {
       const pickUpLocations = s.docs.map<PickUpLocation>(t => ({
         ...(t.data() as PickUpLocationDocument),
         id: t.id,

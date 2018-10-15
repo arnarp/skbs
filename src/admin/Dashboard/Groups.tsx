@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import './Groups.css'
 import { Button } from '../../shared/components/Button'
 import { Driver } from '../../shared/types/Driver'
@@ -9,7 +10,7 @@ import { AddDriverModalButton } from './AddDriverModalButton'
 import { AddBusModalButtonButton } from './AddBusModalButton'
 import { AddTourModalButton } from './AddTourModalButton'
 import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton'
-import { Booking } from '../../shared/types/Booking'
+import { Booking, groupBookinsByPickUp, totalPax, toursInBookings } from '../../shared/types/Booking'
 import { Tour } from '../../shared/types/Tour'
 
 type GroupsProps = {
@@ -91,6 +92,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                 pax: i[1],
               }
             })
+            const byPickup = groupBookinsByPickUp(bookingsForGroup)
             console.log({ bookingsForGroup, tourPax })
             return (
               <div className="group" key={g.id}>
@@ -156,14 +158,29 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                   </select>
                   <div className="ratio">
                     {colorPax.map(i => (
-                      <div key={i.color}
-                        style={{ backgroundColor: i.color, width: `${(100 * i.pax) / (g.maxPax || g.pax)}px` }}
+                      <div
+                        key={i.color}
+                        style={{
+                          backgroundColor: i.color,
+                          width: `${(100 * i.pax) / (g.maxPax || g.pax)}px`,
+                        }}
                       />
                     ))}
                   </div>
                   <span>
                     {g.pax}/{g.maxPax || '?'}
                   </span>
+                  <Link to={`/group/${g.id}`}>Print</Link>
+                </div>
+                <div className="groupContent">
+                  <p>Tours: {toursInBookings(bookingsForGroup).join(', ')}</p>
+                  <ul>
+                    {byPickup.map(p => (
+                      <li key={p.pickUpName}>
+                        {p.pickUpName} {totalPax(p.bookings)} PAX
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             )

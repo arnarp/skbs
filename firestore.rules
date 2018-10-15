@@ -13,28 +13,28 @@ service cloud.firestore {
       allow update: if isAdmin()
     }
     match /bookings/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
     match /drivers/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
     match /buses/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
     match /groups/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
     match /tours/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
     match /pickUpLocations/{id} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
   }
 }

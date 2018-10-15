@@ -138,3 +138,10 @@ export function countPaxByTour(input: BookingsByTour) {
     return acc + countPax(val.bookings)
   }, 0)
 }
+
+export function toursInBookings(bookings: Booking[]) {
+  const groupTours = new Set(
+    bookings.map(i => (i.tour !== null ? i.tour.name : i.import.tour)),
+  )
+  return Array.from(groupTours.values())
+}

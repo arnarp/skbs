@@ -1,0 +1,18 @@
+.Users table {
+  table-layout: fixed;
+}
+.Users tr {
+  height: 48px;
+  display: flex;
+}
+.Users td {
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.Users tr td:first-child {
+  width: 48px;
+}
+.Users tr td:nth-child(2) {
+  width: 200px;
+}

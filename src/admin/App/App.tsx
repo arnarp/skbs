@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { auth, firestore } from '../firebase'
 import { UserInfo } from '../../shared/types/User/UserInfo'
 import { getClaims } from '../../shared/auth/getClaims'
@@ -8,6 +9,8 @@ import { AppBar } from './AppBar'
 import './App.css'
 import { LoginPage } from './LoginPage'
 import { Dashboard } from '../Dashboard'
+import { Users } from '../Users';
+import { GroupPage } from '../GroupPage';
 
 type AppProps = {}
 
@@ -76,15 +79,19 @@ export class App extends React.Component<AppProps, AppState> {
       )
     }
     return (
-      <div className="App">
-        <AppBar
-          userInfo={this.state.userInfo}
-          signOut={() => {
-            auth().signOut()
-          }}
-        />
-        {this.state.userInfo && <Dashboard />}
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <AppBar
+            userInfo={this.state.userInfo}
+            signOut={() => {
+              auth().signOut()
+            }}
+          />
+          <Route exact path='/' component={Dashboard} />
+          <Route path='/users' component={Users} />
+          <Route path='/group/:id' component={GroupPage} />
+        </div>
+      </BrowserRouter>
     )
   }
 

@@ -26,6 +26,7 @@
   width: 200px;
 }
 .groups .groupHeader .ratio {
+  display: inline-flex;
   width: 100px;
   height: 24px;
   border: 1px solid var(--default-color-alpha07);
