@@ -2,3 +2,5 @@
 /dist
 /.cache
 /.firebase
+.env.development
+.env.production
