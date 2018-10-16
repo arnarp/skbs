@@ -78,10 +78,19 @@ h4 {
   font-size: 20px;
   margin: 6px 0;
 }
+p {
+  margin: 0;
+}
+ul {
+  margin: 0;
+}
 @media screen {
   main {
     margin: 12px;
   }
+}
+dl {
+  margin: 0;
 }
 dt {
   float: left;

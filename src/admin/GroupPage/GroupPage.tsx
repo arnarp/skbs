@@ -48,6 +48,7 @@ export class GroupPage extends React.PureComponent<
     console.log(this.state)
     return (
       <main className="GroupPage">
+        <div className='header'>
         <h1>
           {this.state.group.date.toLocaleDateString('en-GB', {
             weekday: 'long',
@@ -74,6 +75,7 @@ export class GroupPage extends React.PureComponent<
           <dt>Pax</dt>
           <dd>{this.state.group.pax}</dd>
         </dl>
+        </div>
         {this.state.bookings &&
           groupBookinsByPickUp(this.state.bookings).map(p => (
             <div key={p.pickUpName} className="Pickup">

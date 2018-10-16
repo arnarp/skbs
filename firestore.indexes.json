@@ -1,3 +1,25 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionId": "bookings",
+      "fields": [
+        { "fieldPath": "tour", "mode": "ASCENDING" },
+        { "fieldPath": "import.tour", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "bookings",
+      "fields": [
+        { "fieldPath": "import.pickUp", "mode": "ASCENDING" },
+        { "fieldPath": "pickUp", "mode": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "groups",
+      "fields": [
+        { "fieldPath": "date", "mode": "ASCENDING" },
+        { "fieldPath": "friendlyKey", "mode": "ASCENDING" }
+      ]
+    }
+  ]
 }

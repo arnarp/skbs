@@ -1,5 +1,10 @@
+.GroupPage .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 .GroupPage .Pickup {
-  break-inside: avoid; 
+  break-inside: avoid;
 }
 .GroupPage .Pickup + .Pickup {
   margin-top: 12px;
@@ -13,4 +18,26 @@
 }
 .GroupPage table td:nth-child(2) {
   width: 40%;
+}
+@media print {
+  .GroupPage {
+    font-size: 18px;
+  }
+  .GroupPage h1 {
+    margin: 0;
+    font-size: 26px;
+  }
+  .GroupPage h2 {
+    font-size: 21px;
+    margin: 0;
+  }
+  .GroupPage dd {
+    padding: 0;
+  }
+  .GroupPage .header {
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--default-text-color-alpha07);
+    margin-bottom: 12px;
+  }
 }

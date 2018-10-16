@@ -16,7 +16,7 @@
       "target": "admin",
       "public": "dist/admin",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "predeploy": ["npm run build:admin"],
+      "predeploy": "npm run build:admin",
       "rewrites": [
         {
           "source": "**",

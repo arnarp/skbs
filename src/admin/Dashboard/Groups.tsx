@@ -85,7 +85,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
               },
               {} as { [tourId: string]: number },
             )
-            const colorPax = Object.entries(tourPax).map(i => {
+            const colorPax = this.props.tours.length === 0 ? [] : Object.entries(tourPax).map(i => {
               const tour = this.props.tours.find(t => t.id === i[0])
               return {
                 color: tour === undefined ? '#24292eb3' : tour.color,
@@ -93,7 +93,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
               }
             })
             const byPickup = groupBookinsByPickUp(bookingsForGroup)
-            console.log({ bookingsForGroup, tourPax })
+            console.log({ bookingsForGroup, tourPax, colorPax })
             return (
               <div className="group" key={g.id}>
                 <div className="groupHeader">

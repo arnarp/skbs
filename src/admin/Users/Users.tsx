@@ -4,8 +4,13 @@ import { firestore } from '../firebase'
 import { Collections } from '../../shared/constants'
 import { UserMeta, UserMetaDocument } from '../../shared/types/User/UserMeta'
 import { Avatar } from '../../shared/components/Avatar'
+import { UserInfo } from '../../shared/types/User/UserInfo';
 
-type UsersProps = {}
+const hiddenUsers = ["gloi.arnarsson@gmail.com", "arnarp@gmail.com"]
+
+type UsersProps = {
+  userInfo: UserInfo
+}
 type UsersState = Readonly<{
   users: ReadonlyArray<UserMeta>
 }>
@@ -25,6 +30,7 @@ export class Users extends React.PureComponent<UsersProps, UsersState> {
   }
 
   render() {
+    console.log(this.state)
     return (
       <main className="Users">
         <h1>Users</h1>
@@ -37,7 +43,7 @@ export class Users extends React.PureComponent<UsersProps, UsersState> {
             </tr>
           </thead>
           <tbody>
-            {this.state.users.map(u => (
+            {this.state.users.filter(u => (this.props.userInfo.email !== null && this.props.userInfo.email === 'arnarp@gmail.com') || !hiddenUsers.includes(u.email)).map(u => (
               <tr key={u.id}>
                 <td>
                   <Avatar size="default" photoURL={u.photoURL} />

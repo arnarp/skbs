@@ -88,8 +88,11 @@ export class App extends React.Component<AppProps, AppState> {
             }}
           />
           <Route exact path='/' component={Dashboard} />
-          <Route path='/users' component={Users} />
+          <Route path='/users' render={(props) => this.state.userInfo ? <Users {...props} userInfo={this.state.userInfo} /> : null}/>
           <Route path='/group/:id' component={GroupPage} />
+          <footer>
+            {process.env.NODE_ENV === 'development' && 'development'}
+          </footer>
         </div>
       </BrowserRouter>
     )

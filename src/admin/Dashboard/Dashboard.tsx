@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { startOfToday } from 'date-fns'
 import { ImportDataFromExcel } from './ImportDataFromExcel'
 import './Dashboard.css'
 import { Groups } from './Groups'
@@ -21,7 +22,7 @@ import { Collections } from '../../shared/constants'
 type DashboardProps = {}
 
 const initialState = {
-  chosenDate: new Date('2018-09-25'),
+  chosenDate: startOfToday(),
   bookings: [] as Booking[],
   groups: [] as Group[],
   tours: [] as Tour[],

@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "skbs-b0e5b"
+    "default": "skbs-b0e5b",
+    "dev": "skbs-dev"
   },
   "targets": {
     "skbs-b0e5b": {
