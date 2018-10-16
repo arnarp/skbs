@@ -52,15 +52,22 @@
   margin-left: 24px;
   table-layout: fixed;
 }
-.dashboard .pickUpContainer table tr :nth-child(1) {
-  width: 35%;
-}
-.dashboard .pickUpContainer table tr :nth-child(2) {
-  width: 10%;
-}
-.dashboard .pickUpContainer table tr :nth-child(3) {
+.dashboard .pickUpContainer table tr td:nth-child(1) {
   width: 25%;
 }
-.dashboard .pickUpContainer table tr :nth-child(4) {
-  text-align: right;
+.dashboard .pickUpContainer table tr td:nth-child(2) {
+  width: 5%;
+}
+.dashboard .pickUpContainer table tr td:nth-child(3) {
+  width: 25%;
+}
+.dashboard .pickUpContainer table tr td:nth-child(4) {
+  text-align: left;
+  width: 20%;
+}
+.dashboard .pickUpContainer table tr td:nth-child(5) {
+  width: 25%;
+}
+.dashboard .pickUpContainer table select {
+  width: 100%;
 }

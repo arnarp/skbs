@@ -6,6 +6,7 @@ import { firestore } from '../firebase'
 import { Collections } from '../../shared/constants'
 import { Booking, toursInBookings, groupBookinsByPickUp } from '../../shared/types/Booking'
 import { propertyOf } from '../../shared/types/utils'
+import Helmet from 'react-helmet'
 
 type GroupPageProps = {}
 type GroupPageState = Readonly<{
@@ -48,33 +49,36 @@ export class GroupPage extends React.PureComponent<
     console.log(this.state)
     return (
       <main className="GroupPage">
-        <div className='header'>
-        <h1>
-          {this.state.group.date.toLocaleDateString('en-GB', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-          ,<br />
-          {toursInBookings(this.state.bookings || [])}
-        </h1>
-        <dl>
-          {this.state.group.driver && (
-            <React.Fragment>
-              <dt>Driver</dt>
-              <dd>{this.state.group.driver.name}</dd>
-            </React.Fragment>
-          )}
-          {this.state.group.bus && (
-            <React.Fragment>
-              <dt>Bus</dt>
-              <dd>{this.state.group.bus.name}</dd>
-            </React.Fragment>
-          )}
-          <dt>Pax</dt>
-          <dd>{this.state.group.pax}</dd>
-        </dl>
+        <Helmet>
+          <title>Pickup sheet</title>
+        </Helmet>
+        <div className="header">
+          <h1>
+            {this.state.group.date.toLocaleDateString('en-GB', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+            ,<br />
+            {toursInBookings(this.state.bookings || [])}
+          </h1>
+          <dl>
+            {this.state.group.driver && (
+              <React.Fragment>
+                <dt>Driver</dt>
+                <dd>{this.state.group.driver.name}</dd>
+              </React.Fragment>
+            )}
+            {this.state.group.bus && (
+              <React.Fragment>
+                <dt>Bus</dt>
+                <dd>{this.state.group.bus.name}</dd>
+              </React.Fragment>
+            )}
+            <dt>Pax</dt>
+            <dd>{this.state.group.pax}</dd>
+          </dl>
         </div>
         {this.state.bookings &&
           groupBookinsByPickUp(this.state.bookings).map(p => (
@@ -93,6 +97,7 @@ export class GroupPage extends React.PureComponent<
               </table>
             </div>
           ))}
+        {this.state.group && this.state.group.note && <p>{this.state.group.note}</p>}
       </main>
     )
   }

@@ -34,7 +34,14 @@
 .groups .groupHeader .ratio > * {
   height: 100%;
 }
-
+.groups label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.groups label textarea {
+  margin-left: 12px;
+}
 .buttonsRow {
   display: flex;
   padding: 12px 0;

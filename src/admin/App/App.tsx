@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import { auth, firestore } from '../firebase'
 import { UserInfo } from '../../shared/types/User/UserInfo'
 import { getClaims } from '../../shared/auth/getClaims'
@@ -9,8 +10,8 @@ import { AppBar } from './AppBar'
 import './App.css'
 import { LoginPage } from './LoginPage'
 import { Dashboard } from '../Dashboard'
-import { Users } from '../Users';
-import { GroupPage } from '../GroupPage';
+import { Users } from '../Users'
+import { GroupPage } from '../GroupPage'
 
 type AppProps = {}
 
@@ -81,18 +82,24 @@ export class App extends React.Component<AppProps, AppState> {
     return (
       <BrowserRouter>
         <div className="App">
+          <Helmet>
+            <title>SKBS admin</title>
+          </Helmet>
           <AppBar
             userInfo={this.state.userInfo}
             signOut={() => {
               auth().signOut()
             }}
           />
-          <Route exact path='/' component={Dashboard} />
-          <Route path='/users' render={(props) => this.state.userInfo ? <Users {...props} userInfo={this.state.userInfo} /> : null}/>
-          <Route path='/group/:id' component={GroupPage} />
-          <footer>
-            {process.env.NODE_ENV === 'development' && 'development'}
-          </footer>
+          <Route exact path="/" component={Dashboard} />
+          <Route
+            path="/users"
+            render={props =>
+              this.state.userInfo ? <Users {...props} userInfo={this.state.userInfo} /> : null
+            }
+          />
+          <Route path="/group/:id" component={GroupPage} />
+          <footer>{process.env.NODE_ENV === 'development' && 'development'}</footer>
         </div>
       </BrowserRouter>
     )

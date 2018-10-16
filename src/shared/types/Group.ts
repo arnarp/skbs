@@ -15,6 +15,7 @@ export type Group = {
   }
   pax: number
   maxPax?: number
+  note?: string
 }
 
 export type GroupDocument = Omit<Group, 'id'>

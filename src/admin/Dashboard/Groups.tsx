@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Groups.css'
 import { Button } from '../../shared/components/Button'
 import { Driver } from '../../shared/types/Driver'
@@ -10,8 +10,14 @@ import { AddDriverModalButton } from './AddDriverModalButton'
 import { AddBusModalButtonButton } from './AddBusModalButton'
 import { AddTourModalButton } from './AddTourModalButton'
 import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton'
-import { Booking, groupBookinsByPickUp, totalPax, toursInBookings } from '../../shared/types/Booking'
+import {
+  Booking,
+  groupBookinsByPickUp,
+  totalPax,
+  toursInBookings,
+} from '../../shared/types/Booking'
 import { Tour } from '../../shared/types/Tour'
+import { Collections } from '../../shared/constants'
 
 type GroupsProps = {
   date: Date
@@ -85,13 +91,16 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
               },
               {} as { [tourId: string]: number },
             )
-            const colorPax = this.props.tours.length === 0 ? [] : Object.entries(tourPax).map(i => {
-              const tour = this.props.tours.find(t => t.id === i[0])
-              return {
-                color: tour === undefined ? '#24292eb3' : tour.color,
-                pax: i[1],
-              }
-            })
+            const colorPax =
+              this.props.tours.length === 0
+                ? []
+                : Object.entries(tourPax).map(i => {
+                    const tour = this.props.tours.find(t => t.id === i[0])
+                    return {
+                      color: tour === undefined ? '#24292eb3' : tour.color,
+                      pax: i[1],
+                    }
+                  })
             const byPickup = groupBookinsByPickUp(bookingsForGroup)
             console.log({ bookingsForGroup, tourPax, colorPax })
             return (
@@ -181,6 +190,23 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                       </li>
                     ))}
                   </ul>
+                  <label>
+                    Note
+                    <textarea
+                      rows={1}
+                      cols={60}
+                      value={g.note || ''}
+                      onChange={event => {
+                        const update: Partial<Group> = {
+                          note: event.target.value,
+                        }
+                        firestore
+                          .collection(Collections.Groups)
+                          .doc(g.id)
+                          .update(update)
+                      }}
+                    />
+                  </label>
                 </div>
               </div>
             )
