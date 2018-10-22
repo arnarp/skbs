@@ -1,0 +1,4 @@
+.EditBookingModalButton .pickupInputs {
+  display: flex;
+  flex-direction: column;
+}

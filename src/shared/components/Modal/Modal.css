@@ -39,9 +39,9 @@
   justify-content: space-between;
   align-items: center;
 }
-.modal .header > * {
+/* .modal .header > * {
   flex-grow: 1;
-}
+} */
 .modal .header > * + * {
   margin-left: 24px;
 }

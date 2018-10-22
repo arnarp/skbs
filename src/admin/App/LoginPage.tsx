@@ -26,7 +26,7 @@ export class LoginPage extends React.PureComponent<
             auth().signInWithRedirect(provider)
           }}
         >
-          Innskráning
+          Login with google
         </Button>
       </div>
     )

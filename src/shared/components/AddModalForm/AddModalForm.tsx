@@ -11,6 +11,7 @@ type AddModalProps = {
   header: string
   submitBtnLabel: string
   submitDisabled: boolean
+  formClassName?: string
 }
 
 const initialState = {}
@@ -31,7 +32,7 @@ export class AddModalForm extends React.PureComponent<AddModalProps, AddModalSta
       >
         <form onSubmit={this.props.onSubmit} className="AddModalForm">
           {this.props.children}
-          <div>
+          <div className='buttonRow'>
             <Button type="submit" color="primary" style="flat" disabled={this.props.submitDisabled}>
               {this.props.submitBtnLabel}
             </Button>

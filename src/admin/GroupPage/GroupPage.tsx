@@ -4,7 +4,12 @@ import './GroupPage.css'
 import { Group, GroupDocument } from '../../shared/types/Group'
 import { firestore } from '../firebase'
 import { Collections } from '../../shared/constants'
-import { Booking, toursInBookings, groupBookinsByPickUp } from '../../shared/types/Booking'
+import {
+  Booking,
+  toursInBookings,
+  groupBookinsByPickUp,
+  totalPax,
+} from '../../shared/types/Booking'
 import { propertyOf } from '../../shared/types/utils'
 import Helmet from 'react-helmet'
 
@@ -46,7 +51,6 @@ export class GroupPage extends React.PureComponent<
         </main>
       )
     }
-    console.log(this.state)
     return (
       <main className="GroupPage">
         <Helmet>
@@ -76,8 +80,12 @@ export class GroupPage extends React.PureComponent<
                 <dd>{this.state.group.bus.name}</dd>
               </React.Fragment>
             )}
-            <dt>Pax</dt>
-            <dd>{this.state.group.pax}</dd>
+            {this.state.bookings && (
+              <React.Fragment>
+                <dt>Pax</dt>
+                <dd>{totalPax(this.state.bookings)}</dd>
+              </React.Fragment>
+            )}
           </dl>
         </div>
         {this.state.bookings &&

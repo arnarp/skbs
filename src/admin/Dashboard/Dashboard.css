@@ -49,23 +49,26 @@
   align-items: center;
 }
 .dashboard .pickUpContainer table {
-  margin-left: 24px;
+  margin-left: 12px;
   table-layout: fixed;
 }
 .dashboard .pickUpContainer table tr td:nth-child(1) {
-  width: 25%;
+  width: 48px;
 }
 .dashboard .pickUpContainer table tr td:nth-child(2) {
-  width: 5%;
+  width: 20%;
 }
 .dashboard .pickUpContainer table tr td:nth-child(3) {
-  width: 25%;
+  width: 5%;
 }
 .dashboard .pickUpContainer table tr td:nth-child(4) {
-  text-align: left;
   width: 20%;
 }
 .dashboard .pickUpContainer table tr td:nth-child(5) {
+  text-align: left;
+  width: 20%;
+}
+.dashboard .pickUpContainer table tr td:nth-child(6) {
   width: 25%;
 }
 .dashboard .pickUpContainer table select {

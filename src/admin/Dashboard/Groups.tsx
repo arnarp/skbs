@@ -103,6 +103,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                   })
             const byPickup = groupBookinsByPickUp(bookingsForGroup)
             console.log({ bookingsForGroup, tourPax, colorPax })
+            const pax = totalPax(bookingsForGroup)
             return (
               <div className="group" key={g.id}>
                 <div className="groupHeader">
@@ -130,7 +131,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                         .update(groupUpdate)
                     }}
                   >
-                    <option value=""> - Choose driver - </option>
+                    <option value=""> - Select driver - </option>
                     {this.state.drivers.map(d => (
                       <option key={d.id} value={d.id}>
                         {d.name}
@@ -158,7 +159,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                         .update(groupUpdate)
                     }}
                   >
-                    <option value=""> - Choose bus - </option>
+                    <option value=""> - Select bus - </option>
                     {this.state.buses.map(d => (
                       <option key={d.id} value={d.id}>
                         {d.name}
@@ -171,13 +172,13 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                         key={i.color}
                         style={{
                           backgroundColor: i.color,
-                          width: `${(100 * i.pax) / (g.maxPax || g.pax)}px`,
+                          width: `${(100 * pax) / (g.maxPax || pax)}px`,
                         }}
                       />
                     ))}
                   </div>
                   <span>
-                    {g.pax}/{g.maxPax || '?'}
+                    {pax}/{g.maxPax || '?'}
                   </span>
                   <Link to={`/group/${g.id}`}>Print</Link>
                 </div>
@@ -232,7 +233,6 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
   private addGroup = () => {
     const newGroupDoc: GroupDocument = {
       date: this.props.date,
-      pax: 0,
       friendlyKey: this.props.groups.length + 1,
     }
     firestore

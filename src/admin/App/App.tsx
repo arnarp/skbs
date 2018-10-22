@@ -12,6 +12,7 @@ import { LoginPage } from './LoginPage'
 import { Dashboard } from '../Dashboard'
 import { Users } from '../Users'
 import { GroupPage } from '../GroupPage'
+import { AppErrorBoundary } from './AppErrorBoundary'
 
 type AppProps = {}
 
@@ -91,14 +92,17 @@ export class App extends React.Component<AppProps, AppState> {
               auth().signOut()
             }}
           />
-          <Route exact path="/" component={Dashboard} />
-          <Route
-            path="/users"
-            render={props =>
-              this.state.userInfo ? <Users {...props} userInfo={this.state.userInfo} /> : null
-            }
-          />
-          <Route path="/group/:id" component={GroupPage} />
+          <AppErrorBoundary userInfo={this.state.userInfo}>
+            <Route exact path="/" component={Dashboard} />
+            <Route
+              path="/users"
+              render={props =>
+                this.state.userInfo ? <Users {...props} userInfo={this.state.userInfo} /> : null
+              }
+            />
+            <Route path="/group/:id" component={GroupPage} />
+          </AppErrorBoundary>
+
           <footer>{process.env.NODE_ENV === 'development' && 'development'}</footer>
         </div>
       </BrowserRouter>

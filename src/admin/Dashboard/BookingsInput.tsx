@@ -2,18 +2,15 @@ import * as React from 'react'
 import { Booking, groupBookinsByDateAndPickUp, countPax } from '../../shared/types/Booking'
 
 type BookingsInputProps = {
-  bookings?: Booking[]
+  bookings: Booking[]
 }
 
 export const BookingsInput: React.SFC<BookingsInputProps> = ({ bookings }) => {
-  if (bookings === undefined) {
-    return null
-  }
-
   const bookingsGroupedByDateAndPickUp = groupBookinsByDateAndPickUp(bookings)
   return (
     <div className="bookingsInput">
-      {Object.keys(bookingsGroupedByDateAndPickUp).map(d => (
+      {bookings.length === 0 && <p>No new bookings to add</p>}
+      {bookings.length > 0 && Object.keys(bookingsGroupedByDateAndPickUp).map(d => (
         <div key={d}>
           <h3>
             {new Date(d).toLocaleDateString('en-GB', {

@@ -13,7 +13,6 @@ export type Group = {
     id: string
     name: string
   }
-  pax: number
   maxPax?: number
   note?: string
 }

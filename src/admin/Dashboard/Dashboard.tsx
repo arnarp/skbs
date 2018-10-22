@@ -18,11 +18,12 @@ import { LinkTourModalButton } from './LinkTourModalButton'
 import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
 import { LinkPickupLocModalButton } from './LinkPickupLocModalButton'
 import { Collections } from '../../shared/constants'
+import { EditBookingModalButton } from './EditBookingModalButton'
 
 type DashboardProps = {}
 
 const initialState = {
-  chosenDate: startOfToday(),
+  chosenDate: new Date('2018-09-25'), // startOfToday(),
   bookings: [] as Booking[],
   groups: [] as Group[],
   tours: [] as Tour[],
@@ -139,8 +140,6 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                           onChange={event => {
                             const newGroupId = event.target.value || null
                             const batch = firestore.batch()
-                            const pickupTotalPax = totalPax(pickup.bookings)
-                            const oldGroupId = pickup.bookings[0].groupId
                             pickup.bookings.forEach(b => {
                               const id = bookingId(b)
                               const bookingUpdate: Partial<Booking> = {
@@ -149,29 +148,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                               console.log({ bookingUpdate })
                               batch.update(firestore.collection('bookings').doc(id), bookingUpdate)
                             })
-                            const oldGroup = this.state.groups.find(i => i.id === oldGroupId)
-                            if (oldGroup && oldGroupId) {
-                              const oldGroupUpdate: Partial<Group> = {
-                                pax: oldGroup.pax - pickupTotalPax,
-                              }
-                              console.log({ oldGroupUpdate })
-                              batch.update(
-                                firestore.collection('groups').doc(oldGroupId),
-                                oldGroupUpdate,
-                              )
-                            }
-                            const newGroup = this.state.groups.find(i => i.id === newGroupId)
-                            if (newGroup && newGroupId) {
-                              const newGroupUpdate: Partial<Group> = {
-                                pax: newGroup.pax + pickupTotalPax,
-                              }
-                              console.log({ newGroupUpdate })
-                              batch.update(
-                                firestore.collection('groups').doc(newGroupId),
-                                newGroupUpdate,
-                              )
-                            }
-                            console.log({ newGroupId, pickupTotalPax, oldGroupId })
+
                             batch.commit().then(() => console.log('pickup loc updated'))
                           }}
                         >
@@ -189,6 +166,12 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                       <tbody>
                         {pickup.bookings.map(b => (
                           <tr key={b.import.bookingRef}>
+                            <td>
+                              <EditBookingModalButton
+                                pickupLocations={this.state.pickUpLocations}
+                                booking={b}
+                              />
+                            </td>
                             <td>{b.import.mainContact}</td>
                             <td>{b.pax}</td>
                             <td>{b.import.seller}</td>
@@ -198,41 +181,15 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                                 value={b.groupId || ''}
                                 onChange={event => {
                                   const newGroupId = event.target.value || null
-                                  const batch = firestore.batch()
-                                  const oldGroupId = b.groupId
                                   const bookingUpdate: Partial<Booking> = {
                                     groupId: newGroupId,
                                   }
                                   const id = bookingId(b)
-                                  batch.update(
-                                    firestore.collection(Collections.Bookings).doc(id),
-                                    bookingUpdate,
-                                  )
-                                  console.log({ bookingUpdate })
-                                  const oldGroup = this.state.groups.find(i => i.id === oldGroupId)
-                                  if (oldGroup && oldGroupId) {
-                                    const oldGroupUpdate: Partial<Group> = {
-                                      pax: oldGroup.pax - b.pax,
-                                    }
-                                    console.log({ oldGroupUpdate })
-                                    batch.update(
-                                      firestore.collection(Collections.Groups).doc(oldGroupId),
-                                      oldGroupUpdate,
-                                    )
-                                  }
-                                  const newGroup = this.state.groups.find(i => i.id === newGroupId)
-                                  if (newGroup && newGroupId) {
-                                    const newGroupUpdate: Partial<Group> = {
-                                      pax: newGroup.pax + b.pax,
-                                    }
-                                    console.log({ newGroupUpdate })
-                                    batch.update(
-                                      firestore.collection(Collections.Groups).doc(newGroupId),
-                                      newGroupUpdate,
-                                    )
-                                  }
-                                  console.log({ newGroupId, b, oldGroupId })
-                                  batch.commit().then(() => console.log('pickup loc updated'))
+                                  firestore
+                                    .collection(Collections.Bookings)
+                                    .doc(id)
+                                    .update(bookingUpdate)
+                                    .then(() => console.log('pickup loc updated'))
                                 }}
                               >
                                 <option value=""> - Choose pickup group - </option>

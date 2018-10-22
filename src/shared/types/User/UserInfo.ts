@@ -1,6 +1,5 @@
-import { User, firestore } from 'firebase/app'
+import { User } from 'firebase/app'
 import { Overwrite } from '../utils'
-import { UID } from '..'
 
 export type UserInfo = Overwrite<
   User,

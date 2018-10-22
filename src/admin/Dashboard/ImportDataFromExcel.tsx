@@ -13,16 +13,19 @@ import {
   generatePickUpLocationSynonymPickUpLocationMap,
 } from '../../shared/types/PickUpLocation'
 import { Tour, generateTourSynonymTourMap } from '../../shared/types/Tour'
+import { Collections } from '../../shared/constants'
 
 type ImportDataFromExcelProps = {
   pickUpLocations: PickUpLocation[]
   tours: Tour[]
 }
 type ImportDataFromExcelState = Readonly<{
-  bookings?: Booking[]
+  importBookings?: Booking[]
+  bookings?: Map<string, Booking>
 }>
 
 const initialState: ImportDataFromExcelState = {
+  importBookings: undefined,
   bookings: undefined,
 }
 
@@ -33,6 +36,24 @@ export class ImportDataFromExcel extends React.PureComponent<
   readonly state: ImportDataFromExcelState = initialState
   input: HTMLInputElement | null = null
   inputId = v4()
+  cancelBookingsSubscription: () => void = () => {}
+
+  componentDidUpdate(_prevProps: ImportDataFromExcelProps, prevState: ImportDataFromExcelState) {
+    if (
+      prevState.importBookings === undefined &&
+      this.state.importBookings !== undefined &&
+      this.state.importBookings.length > 0
+    ) {
+      this.setState(() => ({ bookings: undefined }))
+      this.cancelBookingsSubscription = this.createBookingsSubcription(
+        this.state.importBookings[0].date,
+      )
+    }
+  }
+
+  componentWillUnmount() {
+    this.cancelBookingsSubscription()
+  }
 
   render() {
     return (
@@ -57,7 +78,7 @@ export class ImportDataFromExcel extends React.PureComponent<
                 const pickUpLocationSynonymPickUpLocationIdMap = generatePickUpLocationSynonymPickUpLocationMap(
                   this.props.pickUpLocations,
                 )
-                const bookings = rows.slice(3, -1).map(function(i: string[]): Booking {
+                const importBookings = rows.slice(3, -1).map(function(i: string[]): Booking {
                   const importedTour = i[0]
                   const importedPickUp = i[1]
                   const pickUpLocation = pickUpLocationSynonymPickUpLocationIdMap.get(
@@ -100,8 +121,8 @@ export class ImportDataFromExcel extends React.PureComponent<
                     },
                   }
                 })
-                console.log(bookings)
-                this.setState(() => ({ bookings }))
+                console.log(importBookings)
+                this.setState(() => ({ importBookings }))
                 if (this.input) {
                   this.input.value = ''
                 }
@@ -113,46 +134,79 @@ export class ImportDataFromExcel extends React.PureComponent<
         <Modal
           contentClassName="bookingsInputModal"
           fullscreen
-          show={this.state.bookings !== undefined}
-          onClose={() => this.setState(() => ({ bookings: undefined }))}
+          show={this.state.importBookings !== undefined}
+          onClose={() => this.setState(() => ({ importBookings: undefined }))}
           focusAfterClose={() => {
             this.input && this.input.focus()
           }}
           header="Confirm data import"
         >
-          <BookingsInput bookings={this.state.bookings} />
-          <div className="buttons">
-            <Button
-              color="default"
-              style="flat"
-              onClick={() => {
-                this.setState(() => ({ bookings: undefined }))
-                this.input && this.input.focus()
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              style="flat"
-              onClick={() => {
-                if (this.state.bookings === undefined) {
-                  return
-                }
-                const batch = firestore.batch()
-                this.state.bookings.forEach(value => {
-                  const id = bookingId(value)
-                  removeUndefinedFromObject(value)
-                  batch.set(firestore.collection('bookings').doc(id), value)
-                })
-                batch.commit().then(() => this.setState(() => ({ bookings: undefined })))
-              }}
-            >
-              Import data
-            </Button>
-          </div>
+          {this.state.bookings &&
+            this.state.importBookings && (
+              <React.Fragment>
+                <BookingsInput
+                  bookings={this.state.importBookings.filter(
+                    i => this.state.bookings && !this.state.bookings.has(bookingId(i)),
+                  )}
+                />
+                <div className="buttons">
+                  <Button
+                    color="default"
+                    style="flat"
+                    onClick={() => {
+                      this.setState(() => ({ importBookings: undefined }))
+                      this.input && this.input.focus()
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    style="flat"
+                    onClick={() => {
+                      if (this.state.importBookings === undefined) {
+                        return
+                      }
+                      const batch = firestore.batch()
+
+                      this.state.importBookings
+                        .filter(i => this.state.bookings && !this.state.bookings.has(bookingId(i)))
+                        .forEach(value => {
+                          const id = bookingId(value)
+                          removeUndefinedFromObject(value)
+                          batch.set(firestore.collection(Collections.Bookings).doc(id), value)
+                        })
+                      batch
+                        .commit()
+                        .then(() => this.setState(() => ({ importBookings: undefined })))
+                    }}
+                  >
+                    Import data
+                  </Button>
+                </div>
+              </React.Fragment>
+            )}
         </Modal>
       </div>
     )
   }
+
+  createBookingsSubcription = (forDate: Date) =>
+    firestore
+      .collection(Collections.Bookings)
+      .where('date', '==', forDate)
+      .onSnapshot(s => {
+        const bookings = s.docs.map<Booking>(b => ({
+          ...(b.data() as Booking),
+          date: b.data().date.toDate(),
+        }))
+        const map = new Map<string, Booking>(
+          bookings.map(
+            (i): [string, Booking] => {
+              return [bookingId(i), i]
+            },
+          ),
+        )
+        this.setState(() => ({ bookings: map }))
+      })
 }

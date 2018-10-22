@@ -14,7 +14,8 @@
     "build:bus:prod": "rm -rf dist/bus && parcel build src/bus/index.html --out-dir dist/bus",
     "deploy:functions:prod": "firebase deploy --only functions -P default",
     "deploy:functions:dev": "firebase deploy --only functions -P dev",
-    "deploy:hosting:prod": "npm run build:admin:prod && npm run build:bus && firebase deploy --only hosting -P default",
+    "deploy:hosting:prod": "npm run build:admin:prod && npm run build:bus:prod && firebase deploy --only hosting -P default",
+    "deploy:hosting:admin:prod": "npm run build:admin:prod && firebase deploy --only hosting:admin -P default",
     "deploy:firestore:prod": "firebase deploy --only firestore -P default",
     "deploy:firestore:dev": "firebase deploy --only firestore -P dev",
     "deploy:prod": "firebase deploy -P default"
@@ -38,6 +39,7 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
+    "@sentry/browser": "^4.1.1",
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",
     "firebase": "5.5.2",
