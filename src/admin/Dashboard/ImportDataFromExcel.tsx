@@ -102,6 +102,13 @@ export class ImportDataFromExcel extends React.PureComponent<
                             id: tour.id,
                             name: tour.name,
                           },
+                    pickupName: importedPickUp,
+                    mainContact: i[6],
+                    paymentStatus: i[14],
+                    operationsNote: i[16] || '',
+                    phoneNumber: i[7] || undefined,
+                    email: i[8],
+                    arrival: i[15],
                     groupId: null,
                     import: {
                       tour: importedTour,

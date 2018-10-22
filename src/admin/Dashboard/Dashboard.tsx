@@ -172,10 +172,10 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                                 booking={b}
                               />
                             </td>
-                            <td>{b.import.mainContact}</td>
+                            <td>{b.mainContact}</td>
                             <td>{b.pax}</td>
                             <td>{b.import.seller}</td>
-                            <td>{b.import.paymentStatus}</td>
+                            <td>{b.paymentStatus}</td>
                             <td>
                               <select
                                 value={b.groupId || ''}

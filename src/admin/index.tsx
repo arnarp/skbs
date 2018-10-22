@@ -30,7 +30,13 @@ declare global {
       }
     }
   }
+  // var process : {
+  //   env: {
+  //     NODE_ENV: string
+  //   }
+  // }
 }
+
 
 Sentry.init({
  dsn: process.env.SENTRY_DSN,

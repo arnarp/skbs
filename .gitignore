@@ -4,3 +4,5 @@
 /.firebase
 /.env.development
 /.env.production
+skbs.prod.service-account.json
+skbs.dev.service-account.json

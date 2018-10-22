@@ -19,7 +19,7 @@ type State = Readonly<{
   pax: number
   pickupName: string
   pickup?: { id: string; name: string }
-  note: string
+  operationsNote: string
   mainContact: string
 }>
 
@@ -33,10 +33,10 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
       state: 'normal',
       show: false,
       pax: props.booking.pax,
-      pickupName: props.booking.import.pickUp,
+      pickupName: props.booking.pickupName,
       pickup: props.booking.pickUp || undefined,
-      note: props.booking.import.operationsNote || '',
-      mainContact: props.booking.import.mainContact,
+      operationsNote: props.booking.operationsNote,
+      mainContact: props.booking.mainContact,
     }
   }
 
@@ -44,10 +44,10 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
     if (this.props.booking !== prevProps.booking) {
       this.setState(() => ({
         pax: this.props.booking.pax,
-        pickupName: this.props.booking.import.pickUp,
+        pickupName: this.props.booking.pickupName,
         pickup: this.props.booking.pickUp || undefined,
-        note: this.props.booking.import.operationsNote || '',
-        mainContact: this.props.booking.import.mainContact,
+        operationsNote: this.props.booking.operationsNote,
+        mainContact: this.props.booking.mainContact,
       }))
     }
   }
@@ -122,6 +122,28 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
               </select>
             </div>
           </label>
+          <label>
+            <span>Main contact</span>
+            <input
+              type="text"
+              value={this.state.mainContact}
+              onChange={e => {
+                const mainContact = e.target.value
+                this.setState(() => ({ mainContact }))
+              }}
+            />
+          </label>
+          <label>
+            <span>Note</span>
+            <input
+              type="text"
+              value={this.state.operationsNote}
+              onChange={e => {
+                const operationsNote = e.target.value
+                this.setState(() => ({ operationsNote }))
+              }}
+            />
+          </label>
         </AddModalForm>
       </React.Fragment>
     )
@@ -130,7 +152,12 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
     event.preventDefault()
     const update: Partial<Booking> = {
       pax: this.state.pax,
-      pickUp: this.state.pickup || null,
+      pickUp: this.state.pickup || null,
+      mainContact: this.state.mainContact,
+      operationsNote: this.state.operationsNote,
+    }
+    if (this.state.pickupName !== '') {
+      update.pickupName = this.state.pickupName
     }
     breadcrumb('Update booking', 'info', update)
     firestore

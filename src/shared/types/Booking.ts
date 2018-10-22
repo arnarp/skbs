@@ -14,14 +14,17 @@ export type Booking = {
   } | null
   /** 
    * When imported should be same as import.pickUp.
-   * This field can be mutated. If pickUp is set then
-   * this property should be the same as pickUp.name. 
+   * This field can be mutated. If pickUp is null then
+   * we should use this field. 
    */
   pickupName: string
   /** When imported shoul be same as import.mainContact. Can be mutated. */
   mainContact: string
   paymentStatus: string
   operationsNote: string
+  phoneNumber?: string
+  email: string
+  arrival: string
   /** Data imported from excel sheet. It should not be mutated. */
   import: {
     tour: string

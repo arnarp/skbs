@@ -27,7 +27,7 @@ export const BookingsInput: React.SFC<BookingsInputProps> = ({ bookings }) => {
                 <ul>
                   {bookingsGroupedByDateAndPickUp[d][i].map(b => (
                     <li key={b.import.bookingRef}>
-                      {b.pax} PAX - {b.import.mainContact}
+                      {b.pax} PAX - {b.mainContact}
                     </li>
                   ))}
                 </ul>

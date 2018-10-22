@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    // "outFile": "dist/datamigration.js",
+    "outDir": "dist/datamigration",
+    "sourceMap": true,
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    "moduleResolution": "node"
+  },
+  "files": ["src/datamigration/index.ts"],
+}

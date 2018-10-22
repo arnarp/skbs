@@ -18,7 +18,9 @@
     "deploy:hosting:admin:prod": "npm run build:admin:prod && firebase deploy --only hosting:admin -P default",
     "deploy:firestore:prod": "firebase deploy --only firestore -P default",
     "deploy:firestore:dev": "firebase deploy --only firestore -P dev",
-    "deploy:prod": "firebase deploy -P default"
+    "deploy:prod": "firebase deploy -P default",
+    "run:datamigration:dev": "rm -rf dist/datamigration && tsc -p tsconfig.datamigration.json && NODE_ENV=development node dist/datamigration/datamigration/index.js",
+    "run:datamigration:prod": "rm -rf dist/datamigration && tsc -p tsconfig.datamigration.json && NODE_ENV=production node dist/datamigration/datamigration/index.js"
   },
   "keywords": [],
   "author": "",

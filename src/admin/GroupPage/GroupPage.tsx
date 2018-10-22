@@ -97,8 +97,8 @@ export class GroupPage extends React.PureComponent<
                   {p.bookings.map(b => (
                     <tr key={b.import.bookingRef}>
                       <td>{b.pax}</td>
-                      <td>{b.import.mainContact}</td>
-                      <td>{b.import.paymentStatus}</td>
+                      <td>{b.mainContact}</td>
+                      <td>{b.paymentStatus}</td>
                     </tr>
                   ))}
                 </tbody>
