@@ -19,6 +19,16 @@
 .GroupPage table td:nth-child(2) {
   width: 40%;
 }
+.GroupPage .note-container {
+  max-width: 400px;
+  margin-left: auto;
+}
+.GroupPage .note-container > * {
+  width: 100%;
+}
+.GroupPage .note {
+  display: none;
+}
 @media print {
   .GroupPage {
     font-size: 18px;
@@ -39,5 +49,11 @@
     justify-content: space-between;
     border-bottom: 1px solid var(--default-text-color-alpha07);
     margin-bottom: 12px;
+  }
+  .GroupPage textarea {
+    display: none;
+  }
+  .GroupPage .note {
+    display: block;
   }
 }

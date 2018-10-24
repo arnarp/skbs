@@ -15,6 +15,14 @@
   --secondary-color-alpha02: hsla(340, 100%, 63%, 0.2);
   --error-color: hsla(348, 100%, 55%, 1);
   --error-color-alpha02: hsla(348, 100%, 55%, 0.2);
+
+  --white: hsla(255, 100%, 100%, 1);
+  --white-08: hsla(255, 100%, 100%, .8);
+  --tangerine: hsla(36, 99%, 47%, 1);
+  --tangerine-05: hsla(36, 99%, 47%, .5);
+  --charcoal: hsla(214, 31%, 26%, 1);
+  --android-green: hsla(81, 49%, 53%, 1);
+  --android-green-05: hsla(81, 49%, 53%, .5);
 }
 html,
 body {
@@ -83,6 +91,12 @@ p {
 }
 ul {
   margin: 0;
+}
+table {
+  border-collapse: collapse;
+}
+table td {
+  padding: 0;
 }
 @media screen {
   main {

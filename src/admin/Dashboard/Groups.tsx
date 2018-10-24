@@ -191,33 +191,13 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                       </li>
                     ))}
                   </ul>
-                  <label>
-                    Note
-                    <textarea
-                      rows={1}
-                      cols={60}
-                      value={g.note || ''}
-                      onChange={event => {
-                        const update: Partial<Group> = {
-                          note: event.target.value,
-                        }
-                        firestore
-                          .collection(Collections.Groups)
-                          .doc(g.id)
-                          .update(update)
-                      }}
-                    />
-                  </label>
                 </div>
               </div>
             )
           })}
         </div>
         <div className="buttonsRow">
-          <AddDriverModalButton />
-          <AddBusModalButtonButton />
-          <AddTourModalButton />
-          <AddPickUpLocationModalButton />
+          
           <Button
             color="default"
             style="flat"

@@ -25,7 +25,7 @@ export const onPickupLocationUpdate = firestore
             .firestore()
             .collection('bookings')
             .where('pickUp', '==', null)
-            .where('import.pickUp', '==', a)
+            .where('pickupName', '==', a)
             .get()
             .then(s => {
               console.log(`${s.size} number of bookings fetched`)

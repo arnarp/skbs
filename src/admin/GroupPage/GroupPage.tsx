@@ -41,6 +41,7 @@ export class GroupPage extends React.PureComponent<
   }
 
   render() {
+    console.log('GroupPage render', this.state)
     if (this.state.group === undefined) {
       return null
     }
@@ -105,7 +106,30 @@ export class GroupPage extends React.PureComponent<
               </table>
             </div>
           ))}
-        {this.state.group && this.state.group.note && <p>{this.state.group.note}</p>}
+        <div className='note-container'>
+        <textarea
+          aria-label="Note"
+          rows={3}
+          value={this.state.group.note || ''}
+          onChange={event => {
+            const update: Partial<Group> = {
+              note: event.target.value,
+            }
+            const group = this.state.group
+            if (group) {
+              firestore
+                .collection(Collections.Groups)
+                .doc(group.id)
+                .update(update)
+            }
+          }}
+        />
+        <div className="note">
+          {this.state.group &&
+            this.state.group.note &&
+            this.state.group.note.split(/\r?\n/).map((val, index) => <p key={index}>{val}</p>)}
+        </div>
+        </div>
       </main>
     )
   }

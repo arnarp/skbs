@@ -10,7 +10,7 @@
     {
       "collectionId": "bookings",
       "fields": [
-        { "fieldPath": "import.pickUp", "mode": "ASCENDING" },
+        { "fieldPath": "pickupName", "mode": "ASCENDING" },
         { "fieldPath": "pickUp", "mode": "ASCENDING" }
       ]
     },

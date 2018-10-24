@@ -71,9 +71,9 @@ export function groupBookinsByPickUp(bookings: Booking[]): BookingsByPickUp[] {
         }
       }
     } else {
-      if (r[b.import.pickUp] === undefined) {
-        r[b.import.pickUp] = {
-          pickUpName: b.import.pickUp,
+      if (r[b.pickupName] === undefined) {
+        r[b.pickupName] = {
+          pickUpName: b.pickupName,
           bookings: [],
         }
       }
@@ -82,7 +82,7 @@ export function groupBookinsByPickUp(bookings: Booking[]): BookingsByPickUp[] {
   return Object.values(r).map(i => ({
     ...i,
     bookings: bookings.filter(
-      b => (b.pickUp ? b.pickUp.name === i.pickUpName : b.import.pickUp === i.pickUpName),
+      b => (b.pickUp ? b.pickUp.name === i.pickUpName : b.pickupName === i.pickUpName),
     ),
   }))
 }
@@ -99,7 +99,7 @@ export function groupBookinsByDateAndPickUp(bookings: Booking[]): BookingsByDate
       accumulator[currentValue.date.toISOString()] = {}
     }
     const pickUp =
-      currentValue.pickUp === null ? currentValue.import.pickUp : currentValue.pickUp.name
+      currentValue.pickUp === null ? currentValue.pickupName : currentValue.pickUp.name
     if (accumulator[currentValue.date.toISOString()][pickUp] === undefined) {
       accumulator[currentValue.date.toISOString()][pickUp] = []
     }
