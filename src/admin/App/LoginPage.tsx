@@ -1,7 +1,7 @@
 import * as React from 'react'
 import './LoginPage.css'
 import { Button } from '../../shared/components/Button'
-import { auth } from '../firebase'
+import { auth } from '../../firebase'
 
 type LoginPageProps = {}
 

@@ -1,23 +1,39 @@
-.GroupPage .header {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+.GroupPage .header .subheader {
+  font-size: 20px;
+}
+.GroupPage .header .subheader > span + span::before {
+  content: ", ";
+}
+.GroupPage h1 span {
+  font-size: 26px;
 }
 .GroupPage .Pickup {
   break-inside: avoid;
 }
-.GroupPage .Pickup + .Pickup {
+.GroupPage * + * {
   margin-top: 12px;
+}
+.GroupPage .Pickup h2 {
+  font-weight: 400;
 }
 .GroupPage table {
   table-layout: fixed;
-  width: 100%;
+  width: 90%;
+}
+.GroupPage table tr td {
+  border-bottom: 1px solid var(--charcoal-05);
 }
 .GroupPage table td:first-child {
-  width: 10%;
+  width: 76px;
 }
 .GroupPage table td:nth-child(2) {
-  width: 40%;
+  width: 250px;
+}
+.GroupPage table td:nth-child(3) {
+  width: 130px;
+}
+.GroupPage table td:nth-child(4) {
+  width: 180px;
 }
 .GroupPage .note-container {
   max-width: 400px;
@@ -36,6 +52,9 @@
   .GroupPage h1 {
     margin: 0;
     font-size: 26px;
+  }
+  .GroupPage h1 span {
+    font-size: 20px;
   }
   .GroupPage h2 {
     font-size: 21px;

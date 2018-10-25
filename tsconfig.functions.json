@@ -5,7 +5,7 @@
     "outDir": "dist/functions",
     "sourceMap": true,
     "target": "es2017",
-    "lib": ["es2017"],
+    "lib": ["es2017", "dom"],
   },
   "compileOnSave": true,
   "include": ["src/functions/index.ts"],

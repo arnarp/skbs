@@ -21,6 +21,7 @@
   --tangerine: hsla(36, 99%, 47%, 1);
   --tangerine-05: hsla(36, 99%, 47%, .5);
   --charcoal: hsla(214, 31%, 26%, 1);
+  --charcoal-05: hsla(214, 31%, 26%, .5);
   --android-green: hsla(81, 49%, 53%, 1);
   --android-green-05: hsla(81, 49%, 53%, .5);
 }
@@ -46,7 +47,7 @@ body {
   font-size: 21px;
   font-weight: 300;
   line-height: 1.58;
-  color: var(--default-text-color);
+  color: var(--charcoal);
   background-color: #fff;
 }
 button {
@@ -122,4 +123,8 @@ dd {
 }
 input[type=number] {
   text-align: right;
+}
+a {
+  color: var(--charcoal);
+  text-decoration: none;
 }

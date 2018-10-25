@@ -18,13 +18,12 @@
   justify-content: space-between;
 }
 .AddModalForm label span {
-  flex-grow: 2
+  width: 124px;
 }
 .AddModalForm label input,
 .AddModalForm label div,
 .AddModalForm label select {
-  margin-left: 12px;
-  flex-grow: 3;
+  width: 314px;
 }
 .AddModalForm input,
 .AddModalForm select {
@@ -35,4 +34,9 @@
   flex-direction: row;
   justify-content: flex-end;
   margin-top: auto;
+}
+@media only screen and (max-width: 600px) {
+  .AddModalForm label {
+    flex-direction: column;
+  }
 }

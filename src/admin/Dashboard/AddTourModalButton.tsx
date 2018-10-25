@@ -2,7 +2,7 @@ import * as React from 'react'
 import randomColor = require('randomcolor')
 import { Button } from '../../shared/components/Button'
 import { AddModalForm } from '../../shared/components/AddModalForm'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { TourDocument } from '../../shared/types/Tour'
 
 type AddTourModalButtonProps = {}

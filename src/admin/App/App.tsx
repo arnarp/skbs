@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import { auth, firestore } from '../firebase'
+import { auth, firestore } from '../../firebase'
 import { UserInfo } from '../../shared/types/User/UserInfo'
 import { getClaims } from '../../shared/auth/getClaims'
 import { UserClaims } from '../../shared/types/User/UserClaims'

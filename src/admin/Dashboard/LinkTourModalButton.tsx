@@ -3,7 +3,7 @@ import { Button } from '../../shared/components/Button'
 import { LinkIcon } from '../../shared/icons/LinkIcon'
 import { Tour, TourDocument } from '../../shared/types/Tour'
 import { AddModalForm } from '../../shared/components/AddModalForm'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 
 type LinkTourModalButtonProps = {
   tours: Tour[]

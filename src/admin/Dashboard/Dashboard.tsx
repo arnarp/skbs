@@ -1,34 +1,34 @@
-import * as React from 'react'
-import { startOfToday } from 'date-fns'
-import classnames from 'classnames'
-import { ImportDataFromExcel } from './ImportDataFromExcel'
-import './Dashboard.css'
-import { Groups } from './Groups'
-import { firestore } from '../firebase'
+import * as React from "react"
+import { startOfToday } from "date-fns"
+import classnames from "classnames"
+import { ImportDataFromExcel } from "./ImportDataFromExcel"
+import "./Dashboard.css"
+import { Groups } from "./Groups"
+import { firestore } from "../../firebase"
 import {
   Booking,
   groupBookingsByTours,
   bookingId,
   totalPax,
   countPaxByTour,
-} from '../../shared/types/Booking'
-import { Group, GroupDocument } from '../../shared/types/Group'
-import { Tour, TourDocument } from '../../shared/types/Tour'
-import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
-import { LinkTourModalButton } from './LinkTourModalButton'
-import { Dropdown } from '../../shared/components/Dropdown/Dropdown'
-import { LinkPickupLocModalButton } from './LinkPickupLocModalButton'
-import { Collections } from '../../shared/constants'
-import { EditBookingModalButton } from './EditBookingModalButton'
-import { AddDriverModalButton } from './AddDriverModalButton'
-import { AddBusModalButtonButton } from './AddBusModalButton'
-import { AddTourModalButton } from './AddTourModalButton'
-import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton'
+} from "../../shared/types/Booking"
+import { Group, GroupDocument } from "../../shared/types/Group"
+import { Tour, TourDocument } from "../../shared/types/Tour"
+import { PickUpLocation, PickUpLocationDocument } from "../../shared/types/PickUpLocation"
+import { LinkTourModalButton } from "./LinkTourModalButton"
+import { Dropdown } from "../../shared/components/Dropdown/Dropdown"
+import { LinkPickupLocModalButton } from "./LinkPickupLocModalButton"
+import { Collections } from "../../shared/constants"
+import { EditBookingModalButton } from "./EditBookingModalButton"
+import { AddDriverModalButton } from "./AddDriverModalButton"
+import { AddBusModalButtonButton } from "./AddBusModalButton"
+import { AddTourModalButton } from "./AddTourModalButton"
+import { AddPickUpLocationModalButton } from "./AddPickUpLocationModalButton"
 
 type DashboardProps = {}
 
 const initialState = {
-  chosenDate: process.env.NODE_ENV === 'development' ? new Date('2018-09-25') : startOfToday(),
+  chosenDate: process.env.NODE_ENV === "development" ? new Date("2018-09-25") : startOfToday(),
   bookings: [] as Booking[],
   groups: [] as Group[],
   tours: [] as Tour[],
@@ -67,19 +67,19 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
   }
 
   render() {
-    console.log('Dashboard render', this.state)
+    console.log("Dashboard render", this.state)
     const bookingsByTour = groupBookingsByTours(this.state.bookings)
     const numberOfBookingsNotInGroup = this.state.bookings.filter(i => i.groupId === null).length
     return (
       <main className="dashboard">
         <div className="header-row">
           <h1>
-            Bookings for{' '}
-            {this.state.chosenDate.toLocaleDateString('en-GB', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+            Bookings for{" "}
+            {this.state.chosenDate.toLocaleDateString("en-GB", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </h1>
           <ImportDataFromExcel
@@ -92,17 +92,19 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
             Change date
             <input
               type="date"
-              value={this.state.chosenDate.toISOString().split('T')[0]}
+              value={this.state.chosenDate.toISOString().split("T")[0]}
               onChange={event => {
                 const newValue = event.target.value
                 this.setState(() => ({ chosenDate: new Date(newValue) }))
               }}
             />
           </label>
-          <AddDriverModalButton />
-          <AddBusModalButtonButton />
-          <AddTourModalButton />
-          <AddPickUpLocationModalButton />
+          <div>
+            <AddDriverModalButton />
+            <AddBusModalButtonButton />
+            <AddTourModalButton />
+            <AddPickUpLocationModalButton />
+          </div>
         </div>
         <Groups
           date={this.state.chosenDate}
@@ -110,9 +112,11 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
           bookings={this.state.bookings}
           tours={this.state.tours}
         />
-        <div className={classnames('number-of-ungrouped-row', {
-          isZero: numberOfBookingsNotInGroup === 0,
-        })}>
+        <div
+          className={classnames("number-of-ungrouped-row", {
+            isZero: numberOfBookingsNotInGroup === 0,
+          })}
+        >
           <span>{`${numberOfBookingsNotInGroup} bookings ungrouped`}</span>
         </div>
         {bookingsByTour.map(g => {
@@ -123,7 +127,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                 buttonInlineStyle={
                   g.tourId !== undefined
                     ? {
-                        textDecoration: 'underline',
+                        textDecoration: "underline",
                         textDecorationColor: tour && tour.color,
                       }
                     : {}
@@ -146,7 +150,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                   return (
                     <div
                       key={pickup.pickUpName}
-                      className={classnames('pickUpContainer', {
+                      className={classnames("pickUpContainer", {
                         allInGroups: allInGroups,
                       })}
                     >
@@ -161,7 +165,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                         <span>{totalPax(pickup.bookings)} PAX</span>
                         {allWithSameGroupValue && (
                           <select
-                            value={pickup.bookings[0].groupId || ''}
+                            value={pickup.bookings[0].groupId || ""}
                             onChange={event => {
                               const newGroupId = event.target.value || null
                               const batch = firestore.batch()
@@ -172,19 +176,19 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                                 }
                                 console.log({ bookingUpdate })
                                 batch.update(
-                                  firestore.collection('bookings').doc(id),
+                                  firestore.collection("bookings").doc(id),
                                   bookingUpdate,
                                 )
                               })
 
-                              batch.commit().then(() => console.log('pickup loc updated'))
+                              batch.commit().then(() => console.log("pickup loc updated"))
                             }}
                           >
                             <option value=""> - Choose pickup group - </option>
                             {this.state.groups.map(g => (
                               <option key={g.id} value={g.id}>
-                                #{g.friendlyKey} - {g.driver ? g.driver.name : '    '} -{' '}
-                                {g.bus ? g.bus.name : '    '}
+                                #{g.friendlyKey} - {g.driver ? g.driver.name : "    "} -{" "}
+                                {g.bus ? g.bus.name : "    "}
                               </option>
                             ))}
                           </select>
@@ -211,7 +215,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                               <td>{b.paymentStatus}</td>
                               <td>
                                 <select
-                                  value={b.groupId || ''}
+                                  value={b.groupId || ""}
                                   onChange={event => {
                                     const newGroupId = event.target.value || null
                                     const bookingUpdate: Partial<Booking> = {
@@ -222,14 +226,14 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
                                       .collection(Collections.Bookings)
                                       .doc(id)
                                       .update(bookingUpdate)
-                                      .then(() => console.log('pickup loc updated'))
+                                      .then(() => console.log("pickup loc updated"))
                                   }}
                                 >
                                   <option value=""> - Choose pickup group - </option>
                                   {this.state.groups.map(g => (
                                     <option key={g.id} value={g.id}>
-                                      #{g.friendlyKey} - {g.driver ? g.driver.name : '    '} -{' '}
-                                      {g.bus ? g.bus.name : '    '}
+                                      #{g.friendlyKey} - {g.driver ? g.driver.name : "    "} -{" "}
+                                      {g.bus ? g.bus.name : "    "}
                                     </option>
                                   ))}
                                 </select>
@@ -252,22 +256,22 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
   createGroupsSubscription = () =>
     firestore
       .collection(Collections.Groups)
-      .where('date', '==', this.state.chosenDate)
-      .orderBy('friendlyKey', 'asc')
+      .where("date", "==", this.state.chosenDate)
+      .orderBy("friendlyKey", "asc")
       .onSnapshot(s => {
         const groups = s.docs.map<Group>(g => ({
           id: g.id,
           ...(g.data() as GroupDocument),
           date: g.data().date.toDate(),
         }))
-        console.log('fetched groups', groups)
+        console.log("fetched groups", groups)
         this.setState(() => ({ groups }))
       })
 
   createBookingsSubcription = () =>
     firestore
       .collection(Collections.Bookings)
-      .where('date', '==', this.state.chosenDate)
+      .where("date", "==", this.state.chosenDate)
       .onSnapshot(s => {
         const bookings = s.docs.map<Booking>(b => ({
           ...(b.data() as Booking),
@@ -278,7 +282,7 @@ export class Dashboard extends React.PureComponent<DashboardProps, DashboardStat
   createToursSubscription = () =>
     firestore
       .collection(Collections.Tours)
-      .orderBy('name', 'desc')
+      .orderBy("name", "desc")
       .onSnapshot(s => {
         const tours = s.docs.map<Tour>(t => ({
           ...(t.data() as TourDocument),

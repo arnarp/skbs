@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Button } from '../../shared/components/Button'
 import { LinkIcon } from '../../shared/icons/LinkIcon'
 import { AddModalForm } from '../../shared/components/AddModalForm'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
 import { Collections } from '../../shared/constants'
 

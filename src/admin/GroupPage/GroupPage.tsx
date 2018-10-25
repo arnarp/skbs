@@ -1,17 +1,17 @@
-import * as React from 'react'
-import { RouteComponentProps } from 'react-router-dom'
-import './GroupPage.css'
-import { Group, GroupDocument } from '../../shared/types/Group'
-import { firestore } from '../firebase'
-import { Collections } from '../../shared/constants'
+import * as React from "react"
+import { RouteComponentProps } from "react-router-dom"
+import "./GroupPage.css"
+import { Group, GroupDocument } from "../../shared/types/Group"
+import { firestore } from "../../firebase"
+import { Collections } from "../../shared/constants"
 import {
   Booking,
   toursInBookings,
   groupBookinsByPickUp,
   totalPax,
-} from '../../shared/types/Booking'
-import { propertyOf } from '../../shared/types/utils'
-import Helmet from 'react-helmet'
+} from "../../shared/types/Booking"
+import { propertyOf } from "../../shared/types/utils"
+import Helmet from "react-helmet"
 
 type GroupPageProps = {}
 type GroupPageState = Readonly<{
@@ -30,7 +30,7 @@ export class GroupPage extends React.PureComponent<
   cancelBookingsSubscription: () => void = () => {}
 
   componentDidMount() {
-    console.log('Group did mount', this.props.match.params.id)
+    console.log("Group did mount", this.props.match.params.id)
     this.cancelGroupSubscription = this.createGroupSubscription(this.props.match.params.id)
     this.cancelBookingsSubscription = this.createBookingsSubscription(this.props.match.params.id)
   }
@@ -41,7 +41,7 @@ export class GroupPage extends React.PureComponent<
   }
 
   render() {
-    console.log('GroupPage render', this.state)
+    console.log("GroupPage render", this.state)
     if (this.state.group === undefined) {
       return null
     }
@@ -59,35 +59,34 @@ export class GroupPage extends React.PureComponent<
         </Helmet>
         <div className="header">
           <h1>
-            {this.state.group.date.toLocaleDateString('en-GB', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+            {this.state.group.date.toLocaleDateString("en-GB", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
-            ,<br />
-            {toursInBookings(this.state.bookings || [])}
+            , <span>{toursInBookings(this.state.bookings || [])}</span>
           </h1>
-          <dl>
+          <div className="subheader">
             {this.state.group.driver && (
-              <React.Fragment>
-                <dt>Driver</dt>
-                <dd>{this.state.group.driver.name}</dd>
-              </React.Fragment>
+              <span>
+                <b>Driver: </b>
+                {this.state.group.driver.name}
+              </span>
             )}
             {this.state.group.bus && (
-              <React.Fragment>
-                <dt>Bus</dt>
-                <dd>{this.state.group.bus.name}</dd>
-              </React.Fragment>
+              <span>
+                <b>Bus: </b>
+                {this.state.group.bus.name}
+              </span>
             )}
             {this.state.bookings && (
-              <React.Fragment>
-                <dt>Pax</dt>
-                <dd>{totalPax(this.state.bookings)}</dd>
-              </React.Fragment>
+              <span>
+                <b>Pax: </b>
+                {totalPax(this.state.bookings)}
+              </span>
             )}
-          </dl>
+          </div>
         </div>
         {this.state.bookings &&
           groupBookinsByPickUp(this.state.bookings).map(p => (
@@ -97,38 +96,40 @@ export class GroupPage extends React.PureComponent<
                 <tbody>
                   {p.bookings.map(b => (
                     <tr key={b.import.bookingRef}>
-                      <td>{b.pax}</td>
+                      <td>{b.pax} PAX</td>
                       <td>{b.mainContact}</td>
                       <td>{b.paymentStatus}</td>
+                      <td>{b.import.seller}</td>
+                      <td>{b.operationsNote}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ))}
-        <div className='note-container'>
-        <textarea
-          aria-label="Note"
-          rows={3}
-          value={this.state.group.note || ''}
-          onChange={event => {
-            const update: Partial<Group> = {
-              note: event.target.value,
-            }
-            const group = this.state.group
-            if (group) {
-              firestore
-                .collection(Collections.Groups)
-                .doc(group.id)
-                .update(update)
-            }
-          }}
-        />
-        <div className="note">
-          {this.state.group &&
-            this.state.group.note &&
-            this.state.group.note.split(/\r?\n/).map((val, index) => <p key={index}>{val}</p>)}
-        </div>
+        <div className="note-container">
+          <textarea
+            aria-label="Note"
+            rows={3}
+            value={this.state.group.note || ""}
+            onChange={event => {
+              const update: Partial<Group> = {
+                note: event.target.value,
+              }
+              const group = this.state.group
+              if (group) {
+                firestore
+                  .collection(Collections.Groups)
+                  .doc(group.id)
+                  .update(update)
+              }
+            }}
+          />
+          <div className="note">
+            {this.state.group &&
+              this.state.group.note &&
+              this.state.group.note.split(/\r?\n/).map((val, index) => <p key={index}>{val}</p>)}
+          </div>
         </div>
       </main>
     )
@@ -155,7 +156,7 @@ export class GroupPage extends React.PureComponent<
   private createBookingsSubscription = (id: string) => {
     return firestore
       .collection(Collections.Bookings)
-      .where(propertyOf<Booking>('groupId'), '==', id)
+      .where(propertyOf<Booking>("groupId"), "==", id)
       .onSnapshot(s => {
         const bookings = s.docs.map<Booking>(b => ({
           ...(b.data() as Booking),

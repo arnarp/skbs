@@ -3,13 +3,9 @@ import { Link } from 'react-router-dom'
 import './Groups.css'
 import { Button } from '../../shared/components/Button'
 import { Driver } from '../../shared/types/Driver'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { BusDocument, Bus } from '../../shared/types/Bus'
 import { GroupDocument, Group } from '../../shared/types/Group'
-import { AddDriverModalButton } from './AddDriverModalButton'
-import { AddBusModalButtonButton } from './AddBusModalButton'
-import { AddTourModalButton } from './AddTourModalButton'
-import { AddPickUpLocationModalButton } from './AddPickUpLocationModalButton'
 import {
   Booking,
   groupBookinsByPickUp,
@@ -17,7 +13,7 @@ import {
   toursInBookings,
 } from '../../shared/types/Booking'
 import { Tour } from '../../shared/types/Tour'
-import { Collections } from '../../shared/constants'
+import { subscribeOnDrivers } from '../../firebase/firestore/drivers';
 
 type GroupsProps = {
   date: Date
@@ -41,19 +37,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
   readonly subscriptions: Array<() => void> = []
 
   componentDidMount() {
-    const driversSubcription = firestore
-      .collection('drivers')
-      .orderBy('name', 'desc')
-      .onSnapshot(s => {
-        const drivers = s.docs.map<Driver>(d => ({
-          id: d.id,
-          name: d.data().name,
-        }))
-        console.log('fetched drivers', drivers)
-        this.setState(() => ({
-          drivers,
-        }))
-      })
+    const driversSubcription = subscribeOnDrivers(drivers => this.setState(() => ({ drivers })))
     this.subscriptions.push(driversSubcription)
     const busesSubscription = firestore
       .collection('buses')

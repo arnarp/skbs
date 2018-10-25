@@ -22,7 +22,7 @@
   background: white;
   margin: 6px;
   min-width: 50vw;
-  max-width: calc(414px - 12px);
+  /* max-width: calc(414px - 12px); */
   border-radius: 4px;
   max-height: calc(100vh - 12px);
 }

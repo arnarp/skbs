@@ -34,7 +34,8 @@ async function migrateBookings() {
         operationsNote: booking.import.operationsNote || '',
         phoneNumber: booking.import.phoneNumber,
         email: booking.import.email,
-        arrival: booking.import.arrival
+        arrival: booking.import.arrival,
+        paymentStatus: booking.import.paymentStatus,
       }
       removeUndefinedFromObject(update)
       console.info({ update })

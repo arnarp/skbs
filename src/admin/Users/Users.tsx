@@ -1,6 +1,6 @@
 import * as React from 'react'
 import './Users.css'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { Collections } from '../../shared/constants'
 import { UserMeta, UserMetaDocument } from '../../shared/types/User/UserMeta'
 import { Avatar } from '../../shared/components/Avatar'

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
 import { AddModalForm } from '../../shared/components/AddModalForm'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { BusDocument } from '../../shared/types/Bus';
 
 type AddBusModalButtonButtonProps = {}

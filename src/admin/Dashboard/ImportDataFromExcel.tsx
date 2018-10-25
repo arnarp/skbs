@@ -6,7 +6,7 @@ import './ImportDataFromExcel.css'
 import { Booking, bookingId } from '../../shared/types/Booking'
 import { BookingsInput } from './BookingsInput'
 import { Button } from '../../shared/components/Button'
-import { firestore } from '../firebase'
+import { firestore } from '../../firebase'
 import { removeUndefinedFromObject } from '../../shared/utils/removeUndefinedFromObject'
 import {
   PickUpLocation,
