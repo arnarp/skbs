@@ -33,7 +33,7 @@ export class LinkPickupLocModalButton extends React.PureComponent<
           style="flat"
           onClick={() => this.setState(() => ({ show: true }))}
         >
-          <LinkIcon color="primary" size="small" />
+          <LinkIcon color="munsell" size="small" />
         </Button>
         <AddModalForm
           show={this.state.show}

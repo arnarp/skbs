@@ -9,7 +9,7 @@ type ButtonProps = {
   onClick?: () => void
   disabled?: boolean
   lookLikeDisabled?: boolean
-  color: 'default' | 'primary' | 'secondary' | 'white'
+  color: 'default' | 'munsell' | 'white'
   style?: ButtonStyle
   type?: 'button' | 'submit'
   to?: string

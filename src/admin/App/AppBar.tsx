@@ -32,6 +32,7 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
       <div className="AppBar" role="banner">
         <Link to='/'>Admin</Link>
         <Link to='/users'>Users</Link>
+        <Link to='/drivers'>Drivers</Link>
         <button
           className="UserBtn"
           ref={el => (this.toggleUserModalButton = el)}

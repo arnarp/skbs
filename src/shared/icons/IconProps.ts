@@ -1,10 +1,5 @@
 export type MainColors =
-  | 'default'
-  | 'white'
-  | 'primary'
-  | 'secondary'
-  | 'error'
-  | 'green';
+  | 'munsell' | 'white';
 export type Sizes = 'small' | 'medium' | 'large' | 'xLarge';
 
 export type IconProps = {

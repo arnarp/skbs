@@ -95,27 +95,27 @@
   outline: 1px solid var(--primary-color);
 }
 
-.Button.primary {
+.Button.munsell {
   color: white;
-  background-color: var(--primary-color);
-  border: 1px solid var(--primary-color);
+  background-color: var(--munsell);
+  border: 1px solid var(--munsell);
 }
 .Button.primary:hover {
-  background-color: var(--primary-color);
+  background-color: var(--munsell);
 }
 .Button.primary.Disabled {
   color: rgba(0, 0, 0, 0.5);
-  background-color: var(--primary-color-alpha07);
+  background-color: var(--munsell-07);
 }
 .Button.Style-flat.primary {
-  color: var(--primary-color);
+  color: var(--munsell);
   background-color: transparent;
 }
 .Button.Style-flat.primary.Disabled {
-  color: var(--primary-color-alpha02);
+  color: var(--munsell-02);
 }
 .Button.Style-flat.primary:focus {
-  outline: 1px solid var(--primary-color-alpha02);
+  outline: 1px solid var(--munsell-02);
 }
 
 .Button.secondary {

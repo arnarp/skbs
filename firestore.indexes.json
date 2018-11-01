@@ -20,6 +20,13 @@
         { "fieldPath": "date", "mode": "ASCENDING" },
         { "fieldPath": "friendlyKey", "mode": "ASCENDING" }
       ]
+    },
+    {
+      "collectionId": "drivers",
+      "fields": [
+        { "fieldPath": "status", "mode": "ASCENDING" },
+        { "fieldPath": "name", "mode": "DESCENDING" }
+      ]
     }
   ]
 }

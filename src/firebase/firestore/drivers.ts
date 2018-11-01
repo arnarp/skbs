@@ -1,16 +1,25 @@
 import { firestore } from ".."
-import { Driver } from "../../shared/types/Driver";
+import { Driver, DriverDocument } from "../../shared/types/Driver"
+import { OrderByDirection } from "@google-cloud/firestore"
 
-export function subscribeOnDrivers(onDrivers: (drivers: Driver[]) => void) {
-  return firestore
-    .collection("drivers")
-    .orderBy("name", "desc")
-    .onSnapshot(s => {
-      const drivers = s.docs.map<Driver>(d => ({
-        id: d.id,
-        name: d.data().name,
-      }))
-      console.log("fetched drivers", drivers)
-      onDrivers(drivers)
-    })
+export function subscribeOnDrivers(
+  config: {
+    orderBy?: {
+      fieldPath: keyof Driver
+      directionStr: OrderByDirection
+    }
+  },
+  onDrivers: (drivers: Driver[]) => void,
+) {
+  const orderBy = config.orderBy || { fieldPath: "name", directionStr: "desc" }
+  const collection = firestore.collection("drivers")
+  let query = collection.orderBy(orderBy.fieldPath, orderBy.directionStr)
+  return query.onSnapshot(s => {
+    const drivers = s.docs.map<Driver>(d => ({
+      id: d.id,
+      ...(d.data() as DriverDocument),
+    }))
+    console.log("fetched drivers", drivers)
+    onDrivers(drivers)
+  })
 }

@@ -13,6 +13,7 @@ import { Dashboard } from '../Dashboard'
 import { Users } from '../Users'
 import { GroupPage } from '../GroupPage'
 import { AppErrorBoundary } from './AppErrorBoundary'
+import { DriversPage } from '../Views/Drivers';
 
 type AppProps = {}
 
@@ -101,6 +102,7 @@ export class App extends React.Component<AppProps, AppState> {
               }
             />
             <Route path="/group/:id" component={GroupPage} />
+            <Route path="/drivers" component={DriversPage} />
           </AppErrorBoundary>
 
           <footer>{process.env.NODE_ENV === 'development' && 'development'}</footer>

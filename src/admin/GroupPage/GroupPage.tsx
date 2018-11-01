@@ -76,7 +76,7 @@ export class GroupPage extends React.PureComponent<
             )}
             {this.state.group.bus && (
               <span>
-                <b>Bus: </b>
+                <b>Vehicle: </b>
                 {this.state.group.bus.name}
               </span>
             )}

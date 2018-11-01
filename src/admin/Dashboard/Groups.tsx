@@ -1,19 +1,19 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
-import './Groups.css'
-import { Button } from '../../shared/components/Button'
-import { Driver } from '../../shared/types/Driver'
-import { firestore } from '../../firebase'
-import { BusDocument, Bus } from '../../shared/types/Bus'
-import { GroupDocument, Group } from '../../shared/types/Group'
+import * as React from "react"
+import { Link } from "react-router-dom"
+import "./Groups.css"
+import { Button } from "../../shared/components/Button"
+import { Driver } from "../../shared/types/Driver"
+import { firestore } from "../../firebase"
+import { BusDocument, Bus } from "../../shared/types/Bus"
+import { GroupDocument, Group } from "../../shared/types/Group"
 import {
   Booking,
   groupBookinsByPickUp,
   totalPax,
   toursInBookings,
-} from '../../shared/types/Booking'
-import { Tour } from '../../shared/types/Tour'
-import { subscribeOnDrivers } from '../../firebase/firestore/drivers';
+} from "../../shared/types/Booking"
+import { Tour } from "../../shared/types/Tour"
+import { subscribeOnDrivers } from "../../firebase/firestore/drivers"
 
 type GroupsProps = {
   date: Date
@@ -37,17 +37,17 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
   readonly subscriptions: Array<() => void> = []
 
   componentDidMount() {
-    const driversSubcription = subscribeOnDrivers(drivers => this.setState(() => ({ drivers })))
+    const driversSubcription = subscribeOnDrivers({}, drivers => this.setState(() => ({ drivers })))
     this.subscriptions.push(driversSubcription)
     const busesSubscription = firestore
-      .collection('buses')
-      .orderBy('name', 'desc')
+      .collection("buses")
+      .orderBy("name", "desc")
       .onSnapshot(s => {
         const buses = s.docs.map<Bus>(d => ({
           id: d.id,
           ...(d.data() as BusDocument),
         }))
-        console.log('fetched buses', buses)
+        console.log("fetched buses", buses)
         this.setState(() => ({ buses }))
       })
     this.subscriptions.push(busesSubscription)
@@ -66,7 +66,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
             const bookingsForGroup = this.props.bookings.filter(b => b.groupId === g.id)
             const tourPax = bookingsForGroup.reduce(
               (acc, val) => {
-                const tourId = val.tour === null ? 'unknown' : val.tour.id
+                const tourId = val.tour === null ? "unknown" : val.tour.id
                 if (acc[tourId] === undefined) {
                   acc[tourId] = 0
                 }
@@ -81,7 +81,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                 : Object.entries(tourPax).map(i => {
                     const tour = this.props.tours.find(t => t.id === i[0])
                     return {
-                      color: tour === undefined ? '#24292eb3' : tour.color,
+                      color: tour === undefined ? "#24292eb3" : tour.color,
                       pax: i[1],
                     }
                   })
@@ -93,10 +93,10 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                 <div className="groupHeader">
                   <span className="friendlyKey">{g.friendlyKey}</span>
                   <select
-                    value={g.driver === undefined ? '' : g.driver.id}
+                    value={g.driver === undefined ? "" : g.driver.id}
                     onChange={event => {
                       const newGroupDriverId = event.target.value
-                      console.log('onChange', { newGroupDriverId })
+                      console.log("onChange", { newGroupDriverId })
                       const newGroupDriver = this.state.drivers.find(
                         value => value.id === newGroupDriverId,
                       )
@@ -110,7 +110,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                               },
                       }
                       firestore
-                        .collection('groups')
+                        .collection("groups")
                         .doc(g.id)
                         .update(groupUpdate)
                     }}
@@ -123,7 +123,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                     ))}
                   </select>
                   <select
-                    value={g.bus === undefined ? '' : g.bus.id}
+                    value={g.bus === undefined ? "" : g.bus.id}
                     onChange={event => {
                       const newGroupBusId = event.target.value
                       const newGroupBus = this.state.buses.find(value => value.id === newGroupBusId)
@@ -138,7 +138,7 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                         maxPax: newGroupBus ? newGroupBus.maxPax : undefined,
                       }
                       firestore
-                        .collection('groups')
+                        .collection("groups")
                         .doc(g.id)
                         .update(groupUpdate)
                     }}
@@ -162,12 +162,12 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
                     ))}
                   </div>
                   <span>
-                    {pax}/{g.maxPax || '?'}
+                    {pax}/{g.maxPax || "?"}
                   </span>
                   <Link to={`/group/${g.id}`}>Print</Link>
                 </div>
                 <div className="groupContent">
-                  <p>Tours: {toursInBookings(bookingsForGroup).join(', ')}</p>
+                  <p>Tours: {toursInBookings(bookingsForGroup).join(", ")}</p>
                   <ul>
                     {byPickup.map(p => (
                       <li key={p.pickUpName}>
@@ -181,7 +181,6 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
           })}
         </div>
         <div className="buttonsRow">
-          
           <Button
             color="default"
             style="flat"
@@ -200,10 +199,10 @@ export class Groups extends React.PureComponent<GroupsProps, GroupsState> {
       friendlyKey: this.props.groups.length + 1,
     }
     firestore
-      .collection('groups')
+      .collection("groups")
       .add(newGroupDoc)
       .then(() => {
-        console.log('Saved group')
+        console.log("Saved group")
       })
   }
 }

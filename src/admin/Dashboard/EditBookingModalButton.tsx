@@ -60,7 +60,7 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
           style="flat"
           onClick={() => this.setState(() => ({ show: true }))}
         >
-          <EditIcon color="default" size="small" />
+          <EditIcon color="munsell" size="small" />
         </Button>
         <AddModalForm
           show={this.state.show}

@@ -1,5 +1,5 @@
-.Svg.Fill-default {
-  fill: var(--default-text-color-alpha07);
+.Svg.Fill-munsell {
+  fill: var(--munsell);
 }
 .Svg.Fill-white {
   fill: white;
@@ -13,11 +13,11 @@
 .Svg.Fill-error {
   fill: var(--error-color);
 }
-.Svg.Stroke-default {
-  stroke: var(--default-text-color-alpha07);
+.Svg.Stroke-white {
+  stroke: var(--white);
 }
-.Svg.Stroke-primary {
-  stroke: var(--primary-color);
+.Svg.Stroke-munsell {
+  stroke: var(--munsell);
 }
 .Svg.Size-small {
   height: 18px;
