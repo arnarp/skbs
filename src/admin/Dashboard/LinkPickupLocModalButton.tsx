@@ -22,13 +22,13 @@ export class LinkPickupLocModalButton extends React.PureComponent<
   LinkPickupLocModalButtonState
 > {
   readonly state: LinkPickupLocModalButtonState = initialState
-  btn: HTMLButtonElement | null = null
+  btn = React.createRef<HTMLButtonElement>()
 
   render() {
     return (
       <React.Fragment>
         <Button
-          inputRef={el => (this.btn = el)}
+          ref={this.btn}
           color="default"
           style="flat"
           onClick={() => this.setState(() => ({ show: true }))}
@@ -38,7 +38,7 @@ export class LinkPickupLocModalButton extends React.PureComponent<
         <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
-          focusAfterClose={() => this.btn && this.btn.focus()}
+          focusAfterClose={() => this.btn.current && this.btn.current.focus()}
           header="Link pickup location"
           submitBtnLabel="Link pickup location"
           onSubmit={this.onSubmit}

@@ -25,7 +25,7 @@ type State = Readonly<{
 
 export class EditBookingModalButton extends React.PureComponent<Props, State> {
   readonly state: State
-  btn: HTMLButtonElement | null = null
+  btn = React.createRef<HTMLButtonElement>()
 
   constructor(props: Props) {
     super(props)
@@ -55,7 +55,7 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <Button
-          inputRef={el => (this.btn = el)}
+          ref={this.btn}
           color="default"
           style="flat"
           onClick={() => this.setState(() => ({ show: true }))}
@@ -65,12 +65,12 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
         <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => ({ show: false }))}
-          focusAfterClose={() => this.btn && this.btn.focus()}
+          focusAfterClose={() => this.btn.current && this.btn.current.focus()}
           header="Edit booking"
           submitBtnLabel="Submit changes"
           onSubmit={this.onSubmit}
           submitDisabled={false}
-          formClassName="EditBookingModalButton"
+          // formClassName="EditBookingModalButton"
         >
           <label>
             <span>Pax</span>

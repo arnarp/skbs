@@ -1,56 +1,66 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
-import classnames from 'classnames'
-import './Button.css'
+import * as React from "react"
+import classnames from "classnames"
+import "./Button.css"
 
-type ButtonStyle = 'raised' | 'action' | 'flat'
+type ButtonStyle = "raised" | "action" | "flat"
 
 type ButtonProps = {
   onClick?: () => void
   disabled?: boolean
   lookLikeDisabled?: boolean
-  color: 'default' | 'munsell' | 'white'
+  color: "default" | "munsell" | "white"
   style?: ButtonStyle
-  type?: 'button' | 'submit'
-  to?: string
-  width?: 'fit-content'
+  type?: "button" | "submit"
+  // to?: string
+  width?: "fit-content"
   className?: string
-  inputRef?: (ref: any) => void
 }
-export class Button extends React.PureComponent<ButtonProps> {
-  render() {
-    const style: ButtonStyle = this.props.style || 'raised'
-    const className = classnames(
-      this.props.className,
-      'Button',
-      this.props.color,
-      `Style-${style}`,
-      this.props.width,
-      {
-        Disabled: this.props.lookLikeDisabled || this.props.disabled,
-      },
-    )
-    if (this.props.to) {
-      return (
-        <Link
-          className={className}
-          to={this.props.to}
-          onClick={this.props.onClick}
-        >
-          {this.props.children}
-        </Link>
-      )
-    }
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      onClick,
+      color,
+      width,
+      lookLikeDisabled,
+      children,
+      disabled,
+      className,
+      style = "raised",
+      type = "button",
+    },
+    ref,
+  ) => {
+    // const style: ButtonStyle = this.props.style || "raised"
+    // if (this.props.to) {
+    //   return (
+    //     <Link
+    //       className={className}
+    //       to={this.props.to}
+    //       onClick={this.props.onClick}
+    //     >
+    //       {this.props.children}
+    //     </Link>
+    //   )
+    // }
     return (
       <button
-        type={this.props.type || 'button'}
-        disabled={this.props.disabled}
-        onClick={this.props.onClick}
-        className={className}
-        ref={this.props.inputRef}
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        className={classnames(
+          className,
+          "Button",
+          color,
+          `Style-${style}`,
+          width,
+          {
+            Disabled: lookLikeDisabled || disabled,
+          },
+        )}
+        ref={ref}
       >
-        {this.props.children}
+        {children}
       </button>
     )
-  }
-}
+  },
+)

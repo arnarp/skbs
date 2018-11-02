@@ -23,7 +23,7 @@ export class AddTourModalButton extends React.PureComponent<
   AddTourModalButtonState
 > {
   readonly state: AddTourModalButtonState = initialState()
-  btn: HTMLButtonElement | null = null
+  btn = React.createRef<HTMLButtonElement>()
 
   render() {
     return (
@@ -31,7 +31,7 @@ export class AddTourModalButton extends React.PureComponent<
         <Button
           color="default"
           style="flat"
-          inputRef={el => (this.btn = el)}
+          ref={this.btn}
           onClick={() => this.setState(() => ({ show: true }))}
         >
           Add tour
@@ -40,7 +40,7 @@ export class AddTourModalButton extends React.PureComponent<
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(initialState())}
-          focusAfterClose={() => this.btn && this.btn.focus()}
+          focusAfterClose={() => this.btn.current && this.btn.current.focus()}
           header="Add new tour"
           submitBtnLabel="Add tour"
         >

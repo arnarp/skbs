@@ -21,7 +21,7 @@ export class AppErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch?(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({ error })
-    console.log({ error, errorInfo })
+    console.log({ error, errorInfo, NODE_ENV: process.env.NODE_ENV })
     if ((process.env.NODE_ENV === 'production')) {
       Sentry.withScope(scope => {
         scope.setExtra('componentStack', errorInfo.componentStack)

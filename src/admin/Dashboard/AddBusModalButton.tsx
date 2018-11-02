@@ -18,7 +18,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
   AddBusModalButtonButtonState
 > {
   readonly state: AddBusModalButtonButtonState = initialState
-  btn: HTMLButtonElement | null = null
+  btn = React.createRef<HTMLButtonElement>()
 
   render() {
     return (
@@ -26,7 +26,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
         <Button
           color="default"
           style="flat"
-          inputRef={el => (this.btn = el)}
+          ref={this.btn}
           onClick={() => this.setState(() => ({ show: true }))}
         >
           Add bus
@@ -35,7 +35,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
-          focusAfterClose={() => this.btn && this.btn.focus()}
+          focusAfterClose={() => this.btn.current && this.btn.current.focus()}
           header="Add new bus"
           submitBtnLabel="Add bus"
         >

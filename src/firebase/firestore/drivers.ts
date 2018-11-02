@@ -2,7 +2,7 @@ import { firestore } from ".."
 import { Driver, DriverDocument } from "../../shared/types/Driver"
 import { OrderByDirection } from "@google-cloud/firestore"
 import { Collections } from "../../shared/constants"
-import { FirebaseError } from "firebase";
+import { FirebaseError } from "firebase"
 
 export function subscribeOnDrivers(
   config: {
@@ -26,6 +26,18 @@ export function subscribeOnDrivers(
   })
 }
 
+export function addNewDriver(params: {
+  newDriverDoc: DriverDocument
+  onSuccess: () => void
+  onReject: (reason: FirebaseError) => void
+}) {
+  firestore
+    .collection(Collections.Drivers)
+    .add(params.newDriverDoc)
+    .then(params.onSuccess)
+    .catch(params.onReject)
+}
+
 export function updateDriver(params: {
   driverId: string
   update: Partial<Driver>
@@ -36,6 +48,19 @@ export function updateDriver(params: {
     .collection(Collections.Drivers)
     .doc(params.driverId)
     .update(params.update)
+    .then(params.onSuccess)
+    .catch(params.onReject)
+}
+
+export function deleteDriver(params: {
+  driverId: string
+  onSuccess: () => void
+  onReject: (reason: FirebaseError) => void
+}) {
+  firestore
+    .collection(Collections.Drivers)
+    .doc(params.driverId)
+    .delete()
     .then(params.onSuccess)
     .catch(params.onReject)
 }
