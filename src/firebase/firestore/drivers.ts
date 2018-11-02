@@ -1,6 +1,8 @@
 import { firestore } from ".."
 import { Driver, DriverDocument } from "../../shared/types/Driver"
 import { OrderByDirection } from "@google-cloud/firestore"
+import { Collections } from "../../shared/constants"
+import { FirebaseError } from "firebase";
 
 export function subscribeOnDrivers(
   config: {
@@ -22,4 +24,18 @@ export function subscribeOnDrivers(
     console.log("fetched drivers", drivers)
     onDrivers(drivers)
   })
+}
+
+export function updateDriver(params: {
+  driverId: string
+  update: Partial<Driver>
+  onSuccess: () => void
+  onReject: (reason: FirebaseError) => void
+}) {
+  firestore
+    .collection(Collections.Drivers)
+    .doc(params.driverId)
+    .update(params.update)
+    .then(params.onSuccess)
+    .catch(params.onReject)
 }

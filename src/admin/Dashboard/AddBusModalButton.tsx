@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { firestore } from '../../firebase'
 import { BusDocument } from '../../shared/types/Bus';
 
@@ -31,7 +31,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
         >
           Add bus
         </Button>
-        <AddModalForm
+        <ModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
@@ -61,7 +61,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
               }}
             />
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { DriverDocument } from '../../shared/types/Driver'
 import { firestore } from '../../firebase'
 
@@ -30,7 +30,7 @@ export class AddDriverModalButton extends React.PureComponent<
         >
           Add driver
         </Button>
-        <AddModalForm
+        <ModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
@@ -49,7 +49,7 @@ export class AddDriverModalButton extends React.PureComponent<
               }}
             />
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }

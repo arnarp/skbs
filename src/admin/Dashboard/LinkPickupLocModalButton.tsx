@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
 import { LinkIcon } from '../../shared/icons/LinkIcon'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { firestore } from '../../firebase'
 import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
 import { Collections } from '../../shared/constants'
@@ -35,7 +35,7 @@ export class LinkPickupLocModalButton extends React.PureComponent<
         >
           <LinkIcon color="munsell" size="small" />
         </Button>
-        <AddModalForm
+        <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
           focusAfterClose={() => this.btn && this.btn.focus()}
@@ -63,7 +63,7 @@ export class LinkPickupLocModalButton extends React.PureComponent<
               ))}
             </select>
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }

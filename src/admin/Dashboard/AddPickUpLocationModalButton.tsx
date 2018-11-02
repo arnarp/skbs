@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button } from '../../shared/components/Button'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { firestore } from '../../firebase'
 import { PickUpLocationDocument } from '../../shared/types/PickUpLocation';
 
@@ -33,7 +33,7 @@ export class AddPickUpLocationModalButton extends React.PureComponent<
         >
           Add pick up location
         </Button>
-        <AddModalForm
+        <ModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(initialState())}
@@ -52,7 +52,7 @@ export class AddPickUpLocationModalButton extends React.PureComponent<
               }}
             />
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }

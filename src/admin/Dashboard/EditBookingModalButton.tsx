@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Booking, bookingId } from '../../shared/types/Booking'
 import { Button } from '../../shared/components/Button'
 import { EditIcon } from '../../shared/icons/EditIcon'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { breadcrumb } from '../../shared/utils/breadcrumb'
 import { firestore } from '../../firebase'
 import { Collections } from '../../shared/constants'
@@ -62,7 +62,7 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
         >
           <EditIcon color="munsell" size="small" />
         </Button>
-        <AddModalForm
+        <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => ({ show: false }))}
           focusAfterClose={() => this.btn && this.btn.focus()}
@@ -144,7 +144,7 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
               }}
             />
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }

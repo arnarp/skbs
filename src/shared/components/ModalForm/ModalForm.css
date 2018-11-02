@@ -1,42 +1,48 @@
-.AddModalForm {
+.ModalForm {
   flex-grow: 1;
   padding: 18px;
   display: flex;
   flex-direction: column;
   min-height: 300px;
 }
-.AddModalForm > * + * {
+.ModalForm > * + * {
   margin-top: 12px;
 }
-.AddModalForm button {
+.ModalForm button {
   align-self: flex-end;
   justify-self: flex-end;
   margin-top: auto;
 }
-.AddModalForm label {
+.ModalForm label {
   display: flex;
   justify-content: space-between;
 }
-.AddModalForm label span {
+.ModalForm label span {
   width: 124px;
 }
-.AddModalForm label input,
-.AddModalForm label div,
-.AddModalForm label select {
+.ModalForm label input,
+.ModalForm label div,
+.ModalForm label select {
   width: 314px;
 }
-.AddModalForm input,
-.AddModalForm select {
+.ModalForm input,
+.ModalForm select {
   width: 100%;
 }
-.AddModalForm .buttonRow {
+.ModalForm .buttonRow {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: auto;
 }
+.ModalForm .buttonRow .submitError {
+  color: var(--tangerine);
+  max-width: 360px;
+  padding-right: 12px;
+  overflow: scroll;
+}
 @media only screen and (max-width: 600px) {
-  .AddModalForm label {
+  .ModalForm label {
     flex-direction: column;
   }
 }

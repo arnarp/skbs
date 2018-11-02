@@ -1,7 +1,7 @@
 import * as React from 'react'
 import randomColor = require('randomcolor')
 import { Button } from '../../shared/components/Button'
-import { AddModalForm } from '../../shared/components/AddModalForm'
+import { ModalForm } from '../../shared/components/ModalForm'
 import { firestore } from '../../firebase'
 import { TourDocument } from '../../shared/types/Tour'
 
@@ -36,7 +36,7 @@ export class AddTourModalButton extends React.PureComponent<
         >
           Add tour
         </Button>
-        <AddModalForm
+        <ModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(initialState())}
@@ -73,7 +73,7 @@ export class AddTourModalButton extends React.PureComponent<
               Random
             </Button>
           </label>
-        </AddModalForm>
+        </ModalForm>
       </React.Fragment>
     )
   }
