@@ -13,6 +13,8 @@
     transform 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     outline 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  height: 36px;
+  padding: 6px 12px;
 }
 .Button.fit-content {
   width: fit-content;
@@ -20,55 +22,7 @@
 .Button.Disabled {
   cursor: default;
 }
-.Button:focus {
-  outline: 1px solid white;
-}
-.Button.white:focus {
-  outline: 1px solid var(--primary-color);
-}
-
-.Button.Style-raised {
-  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 2px;
-  padding: 6px 12px;
-  min-height: 36px;
-  min-width: 88px;
-}
-.Button.Style-raised:active {
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
-
-.Button.Style-action {
-  height: 56px;
-  width: 56px;
-  border-radius: 50%;
-  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
-    0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
-}
-.Button.Style-action:active {
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
-.Button.Style-action:focus {
-  outline: none;
-  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
-    0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12),
-    inset 1px 1px 0px 2px white;
-}
-.Button.Style-action:active:focus {
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12),
-    inset 1px 1px 0px 2px white;
-}
-
-.Button.Style-flat {
-  height: 36px;
-  padding: 6px 12px;
-  outline: 1px solid transparent;
-}
-.Button.Style-flat:active {
+.Button:active {
   transform: scale(0.9);
 }
 
@@ -77,78 +31,49 @@
   background-color: transparent;
   border: 1px solid var(--default-color);
 }
-.Button.default:hover {
-  /* background-color: var(--default-color); */
-}
 .Button.default.Disabled {
   color: hsla(0, 0%, 0%, 0.5);
   background-color: var(--default-color-alpha07);
 }
-.Button.Style-flat.default {
+.Button.default {
   color: var(--black);
   background-color: transparent;
 }
-.Button.Style-flat.default.Disabled {
+.Button.default.Disabled {
   color: var(--black-alpha025);
 }
-.Button.Style-flat.default:focus {
-  outline: 1px solid var(--primary-color);
+.Button.default:focus {
+  box-shadow: 0 0 3pt 2pt var(--default-color-alpha07);
 }
 
 .Button.munsell {
-  color: white;
-  background-color: var(--munsell);
-  border: 1px solid var(--munsell);
-}
-.Button.primary:hover {
-  background-color: var(--munsell);
-}
-.Button.primary.Disabled {
-  color: rgba(0, 0, 0, 0.5);
-  background-color: var(--munsell-07);
-}
-.Button.Style-flat.primary {
   color: var(--munsell);
   background-color: transparent;
+  border: 1px solid var(--munsell);
 }
-.Button.Style-flat.primary.Disabled {
+.Button.munsell:hover {
+  background-color: var(--munsell);
+}
+.Button.munsell.Disabled {
+  color: rgba(255, 255, 255, 0.5);
+  background-color: var(--munsell-02);
+  border: 1px solid var(--munsell-02);
+}
+.Button.munsell.Disabled {
   color: var(--munsell-02);
 }
-.Button.Style-flat.primary:focus {
-  outline: 1px solid var(--munsell-02);
+.Button.munsell:focus {
+  box-shadow: 0 0 3pt 2pt var(--munsell-07);
 }
 
-.Button.secondary {
-  color: white;
-  background-color: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
-}
-.Button.secondary:hover {
-  background-color: var(--secondary-color);
-}
-.Button.secondary.Disabled {
-  color: rgba(0, 0, 0, 0.5);
-  background-color: var(--secondary-color-alpha07);
-}
-.Button.Style-flat.secondary {
-  color: var(--secondary-color);
-  background-color: transparent;
-}
-.Button.Style-flat.secondary.Disabled {
-  color: var(--secondary-color-alpha02);
-}
-.Button.Style-flat.secondary:focus {
-  outline: 1px solid var(--secondary-color-alpha02);
-}
-
-.Button.Style-flat.white {
+.Button.white {
   color: white;
   background-color: transparent;
 }
-.Button.Style-flat.white.Disabled {
+.Button.white.Disabled {
   color: hsla(100, 100%, 100%, 0.2);
 }
-.Button.Style-flat.white:focus {
+.Button.white:focus {
   outline: 1px solid hsla(100, 100%, 100%, 0.2);
 }
 

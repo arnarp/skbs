@@ -2,33 +2,29 @@ import * as React from "react"
 import { EditIcon } from "../../../shared/icons/EditIcon"
 import { ModalForm } from "../../../shared/components/ModalForm"
 import { IconButton } from "../../../shared/components/IconButton/IconButton"
-import { Driver } from "../../../shared/types/Driver"
 import { useTextInput } from "../../../shared/hooks/useTextInput"
-import { updateDriver } from "../../../firebase/firestore/drivers"
 import { logger } from "../../../shared/utils/breadcrumb"
+import { PickUpLocation } from "../../../shared/types/PickUpLocation"
+import { updatePickup } from "../../../firebase/firestore/pickups"
 
-export const EditDriverModalButton: React.SFC<{
-  driver: Driver
-}> = ({ driver }) => {
+export const EditPickupModalButton: React.SFC<{ pickup: PickUpLocation }> = ({
+  pickup,
+}) => {
   const [showModal, setShowModal] = React.useState(false)
   const [submitting, setSubmitting] = React.useState(false)
   const [submitError, setSubmitError] = React.useState<string | undefined>(
     undefined,
   )
   const button = React.useRef<HTMLButtonElement>()
-  const [name, setName, nameInputProps] = useTextInput(driver.name)
-  const [phoneNumber, setPhoneNr, phoneNrInputProps] = useTextInput(
-    driver.phoneNumber || "",
-  )
+  const [name, setName, nameInputProps] = useTextInput(pickup.name)
   const onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
     setSubmitting(true)
     setSubmitError(undefined)
-    updateDriver({
-      driverId: driver.id,
+    updatePickup({
+      pickupId: pickup.id,
       update: {
         name,
-        phoneNumber,
       },
       onSuccess: () => {
         setSubmitting(false)
@@ -37,15 +33,14 @@ export const EditDriverModalButton: React.SFC<{
       onReject: reason => {
         setSubmitting(false)
         setSubmitError(reason.message)
-        logger("Update driver error", "error", reason)
+        logger("Update pickup error", "error", reason)
       },
     })
   }
   const onOpenModalClick = () => {
     setShowModal(true)
     setSubmitError(undefined)
-    setName(driver.name)
-    setPhoneNr(driver.phoneNumber || "")
+    setName(pickup.name)
   }
 
   return (
@@ -60,7 +55,7 @@ export const EditDriverModalButton: React.SFC<{
         show={showModal}
         onClose={() => setShowModal(false)}
         focusAfterClose={() => button.current && button.current.focus()}
-        header={`Edit driver ${driver.name}`}
+        header={`Edit pickup ${pickup.name}`}
         submitBtnLabel="Submit changes"
         onSubmit={onSubmit}
         submitDisabled={submitting}
@@ -69,10 +64,6 @@ export const EditDriverModalButton: React.SFC<{
         <label>
           Name
           <input {...nameInputProps} />
-        </label>
-        <label>
-          Phone nr.
-          <input {...phoneNrInputProps} />
         </label>
       </ModalForm>
     </React.Fragment>

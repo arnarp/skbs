@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { IconProps } from './IconProps'
 import './icons.css'
 
-export const EditIcon: React.SFC<IconProps> = props => (
+export const EditIcon = (props: IconProps) => (
   <svg viewBox="0 0 64 64"
   className={classnames('Svg', `Stroke-${props.color}`, `Size-${props.size}`, props.className)}
   >

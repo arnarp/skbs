@@ -9,11 +9,14 @@ import { UserMeta, UserMetaDocument } from '../../shared/types/User/UserMeta'
 import { AppBar } from './AppBar'
 import './App.css'
 import { LoginPage } from './LoginPage'
-import { Dashboard } from '../Dashboard'
-import { Users } from '../Users'
-import { GroupPage } from '../GroupPage'
+import { Dashboard } from '../Views/Dashboard'
+import { Users } from '../Views/Users'
+import { GroupPage } from '../Views/GroupPage'
 import { AppErrorBoundary } from './AppErrorBoundary'
 import { DriversPage } from '../Views/Drivers';
+import { VehiclesPage } from '../Views/Vehicles/VehiclesPage';
+import { PickupsPage } from '../Views/Pickups/PickupsPage';
+import { ToursPage } from '../Views/Tours/ToursPage';
 
 type AppProps = {}
 
@@ -103,6 +106,10 @@ export class App extends React.Component<AppProps, AppState> {
             />
             <Route path="/group/:id" component={GroupPage} />
             <Route path="/drivers" component={DriversPage} />
+            <Route path="/vehicles" component={VehiclesPage} />
+            <Route path="/pickups" component={PickupsPage} />
+            <Route path="/pickups" component={PickupsPage} />
+            <Route path="/tours" component={ToursPage} />
           </AppErrorBoundary>
 
           <footer>{process.env.NODE_ENV === 'development' && 'development'}</footer>

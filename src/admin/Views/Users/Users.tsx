@@ -1,10 +1,10 @@
 import * as React from 'react'
 import './Users.css'
-import { firestore } from '../../firebase'
-import { Collections } from '../../shared/constants'
-import { UserMeta, UserMetaDocument } from '../../shared/types/User/UserMeta'
-import { Avatar } from '../../shared/components/Avatar'
-import { UserInfo } from '../../shared/types/User/UserInfo';
+import { firestore } from '../../../firebase'
+import { Collections } from '../../../shared/constants'
+import { UserMeta, UserMetaDocument } from '../../../shared/types/User/UserMeta'
+import { Avatar } from '../../../shared/components/Avatar'
+import { UserInfo } from '../../../shared/types/User/UserInfo';
 
 const hiddenUsers = ["gloi.arnarsson@gmail.com", "arnarp@gmail.com"]
 

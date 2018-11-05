@@ -1,10 +1,10 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { Transition } from 'react-transition-group'
-import { v4 as uuid } from 'uuid'
-import classnames from 'classnames'
-import { Button } from '../Button'
-import './Modal.css'
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Transition } from "react-transition-group"
+import { v4 as uuid } from "uuid"
+import classnames from "classnames"
+import { Button } from "../Button"
+import "./Modal.css"
 
 type ModalProps = {
   /**
@@ -39,8 +39,8 @@ type ModalState = Readonly<typeof initialState>
  */
 export class Modal extends React.PureComponent<ModalProps, ModalState> {
   headingId: string
-  h2: HTMLHeadingElement | null = null
-  closeButton: any
+  h2: HTMLHeadingElement | null = null
+  closeButton = React.createRef<HTMLButtonElement>()
   constructor(props: ModalProps) {
     super(props)
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -60,21 +60,20 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
     this.cleanup()
   }
 
-  onKeyDown(ev: React.KeyboardEvent<HTMLDivElement> | KeyboardEvent) {
-    if (ev.key === 'Escape') {
+  onKeyDown(ev: React.KeyboardEvent<HTMLDivElement> | KeyboardEvent) {
+    if (ev.key === "Escape") {
       this.props.onClose()
     }
   }
 
   onOpen() {
     this.h2 && this.h2.focus()
-    document.addEventListener('keydown', this.onKeyDown)
-    const root = document.getElementById('root')
+    document.addEventListener("keydown", this.onKeyDown)
+    const root = document.getElementById("root")
     if (root !== null) {
       root.inert = true
     }
-    document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
+    document.body.style.overflow = "hidden"
   }
   onClose() {
     this.cleanup()
@@ -82,17 +81,23 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
   }
 
   cleanup() {
-    document.removeEventListener('keydown', this.onKeyDown)
-    const root = document.getElementById('root')
+    document.removeEventListener("keydown", this.onKeyDown)
+    const root = document.getElementById("root")
     if (root !== null) {
       root.inert = false
     }
-    document.body.style.overflow = 'visible'
-    document.body.style.position = 'static'
+    document.body.style.overflow = "visible"
   }
 
   render() {
-    const { show, header, onClose, children, contentClassName, fullscreen } = this.props
+    const {
+      show,
+      header,
+      onClose,
+      children,
+      contentClassName,
+      fullscreen,
+    } = this.props
     return (
       <Transition in={show} timeout={500} unmountOnExit mountOnEnter>
         {/*
@@ -112,14 +117,14 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
             <div
               onKeyDown={this.onKeyDown}
               aria-labelledby={this.headingId}
-              className={classnames('dialog', state, {
+              className={classnames("dialog", state, {
                 fullscreen: this.props.fullscreen,
               })}
               role="dialog"
               onClick={onClose}
             >
-              <div className={'modal'} onClick={e => e.stopPropagation()}>
-                <div className={'header'}>
+              <div className={"modal"} onClick={e => e.stopPropagation()}>
+                <div className={"header"}>
                   <h2
                     id={this.headingId}
                     tabIndex={-1}
@@ -129,17 +134,16 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     {header}
                   </h2>
                   <Button
-                    inputRef={ref => {
-                      this.closeButton = ref
-                    }}
+                    ref={this.closeButton}
                     onClick={onClose}
                     color="default"
-                    style="flat"
                   >
-                    {fullscreen ? 'Close dialog' : 'Close'}
+                    {fullscreen ? "Close dialog" : "Close"}
                   </Button>
                 </div>
-                <div className={classnames('content', contentClassName)}>{children}</div>
+                <div className={classnames("content", contentClassName)}>
+                  {children}
+                </div>
               </div>
             </div>,
             document.body,

@@ -2,7 +2,7 @@ import { firestore } from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import { TourDocument } from '../../shared/types/Tour'
 import { newValues, chunks } from '../../shared/utils/array'
-import { FIRESTOR_MAX_BATCH_SIZE } from '../../shared/constants'
+import { FIRESTORE_MAX_BATCH_SIZE } from '../../shared/constants'
 import { Booking } from '../../shared/types/Booking'
 
 export const onTourUpdate = firestore.document('tours/{id}').onUpdate((change, _context) => {
@@ -28,7 +28,7 @@ export const onTourUpdate = firestore.document('tours/{id}').onUpdate((change, _
           .then(s => {
             console.log(`${s.size} number of bookings fetched`)
             return Promise.all(
-              chunks(s.docs, FIRESTOR_MAX_BATCH_SIZE).map(chunk => {
+              chunks(s.docs, FIRESTORE_MAX_BATCH_SIZE).map(chunk => {
                 const batch = admin.firestore().batch()
                 chunk.forEach(d => {
                   const bookingRef = admin

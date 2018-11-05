@@ -1,13 +1,15 @@
-import * as React from 'react'
-import { Button } from '../../shared/components/Button'
-import { LinkIcon } from '../../shared/icons/LinkIcon'
-import { Tour, TourDocument } from '../../shared/types/Tour'
-import { ModalForm } from '../../shared/components/ModalForm'
-import { firestore } from '../../firebase'
+import * as React from "react"
+import { LinkIcon } from "../../../shared/icons/LinkIcon"
+import { Tour, TourDocument } from "../../../shared/types/Tour"
+import { ModalForm } from "../../../shared/components/ModalForm"
+import { firestore } from "../../../firebase"
+import { IconButton } from "../../../shared/components/IconButton"
+import { MainColor } from "../../../shared/icons/IconProps"
 
 type LinkTourModalButtonProps = {
   tours: Tour[]
   synonym: string
+  color: MainColor
 }
 
 const initialState = {
@@ -26,14 +28,12 @@ export class LinkTourModalButton extends React.PureComponent<
   render() {
     return (
       <React.Fragment>
-        <Button
+        <IconButton
           ref={this.btn}
-          color="default"
-          style="flat"
+          color={this.props.color}
+          Icon={LinkIcon}
           onClick={() => this.setState(() => ({ show: true }))}
-        >
-          <LinkIcon color="munsell" size="small" />
-        </Button>
+        />
         <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
@@ -47,7 +47,9 @@ export class LinkTourModalButton extends React.PureComponent<
           <label>
             Choose tour
             <select
-              value={this.state.selected === undefined ? '' : this.state.selected.id}
+              value={
+                this.state.selected === undefined ? "" : this.state.selected.id
+              }
               onChange={event => {
                 const selectedId = event.target.value
                 const selected = this.props.tours.find(i => i.id === selectedId)
@@ -76,7 +78,7 @@ export class LinkTourModalButton extends React.PureComponent<
     }
     console.log(update, this.state.selected)
     firestore
-      .collection('tours')
+      .collection("tours")
       .doc(this.state.selected.id)
       .update(update)
       .then(() => this.setState(() => initialState))

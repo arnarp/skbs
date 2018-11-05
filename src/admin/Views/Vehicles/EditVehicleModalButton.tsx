@@ -1,34 +1,36 @@
 import * as React from "react"
+import { Vehicle } from "../../../shared/types/Vehicle"
+import {
+  useTextInput,
+  useNumberInput,
+} from "../../../shared/hooks/useTextInput"
+import { updateVehicle } from "../../../firebase/firestore/vehicles"
+import { logger } from "../../../shared/utils/breadcrumb"
+import { IconButton } from "../../../shared/components/IconButton"
 import { EditIcon } from "../../../shared/icons/EditIcon"
 import { ModalForm } from "../../../shared/components/ModalForm"
-import { IconButton } from "../../../shared/components/IconButton/IconButton"
-import { Driver } from "../../../shared/types/Driver"
-import { useTextInput } from "../../../shared/hooks/useTextInput"
-import { updateDriver } from "../../../firebase/firestore/drivers"
-import { logger } from "../../../shared/utils/breadcrumb"
 
-export const EditDriverModalButton: React.SFC<{
-  driver: Driver
-}> = ({ driver }) => {
+export const EditVehicleModalButton: React.SFC<{ vehicle: Vehicle }> = ({
+  vehicle,
+}) => {
   const [showModal, setShowModal] = React.useState(false)
   const [submitting, setSubmitting] = React.useState(false)
   const [submitError, setSubmitError] = React.useState<string | undefined>(
     undefined,
   )
   const button = React.useRef<HTMLButtonElement>()
-  const [name, setName, nameInputProps] = useTextInput(driver.name)
-  const [phoneNumber, setPhoneNr, phoneNrInputProps] = useTextInput(
-    driver.phoneNumber || "",
-  )
+  const [name, setName, nameInputProps] = useTextInput(vehicle.name)
+  const [maxPax, setMaxPax, maxPaxInputProps] = useNumberInput(vehicle.maxPax)
+
   const onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
     setSubmitting(true)
     setSubmitError(undefined)
-    updateDriver({
-      driverId: driver.id,
+    updateVehicle({
+      vehicleId: vehicle.id,
       update: {
         name,
-        phoneNumber,
+        maxPax,
       },
       onSuccess: () => {
         setSubmitting(false)
@@ -37,15 +39,16 @@ export const EditDriverModalButton: React.SFC<{
       onReject: reason => {
         setSubmitting(false)
         setSubmitError(reason.message)
-        logger("Update driver error", "error", reason)
+        logger("Update vehicle error", "error", reason)
       },
     })
   }
+
   const onOpenModalClick = () => {
     setShowModal(true)
     setSubmitError(undefined)
-    setName(driver.name)
-    setPhoneNr(driver.phoneNumber || "")
+    setName(vehicle.name)
+    setMaxPax(vehicle.maxPax)
   }
 
   return (
@@ -60,7 +63,7 @@ export const EditDriverModalButton: React.SFC<{
         show={showModal}
         onClose={() => setShowModal(false)}
         focusAfterClose={() => button.current && button.current.focus()}
-        header={`Edit driver ${driver.name}`}
+        header={`Edit vehicle ${vehicle.name}`}
         submitBtnLabel="Submit changes"
         onSubmit={onSubmit}
         submitDisabled={submitting}
@@ -71,8 +74,8 @@ export const EditDriverModalButton: React.SFC<{
           <input {...nameInputProps} />
         </label>
         <label>
-          Phone nr.
-          <input {...phoneNrInputProps} />
+          Max Pax
+          <input {...maxPaxInputProps} />
         </label>
       </ModalForm>
     </React.Fragment>

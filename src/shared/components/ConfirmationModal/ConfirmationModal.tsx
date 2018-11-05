@@ -2,7 +2,7 @@ import * as React from "react"
 import "./ConfirmationModal.css"
 import { Modal } from "../Modal"
 import { Button } from "../Button"
-import './ConfirmationModal.css'
+import "./ConfirmationModal.css"
 
 type Props = {
   show: boolean
@@ -21,8 +21,8 @@ export const ConfirmationModal: React.SFC<Props> = ({
   focusAfterClose,
   header,
   children,
-  cancelBtnLabel = 'Cancel',
-  confirmBtnLabel = 'Confirm'
+  cancelBtnLabel = "Cancel",
+  confirmBtnLabel = "Confirm",
 }) => {
   return (
     <Modal
@@ -34,10 +34,10 @@ export const ConfirmationModal: React.SFC<Props> = ({
       <div className="ConfirmationModal">
         {children}
         <div className="buttonRow">
-          <Button color="default" style="flat" onClick={onClose}>
+          <Button color="default" onClick={onClose}>
             {cancelBtnLabel}
           </Button>
-          <Button color="default" style="flat" onClick={onConfirmed}>
+          <Button color="default" onClick={onConfirmed}>
             {confirmBtnLabel}
           </Button>
         </div>

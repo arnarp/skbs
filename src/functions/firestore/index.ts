@@ -1,3 +1,5 @@
 export * from './onTourUpdate'
 export * from './onPickupLocationUpdate'
 export * from './onUserMetaUpdate'
+export * from './onDriverUpdate'
+export * from './onVehicleUpdate'

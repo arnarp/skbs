@@ -3,7 +3,7 @@ import { IconProps } from "./IconProps"
 import "./icons.css"
 import classnames = require("classnames")
 
-export const DeleteIcon: React.SFC<IconProps> = props => (
+export const DeleteIcon = (props: IconProps) => (
   <svg
     viewBox="0 0 64 64"
     className={classnames(

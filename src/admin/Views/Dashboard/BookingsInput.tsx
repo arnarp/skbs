@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Booking, groupBookinsByDateAndPickUp, countPax } from '../../shared/types/Booking'
+import { Booking, groupBookinsByDateAndPickUp, countPax } from '../../../shared/types/Booking'
 
 type BookingsInputProps = {
   bookings: Booking[]

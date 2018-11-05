@@ -33,6 +33,9 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
         <Link to='/'>Admin</Link>
         <Link to='/users'>Users</Link>
         <Link to='/drivers'>Drivers</Link>
+        <Link to='/vehicles'>Vehicles</Link>
+        <Link to='/pickups'>Pickups</Link>
+        <Link to='/tours'>Tours</Link>
         <button
           className="UserBtn"
           ref={el => (this.toggleUserModalButton = el)}
@@ -60,7 +63,6 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
           <div className="footerPanel">
             <Button
               color="default"
-              style="flat"
               onClick={() => {
                 this.toggleUserModal()
                 this.signOutTimeout = setTimeout(() => this.props.signOut(), 300)

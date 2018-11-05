@@ -8,6 +8,7 @@ export type Group = {
   driver?: {
     id: string
     name: string
+    phoneNumber?: string
   }
   bus?: {
     id: string

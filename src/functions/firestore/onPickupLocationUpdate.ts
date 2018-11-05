@@ -1,51 +1,73 @@
 import { firestore } from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import { newValues, chunks } from '../../shared/utils/array'
-import { FIRESTOR_MAX_BATCH_SIZE } from '../../shared/constants'
+import { FIRESTORE_MAX_BATCH_SIZE, Collections } from '../../shared/constants'
 import { Booking } from '../../shared/types/Booking'
-import { PickUpLocationDocument } from '../../shared/types/PickUpLocation'
+import { PickUpLocation, parsePickupSnapshot } from '../../shared/types/PickUpLocation';
 
 export const onPickupLocationUpdate = firestore
   .document('pickUpLocations/{id}')
-  .onUpdate((change, _context) => {
-    const before = change.before.data() as PickUpLocationDocument
-    const after = change.after.data() as PickUpLocationDocument
-    const update: Partial<Booking> = {
-      pickUp: {
-        name: after.name,
-        id: change.after.id,
-      },
-    }
+  .onUpdate(async (change, _context) => {
+    const before = parsePickupSnapshot(change.before)
+    const after = parsePickupSnapshot(change.after)
     if (after.synonyms.length > before.synonyms.length) {
-      const additions = newValues(before.synonyms, after.synonyms)
-      return Promise.all(
-        additions.map(a => {
-          console.log(`Synonym, ${a}, added for pickup location ${after.name}`, update)
-          return admin
-            .firestore()
-            .collection('bookings')
-            .where('pickUp', '==', null)
-            .where('pickupName', '==', a)
-            .get()
-            .then(s => {
-              console.log(`${s.size} number of bookings fetched`)
-              return Promise.all(
-                chunks(s.docs, FIRESTOR_MAX_BATCH_SIZE).map(chunk => {
-                  const batch = admin.firestore().batch()
-                  chunk.forEach(d => {
-                    const bookingRef = admin
-                      .firestore()
-                      .collection('bookings')
-                      .doc(d.id)
-                    console.log('bookingRef', bookingRef)
-                    batch.update(bookingRef, update)
-                  })
-                  return batch.commit().then(() => console.log(`${chunk.length} bookings updated`))
-                }),
-              )
-            })
-        }),
-      )
+      await linkBookings(after, before);
     }
-    return Promise.resolve()
+    if (before.name !== after.name) {
+      await updateBookingsPickup(after)
+    }
   })
+  
+async function updateBookingsPickup(pickup: PickUpLocation) {
+  const bookings = await admin.firestore()
+    .collection(Collections.Bookings)
+    .where("pickUp.id", "==", pickup.id)
+    .get()
+  const update: Partial<Booking> = {
+    pickUp: {
+      name: pickup.name,
+      id: pickup.id,
+    }
+  }
+  await Promise.all(chunks(bookings.docs, FIRESTORE_MAX_BATCH_SIZE).map(async chunk => {
+    const batch = admin.firestore().batch()
+    chunk.forEach(i => {
+      batch.update(i.ref, update)
+    })
+    await batch.commit()
+    console.log(`${chunk.length} bookings updated`)
+  }))
+}
+
+async function linkBookings(after: PickUpLocation, before: PickUpLocation) {
+  const update: Partial<Booking> = {
+    pickUp: {
+      name: after.name,
+      id: after.id,
+    },
+  };
+  const additions = newValues(before.synonyms, after.synonyms);
+  await Promise.all(additions.map(async (a) => {
+    console.log(`Synonym, ${a}, added for pickup location ${after.name}`, update);
+    const bookings = await admin
+      .firestore()
+      .collection('bookings')
+      .where('pickUp', '==', null)
+      .where('pickupName', '==', a)
+      .get();
+    console.log(`${bookings.size} number of bookings fetched`);
+    await Promise.all(chunks(bookings.docs, FIRESTORE_MAX_BATCH_SIZE).map(async (chunk) => {
+      const batch = admin.firestore().batch();
+      chunk.forEach(d => {
+        const bookingRef = admin
+          .firestore()
+          .collection('bookings')
+          .doc(d.id);
+        batch.update(bookingRef, update);
+      });
+      await batch.commit();
+      console.log(`${chunk.length} bookings updated`);
+    }));
+  }));
+}
+

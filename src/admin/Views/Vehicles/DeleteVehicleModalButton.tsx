@@ -1,20 +1,20 @@
 import * as React from "react"
+import { Vehicle } from "../../../shared/types/Vehicle"
 import { IconButton } from "../../../shared/components/IconButton"
 import { DeleteIcon } from "../../../shared/icons/DeleteIcon"
 import { ConfirmationModal } from "../../../shared/components/ConfirmationModal"
-import { Driver } from "../../../shared/types/Driver"
-import { deleteDriver } from "../../../firebase/firestore/drivers"
+import { deleteVehicle } from "../../../firebase/firestore/vehicles"
 import { logger } from "../../../shared/utils/breadcrumb"
 
-export const DeleteDriverModalButton: React.SFC<{
-  driver: Driver
-}> = ({ driver }) => {
+export const DeleteVehicleModalButton: React.SFC<{
+  vehicle: Vehicle
+}> = ({ vehicle }) => {
   const [show, setShow] = React.useState(false)
-  const triggerBtn = React.useRef<HTMLButtonElement>()
+  const trigger = React.useRef<HTMLButtonElement>()
   return (
     <React.Fragment>
       <IconButton
-        ref={triggerBtn}
+        ref={trigger}
         onClick={() => setShow(true)}
         color="tangerine"
         Icon={DeleteIcon}
@@ -24,23 +24,22 @@ export const DeleteDriverModalButton: React.SFC<{
         onClose={() => setShow(false)}
         onConfirmed={() => {
           setShow(false)
-          deleteDriver({
-            driverId: driver.id,
+          deleteVehicle({
+            vehicleId: vehicle.id,
             onSuccess: () => {
-              logger("Driver deleted", "info", driver)
+              logger("Vehicle deleted", "info", vehicle)
             },
             onReject: reason => {
-              logger("Delete driver error", "error", reason)
+              logger("Vehicle delete error", "error", reason)
             },
           })
         }}
         focusAfterClose={() => {
-          console.log("focusAfterClose", triggerBtn.current)
-          triggerBtn.current && triggerBtn.current.focus()
+          trigger.current && trigger.current.focus()
         }}
-        header="Delete driver"
+        header={`Delete vehicle`}
       >
-        <p>Please confirm deleting driver {driver.name}</p>
+        <p>Confirm deleting vehicle {vehicle.name}</p>
       </ConfirmationModal>
     </React.Fragment>
   )

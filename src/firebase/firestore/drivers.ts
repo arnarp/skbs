@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { firestore } from ".."
 import { Driver, DriverDocument } from "../../shared/types/Driver"
 import { OrderByDirection } from "@google-cloud/firestore"
@@ -5,15 +6,15 @@ import { Collections } from "../../shared/constants"
 import { FirebaseError } from "firebase"
 
 export function subscribeOnDrivers(
-  config: {
+  params: {
     orderBy?: {
       fieldPath: keyof Driver
       directionStr: OrderByDirection
-    }
+    },
+    onDrivers: (drivers: Driver[]) => void,
   },
-  onDrivers: (drivers: Driver[]) => void,
 ) {
-  const orderBy = config.orderBy || { fieldPath: "name", directionStr: "desc" }
+  const orderBy = params.orderBy || { fieldPath: "name", directionStr: "desc" }
   const collection = firestore.collection("drivers")
   let query = collection.orderBy(orderBy.fieldPath, orderBy.directionStr)
   return query.onSnapshot(s => {
@@ -22,8 +23,18 @@ export function subscribeOnDrivers(
       ...(d.data() as DriverDocument),
     }))
     console.log("fetched drivers", drivers)
-    onDrivers(drivers)
+    params.onDrivers(drivers)
   })
+}
+
+export function useDrivers() {
+  const [drivers, onDrivers] = React.useState<Driver[]>([])
+  React.useEffect(() => {
+    return subscribeOnDrivers({
+      onDrivers,
+    })
+  }, [])
+  return drivers
 }
 
 export function addNewDriver(params: {

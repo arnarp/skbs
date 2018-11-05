@@ -41,7 +41,6 @@ export const ModalForm: React.SFC<Props> = ({
           <Button
             type="submit"
             color="munsell"
-            style="flat"
             disabled={submitDisabled}
           >
             {submitBtnLabel}

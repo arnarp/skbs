@@ -1,11 +1,16 @@
-import * as React from 'react'
-import classnames from 'classnames'
-import { IconProps } from './IconProps'
-import './icons.css'
+import * as React from "react"
+import classnames from "classnames"
+import { IconProps } from "./IconProps"
+import "./icons.css"
 
-export const LinkIcon: React.SFC<IconProps> = props => (
+export const LinkIcon = (props: IconProps) => (
   <svg
-    className={classnames('Svg', `Fill-${props.color}`, `Size-${props.size}`, props.className)}
+    className={classnames(
+      "Svg",
+      `Fill-${props.color}`,
+      `Size-${props.size}`,
+      props.className,
+    )}
     viewBox="0 0 512 512"
   >
     <path d="M220.118 317.883c-6.655 0-13.308-2.538-18.385-7.615-47.567-47.568-47.567-124.967 0-172.535l96-96c23.044-23.043 53.68-35.733 86.267-35.733s63.224 12.69 86.268 35.732c47.566 47.568 47.566 124.967 0 172.535l-43.883 43.883c-10.154 10.154-26.615 10.154-36.77 0-10.153-10.153-10.153-26.616 0-36.77l43.883-43.883c27.292-27.293 27.292-71.702 0-98.995-13.221-13.221-30.8-20.502-49.498-20.502s-36.276 7.281-49.498 20.503l-96 95.999c-27.293 27.293-27.293 71.703 0 98.996 10.154 10.153 10.153 26.616 0 36.77-5.075 5.076-11.731 7.615-18.384 7.615z" />

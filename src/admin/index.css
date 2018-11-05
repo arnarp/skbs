@@ -24,6 +24,7 @@
   --munsell-07: hsla(191, 95%, 34%, .7);
   --munsell-02: hsla(191, 95%, 34%, .2);
   --charcoal: hsla(214, 31%, 26%, 1);
+  --charcoal-07: hsla(214, 31%, 26%, .7);
   --charcoal-05: hsla(214, 31%, 26%, .5);
   --android: hsla(81, 49%, 53%, 1);
   --android-05: hsla(81, 49%, 53%, .5);
@@ -99,6 +100,7 @@ ul {
 }
 table {
   border-collapse: collapse;
+  text-align: left;
 }
 table td {
   padding: 0;
@@ -125,10 +127,9 @@ dd {
   margin: 0 0 0 110px;
   padding: 0 0 0.5em 0;
 }
-input[type=number] {
-  text-align: right;
-}
 a {
   color: var(--charcoal);
-  text-decoration: none;
+}
+a:focus {
+  outline-offset: 2px;
 }

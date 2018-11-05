@@ -1,14 +1,14 @@
-import * as React from 'react'
-import { Button } from '../../shared/components/Button'
-import { ModalForm } from '../../shared/components/ModalForm'
-import { firestore } from '../../firebase'
-import { PickUpLocationDocument } from '../../shared/types/PickUpLocation';
+import * as React from "react"
+import { Button } from "../../../shared/components/Button"
+import { ModalForm } from "../../../shared/components/ModalForm"
+import { firestore } from "../../../firebase"
+import { PickUpLocationDocument } from "../../../shared/types/PickUpLocation"
 
 type AddPickUpLocationModalButtonProps = {}
 
 const initialState = () => ({
   show: false,
-  name: '',
+  name: "",
 })
 type AddPickUpLocationModalButtonState = Readonly<{
   show: boolean
@@ -27,7 +27,6 @@ export class AddPickUpLocationModalButton extends React.PureComponent<
       <React.Fragment>
         <Button
           color="default"
-          style="flat"
           ref={this.btn}
           onClick={() => this.setState(() => ({ show: true }))}
         >
@@ -64,7 +63,7 @@ export class AddPickUpLocationModalButton extends React.PureComponent<
       synonyms: [],
     }
     firestore
-      .collection('pickUpLocations')
+      .collection("pickUpLocations")
       .add(newDoc)
       .then(() => {
         this.setState(() => initialState())

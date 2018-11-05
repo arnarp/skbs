@@ -1,3 +1,5 @@
+import { firestore } from "firebase";
+
 export interface Tour extends TourDocument {
   id: string
 }
@@ -17,14 +19,11 @@ export function generateTourSynonymTourMap(tours: Tour[]) {
   return result
 }
 
-// export interface TourMapItem {
-//   tourId: string
-//   tourName: string
-//   key: string
-// }
-
-// export interface MergedTour {}
-
-// export interface Day {
-//   tours: Array<Tour | MergedTour>
-// }
+export function parseTourSnapshot(
+  s: firestore.DocumentSnapshot | FirebaseFirestore.DocumentSnapshot,
+): Tour {
+  return {
+    ...(s.data() as TourDocument),
+    id: s.id,
+  }
+}

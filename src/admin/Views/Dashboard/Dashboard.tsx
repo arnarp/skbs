@@ -4,29 +4,26 @@ import classnames from "classnames"
 import { ImportDataFromExcel } from "./ImportDataFromExcel"
 import "./Dashboard.css"
 import { Groups } from "./Groups"
-import { firestore } from "../../firebase"
+import { firestore } from "../../../firebase"
 import {
   Booking,
   groupBookingsByTours,
   bookingId,
   totalPax,
   countPaxByTour,
-} from "../../shared/types/Booking"
-import { Group, GroupDocument } from "../../shared/types/Group"
-import { Tour, TourDocument } from "../../shared/types/Tour"
+} from "../../../shared/types/Booking"
+import { Group, GroupDocument } from "../../../shared/types/Group"
+import { Tour, TourDocument } from "../../../shared/types/Tour"
 import {
   PickUpLocation,
   PickUpLocationDocument,
-} from "../../shared/types/PickUpLocation"
+} from "../../../shared/types/PickUpLocation"
 import { LinkTourModalButton } from "./LinkTourModalButton"
-import { Dropdown } from "../../shared/components/Dropdown/Dropdown"
+import { Dropdown } from "../../../shared/components/Dropdown/Dropdown"
 import { LinkPickupLocModalButton } from "./LinkPickupLocModalButton"
-import { Collections } from "../../shared/constants"
+import { Collections } from "../../../shared/constants"
 import { EditBookingModalButton } from "./EditBookingModalButton"
-import { AddDriverModalButton } from "../Components/AddDriverModalButton"
-import { AddBusModalButtonButton } from "./AddBusModalButton"
-import { AddTourModalButton } from "./AddTourModalButton"
-import { AddPickUpLocationModalButton } from "./AddPickUpLocationModalButton"
+import { AddTourModalButton } from "../Tours/AddTourModalButton"
 
 type DashboardProps = {}
 type DashboardState = Readonly<{
@@ -127,10 +124,7 @@ export class Dashboard extends React.PureComponent<
             />
           </label>
           <div>
-            <AddDriverModalButton />
-            <AddBusModalButtonButton />
             <AddTourModalButton />
-            <AddPickUpLocationModalButton />
           </div>
         </div>
         {this.state.chosenDate && (
@@ -166,6 +160,7 @@ export class Dashboard extends React.PureComponent<
                       <div className="dropdownAside">
                         {g.tourId === undefined && (
                           <LinkTourModalButton
+                            color='munsell'
                             synonym={g.tourName}
                             tours={this.state.tours}
                           />
@@ -194,6 +189,7 @@ export class Dashboard extends React.PureComponent<
                             <h3>{pickup.pickUpName}</h3>
                             {pickup.pickUpId === undefined && (
                               <LinkPickupLocModalButton
+                                color={allInGroups ? 'white' : 'munsell'}
                                 synonym={pickup.pickUpName}
                                 pickupLocations={this.state.pickUpLocations}
                               />

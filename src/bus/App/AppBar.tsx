@@ -17,11 +17,13 @@ type AppBarState = Readonly<typeof initialState>
 
 export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
   readonly state: AppBarState = initialState
-  toggleUserModalButton: HTMLButtonElement
-  signOutTimeout: NodeJS.Timer
+  toggleUserModalButton = React.createRef<HTMLButtonElement>()
+  signOutTimeout: NodeJS.Timer | undefined
 
   componentWillUnmount() {
-    clearTimeout(this.signOutTimeout)
+    if (this.signOutTimeout) {
+      clearTimeout(this.signOutTimeout)
+    }
   }
 
   render() {
@@ -32,7 +34,7 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
           <React.Fragment>
             <button
               className="UserBtn"
-              ref={el => (this.toggleUserModalButton = el)}
+              ref={this.toggleUserModalButton}
               onClick={() => this.toggleUserModal()}
             >
               <img className="UserImg" src={this.props.userInfo.photoURL} />
@@ -41,7 +43,7 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
               hideHeader={true}
               show={this.state.userModalIsOpen}
               onClose={() => this.toggleUserModal()}
-              focusAfterClose={() => this.toggleUserModalButton.focus()}
+              focusAfterClose={() => this.toggleUserModalButton.current && this.toggleUserModalButton.current.focus()}
               header={`Innskráður sem ${this.props.userInfo.displayName}`}
               contentClassName="userModalContent"
             >
@@ -53,7 +55,6 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
               <div className="footerPanel">
                 <Button
                   color="default"
-                  style="flat"
                   onClick={() => {
                     this.toggleUserModal()
                     this.signOutTimeout = setTimeout(

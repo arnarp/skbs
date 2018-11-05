@@ -18,8 +18,7 @@ export class LoginPage extends React.PureComponent<
     return (
       <div className="LoginPage">
         <Button
-          color="primary"
-          style="flat"
+          color="munsell"
           onClick={() => {
             const provider = new auth.GoogleAuthProvider()
             provider.setCustomParameters({ prompt: 'select_account' })

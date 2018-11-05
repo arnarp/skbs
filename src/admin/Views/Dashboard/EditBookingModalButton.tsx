@@ -1,20 +1,20 @@
-import * as React from 'react'
-import { Booking, bookingId } from '../../shared/types/Booking'
-import { Button } from '../../shared/components/Button'
-import { EditIcon } from '../../shared/icons/EditIcon'
-import { ModalForm } from '../../shared/components/ModalForm'
-import { breadcrumb } from '../../shared/utils/breadcrumb'
-import { firestore } from '../../firebase'
-import { Collections } from '../../shared/constants'
-import { PickUpLocation } from '../../shared/types/PickUpLocation'
-import './EditBookingModalButton.css'
+import * as React from "react"
+import { Booking, bookingId } from "../../../shared/types/Booking"
+import { EditIcon } from "../../../shared/icons/EditIcon"
+import { ModalForm } from "../../../shared/components/ModalForm"
+import { logger } from "../../../shared/utils/breadcrumb"
+import { firestore } from "../../../firebase"
+import { Collections } from "../../../shared/constants"
+import { PickUpLocation } from "../../../shared/types/PickUpLocation"
+import "./EditBookingModalButton.css"
+import { IconButton } from "../../../shared/components/IconButton"
 
 type Props = {
   booking: Booking
   pickupLocations: PickUpLocation[]
 }
 type State = Readonly<{
-  state: 'normal' | 'submitting'
+  state: "normal" | "submitting"
   show: boolean
   pax: number
   pickupName: string
@@ -30,7 +30,7 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      state: 'normal',
+      state: "normal",
       show: false,
       pax: props.booking.pax,
       pickupName: props.booking.pickupName,
@@ -54,14 +54,12 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
   render() {
     return (
       <React.Fragment>
-        <Button
+        <IconButton
           ref={this.btn}
-          color="default"
-          style="flat"
           onClick={() => this.setState(() => ({ show: true }))}
-        >
-          <EditIcon color="munsell" size="small" />
-        </Button>
+          color="white"
+          Icon={EditIcon}
+        />
         <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => ({ show: false }))}
@@ -70,7 +68,6 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
           submitBtnLabel="Submit changes"
           onSubmit={this.onSubmit}
           submitDisabled={false}
-          // formClassName="EditBookingModalButton"
         >
           <label>
             <span>Pax</span>
@@ -101,13 +98,15 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
                 }}
               />
               <select
-                value={this.state.pickup ? this.state.pickup.id : ''}
+                value={this.state.pickup ? this.state.pickup.id : ""}
                 onChange={event => {
                   const id = event.target.value
                   this.setState(() => {
-                    const pickup = this.props.pickupLocations.find(i => i.id === id)
+                    const pickup = this.props.pickupLocations.find(
+                      i => i.id === id,
+                    )
                     return {
-                      pickupName: pickup ? pickup.name : '',
+                      pickupName: pickup ? pickup.name : "",
                       pickup,
                     }
                   })
@@ -156,20 +155,20 @@ export class EditBookingModalButton extends React.PureComponent<Props, State> {
       mainContact: this.state.mainContact,
       operationsNote: this.state.operationsNote,
     }
-    if (this.state.pickupName !== '') {
+    if (this.state.pickupName !== "") {
       update.pickupName = this.state.pickupName
     }
-    breadcrumb('Update booking', 'info', update)
+    logger("Update booking", "info", update)
     firestore
       .collection(Collections.Bookings)
       .doc(bookingId(this.props.booking))
       .update(update)
       .then(() => {
-        breadcrumb('Booking updated', 'info', update)
+        logger("Booking updated", "info", update)
         this.setState(() => ({ show: false }))
       })
       .catch(reason => {
-        breadcrumb('Booking update error', 'error', { reason, update })
+        logger("Booking update error", "error", { reason, update })
       })
   }
 }

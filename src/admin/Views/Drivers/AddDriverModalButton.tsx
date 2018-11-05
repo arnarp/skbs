@@ -1,17 +1,19 @@
 import * as React from "react"
-import { Button } from "../../shared/components/Button"
-import { ModalForm } from "../../shared/components/ModalForm"
-import { DriverDocument } from "../../shared/types/Driver"
-import { useTextInput } from "../../shared/hooks/useTextInput"
-import { addNewDriver } from "../../firebase/firestore/drivers";
-import { breadcrumb } from "../../shared/utils/breadcrumb";
+import { Button } from "../../../shared/components/Button"
+import { ModalForm } from "../../../shared/components/ModalForm"
+import { DriverDocument } from "../../../shared/types/Driver"
+import { useTextInput } from "../../../shared/hooks/useTextInput"
+import { addNewDriver } from "../../../firebase/firestore/drivers"
+import { logger } from "../../../shared/utils/breadcrumb"
 
-export const AddDriverModalButton: React.SFC<{}> = () => {
+export const AddDriverModalButton = () => {
   const [showModal, setShowModal] = React.useState(false)
   const triggerButton = React.useRef<HTMLButtonElement>()
   const [name, setName, nameInputProps] = useTextInput("")
   const [phoneNumber, setPhoneNumber, phoneNumberInputProps] = useTextInput("")
-  const [submitError, setSubmitError] = React.useState<string | undefined>(undefined)
+  const [submitError, setSubmitError] = React.useState<string | undefined>(
+    undefined,
+  )
 
   const onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
@@ -25,8 +27,8 @@ export const AddDriverModalButton: React.SFC<{}> = () => {
       onSuccess: setInitialState,
       onReject: reason => {
         setSubmitError(reason.message)
-        breadcrumb("Create new driver error", "error", reason)
-      }
+        logger("Create new driver error", "error", reason)
+      },
     })
   }
   const setInitialState = () => {
@@ -39,7 +41,6 @@ export const AddDriverModalButton: React.SFC<{}> = () => {
     <React.Fragment>
       <Button
         color="default"
-        style="flat"
         ref={triggerButton}
         onClick={() => setShowModal(true)}
       >
@@ -68,5 +69,3 @@ export const AddDriverModalButton: React.SFC<{}> = () => {
     </React.Fragment>
   )
 }
-
-

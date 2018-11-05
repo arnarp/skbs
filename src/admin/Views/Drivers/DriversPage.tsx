@@ -1,9 +1,9 @@
 import * as React from "react"
 import "./DriversPage.css"
-import { useDrivers } from "../../../shared/hooks/useDrivers";
 import { EditDriverModalButton } from "./EditDriverModalButton";
 import { DeleteDriverModalButton } from "./DeleteDriverModalButton";
-import { AddDriverModalButton } from "../../Components/AddDriverModalButton";
+import { AddDriverModalButton } from "./AddDriverModalButton";
+import { useDrivers } from "../../../firebase/firestore/drivers";
 
 export const DriversPage: React.SFC<{}> = () => {
   const drivers = useDrivers()

@@ -1,7 +1,7 @@
-import * as React from 'react'
-import './LoginPage.css'
-import { Button } from '../../shared/components/Button'
-import { auth } from '../../firebase'
+import * as React from "react"
+import "./LoginPage.css"
+import { Button } from "../../shared/components/Button"
+import { auth } from "../../firebase"
 
 type LoginPageProps = {}
 
@@ -18,11 +18,10 @@ export class LoginPage extends React.PureComponent<
     return (
       <div className="LoginPage">
         <Button
-          color="primary"
-          style="flat"
+          color="munsell"
           onClick={() => {
             const provider = new auth.GoogleAuthProvider()
-            provider.setCustomParameters({ prompt: 'select_account' })
+            provider.setCustomParameters({ prompt: "select_account" })
             auth().signInWithRedirect(provider)
           }}
         >

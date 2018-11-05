@@ -1,16 +1,16 @@
 import * as React from "react"
 import { RouteComponentProps } from "react-router-dom"
 import "./GroupPage.css"
-import { Group, GroupDocument } from "../../shared/types/Group"
-import { firestore } from "../../firebase"
-import { Collections } from "../../shared/constants"
+import { Group, GroupDocument } from "../../../shared/types/Group"
+import { firestore } from "../../../firebase"
+import { Collections } from "../../../shared/constants"
 import {
   Booking,
   toursInBookings,
   groupBookinsByPickUp,
   totalPax,
-} from "../../shared/types/Booking"
-import { propertyOf } from "../../shared/types/utils"
+} from "../../../shared/types/Booking"
+import { propertyOf } from "../../../shared/types/utils"
 import Helmet from "react-helmet"
 
 type GroupPageProps = {}

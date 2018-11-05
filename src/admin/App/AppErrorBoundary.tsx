@@ -45,7 +45,7 @@ export class AppErrorBoundary extends React.Component<Props, State> {
         {this.state.error && (
           <main className="AppErrorBoundary">
             <h1>Unexpected error has occured</h1>
-            <Button style="flat" color="default" onClick={() => Sentry.showReportDialog(options)}>
+            <Button color="default" onClick={() => Sentry.showReportDialog(options)}>
               Report feedback
             </Button>
           </main>

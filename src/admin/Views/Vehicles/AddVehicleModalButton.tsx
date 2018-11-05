@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Button } from '../../shared/components/Button'
-import { ModalForm } from '../../shared/components/ModalForm'
-import { firestore } from '../../firebase'
-import { BusDocument } from '../../shared/types/Bus';
+import { Button } from '../../../shared/components/Button'
+import { ModalForm } from '../../../shared/components/ModalForm'
+import { firestore } from '../../../firebase'
+import { VehicleDocument } from '../../../shared/types/Vehicle';
 
 type AddBusModalButtonButtonProps = {}
 
@@ -13,7 +13,7 @@ const initialState = {
 }
 type AddBusModalButtonButtonState = Readonly<typeof initialState>
 
-export class AddBusModalButtonButton extends React.PureComponent<
+export class AddVehicleModalButtonButton extends React.PureComponent<
   AddBusModalButtonButtonProps,
   AddBusModalButtonButtonState
 > {
@@ -25,19 +25,18 @@ export class AddBusModalButtonButton extends React.PureComponent<
       <React.Fragment>
         <Button
           color="default"
-          style="flat"
           ref={this.btn}
           onClick={() => this.setState(() => ({ show: true }))}
         >
-          Add bus
+          Add vehicle
         </Button>
         <ModalForm
           onSubmit={this.onSubmit}
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}
           focusAfterClose={() => this.btn.current && this.btn.current.focus()}
-          header="Add new bus"
-          submitBtnLabel="Add bus"
+          header="Add new vehicle"
+          submitBtnLabel="Submit"
         >
           <label>
             Name
@@ -68,7 +67,7 @@ export class AddBusModalButtonButton extends React.PureComponent<
 
   onSubmit = (event: React.FormEvent<{}>) => {
     event.preventDefault()
-    const newBusDoc: BusDocument = {
+    const newBusDoc: VehicleDocument = {
       name: this.state.name,
       maxPax: this.state.maxPax,
     }

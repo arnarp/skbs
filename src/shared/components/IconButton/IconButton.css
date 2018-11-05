@@ -1,4 +1,24 @@
 .IconButton {
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  transition: border .2s linear, transform .2s ease;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.IconButton:focus > svg {
+  transform: scale(1.2);
+}
+.IconButton.white:focus {
+  border: 1px solid white;
+  box-shadow: 0 0 3pt 2pt hsla(100, 100%, 100%, 0.7);
+
+}
+.IconButton.munsell:focus {
+  border: 1px solid var(--munsell);
+  box-shadow: 0 0 3pt 2pt var(--munsell-07);
 }

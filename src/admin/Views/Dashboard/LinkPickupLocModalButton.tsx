@@ -1,14 +1,16 @@
 import * as React from 'react'
-import { Button } from '../../shared/components/Button'
-import { LinkIcon } from '../../shared/icons/LinkIcon'
-import { ModalForm } from '../../shared/components/ModalForm'
-import { firestore } from '../../firebase'
-import { PickUpLocation, PickUpLocationDocument } from '../../shared/types/PickUpLocation'
-import { Collections } from '../../shared/constants'
+import { LinkIcon } from '../../../shared/icons/LinkIcon'
+import { ModalForm } from '../../../shared/components/ModalForm'
+import { firestore } from '../../../firebase'
+import { PickUpLocation, PickUpLocationDocument } from '../../../shared/types/PickUpLocation'
+import { Collections } from '../../../shared/constants'
+import { MainColor } from '../../../shared/icons/IconProps';
+import { IconButton } from '../../../shared/components/IconButton';
 
 type LinkPickupLocModalButtonProps = {
   pickupLocations: PickUpLocation[]
   synonym: string
+  color: MainColor
 }
 
 const initialState = {
@@ -27,14 +29,12 @@ export class LinkPickupLocModalButton extends React.PureComponent<
   render() {
     return (
       <React.Fragment>
-        <Button
+        <IconButton
           ref={this.btn}
-          color="default"
-          style="flat"
+          color={this.props.color}
           onClick={() => this.setState(() => ({ show: true }))}
-        >
-          <LinkIcon color="munsell" size="small" />
-        </Button>
+          Icon={LinkIcon}
+        />
         <ModalForm
           show={this.state.show}
           onClose={() => this.setState(() => initialState)}

@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin'
-import { Collections, FIRESTOR_MAX_BATCH_SIZE } from '../shared/constants';
+import { Collections, FIRESTORE_MAX_BATCH_SIZE } from '../shared/constants';
 import { chunks } from '../shared/utils/array';
 import { Booking, bookingId } from '../shared/types/Booking';
 import { removeUndefinedFromObject } from '../shared/utils/removeUndefinedFromObject';
@@ -11,7 +11,7 @@ export async function migrateBookings() {
   const firestore = admin.firestore()
 
   const bookings = await firestore.collection(Collections.Bookings).get()
-  await chunks(bookings.docs, FIRESTOR_MAX_BATCH_SIZE).map(async chunk => {
+  await chunks(bookings.docs, FIRESTORE_MAX_BATCH_SIZE).map(async chunk => {
     const batch = firestore.batch()
     chunk.forEach(b => {
       const booking = { ...(b.data() as Booking) }

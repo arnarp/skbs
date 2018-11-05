@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/browser'
 
-export function breadcrumb(message: string, level: 'error' | 'info' | 'warning', data?: any) {
+export function logger(message: string, level: 'error' | 'info' | 'warning', data?: any) {
   if (process.env.NODE_ENV === 'production') {
     Sentry.addBreadcrumb({
       message,
