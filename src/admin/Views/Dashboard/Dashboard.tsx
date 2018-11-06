@@ -1,6 +1,7 @@
 import * as React from "react"
 import { startOfToday } from "date-fns"
 import classnames from "classnames"
+import Helmet from "react-helmet"
 import { ImportDataFromExcel } from "./ImportDataFromExcel"
 import "./Dashboard.css"
 import { Groups } from "./Groups"
@@ -23,7 +24,6 @@ import { Dropdown } from "../../../shared/components/Dropdown/Dropdown"
 import { LinkPickupLocModalButton } from "./LinkPickupLocModalButton"
 import { Collections } from "../../../shared/constants"
 import { EditBookingModalButton } from "./EditBookingModalButton"
-
 type DashboardProps = {}
 type DashboardState = Readonly<{
   chosenDate?: Date
@@ -87,6 +87,9 @@ export class Dashboard extends React.PureComponent<
     ).length
     return (
       <main className="dashboard">
+        <Helmet>
+          <title>Dashboard</title>
+        </Helmet>
         <div className="header-row">
           <h1>
             Bookings for{" "}
@@ -156,7 +159,7 @@ export class Dashboard extends React.PureComponent<
                       <div className="dropdownAside">
                         {g.tourId === undefined && (
                           <LinkTourModalButton
-                            color='munsell'
+                            color="munsell"
                             synonym={g.tourName}
                             tours={this.state.tours}
                           />
@@ -185,7 +188,7 @@ export class Dashboard extends React.PureComponent<
                             <h3>{pickup.pickUpName}</h3>
                             {pickup.pickUpId === undefined && (
                               <LinkPickupLocModalButton
-                                color={allInGroups ? 'white' : 'munsell'}
+                                color={allInGroups ? "white" : "munsell"}
                                 synonym={pickup.pickUpName}
                                 pickupLocations={this.state.pickUpLocations}
                               />

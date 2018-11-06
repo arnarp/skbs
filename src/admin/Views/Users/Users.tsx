@@ -1,10 +1,11 @@
-import * as React from 'react'
-import './Users.css'
-import { firestore } from '../../../firebase'
-import { Collections } from '../../../shared/constants'
-import { UserMeta, UserMetaDocument } from '../../../shared/types/User/UserMeta'
-import { Avatar } from '../../../shared/components/Avatar'
-import { UserInfo } from '../../../shared/types/User/UserInfo';
+import * as React from "react"
+import "./Users.css"
+import { firestore } from "../../../firebase"
+import { Collections } from "../../../shared/constants"
+import { UserMeta, UserMetaDocument } from "../../../shared/types/User/UserMeta"
+import { Avatar } from "../../../shared/components/Avatar"
+import { UserInfo } from "../../../shared/types/User/UserInfo"
+import { Helmet } from "react-helmet"
 
 const hiddenUsers = ["gloi.arnarsson@gmail.com", "arnarp@gmail.com"]
 
@@ -33,31 +34,41 @@ export class Users extends React.PureComponent<UsersProps, UsersState> {
     console.log(this.state)
     return (
       <main className="Users">
+        <Helmet>
+          <title>Users</title>
+        </Helmet>
         <h1>Users</h1>
         <table>
           <thead>
             <tr>
-              <td />
-              <td>Name</td>
-              <td>Admin</td>
+              <th style={{ width: "15%", minWidth: "48px" }} />
+              <th style={{ width: "70%", minWidth: "200px" }}>Name</th>
+              <th style={{ width: "15%", minWidth: "48px" }}>Admin</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.users.filter(u => (this.props.userInfo.email !== null && this.props.userInfo.email === 'arnarp@gmail.com') || !hiddenUsers.includes(u.email)).map(u => (
-              <tr key={u.id}>
-                <td>
-                  <Avatar size="default" photoURL={u.photoURL} />
-                </td>
-                <td>{u.displayName}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={u.claims.isAdmin}
-                    onChange={() => this.toggleAdmin(u)}
-                  />
-                </td>
-              </tr>
-            ))}
+            {this.state.users
+              .filter(
+                u =>
+                  (this.props.userInfo.email !== null &&
+                    this.props.userInfo.email === "arnarp@gmail.com") ||
+                  !hiddenUsers.includes(u.email),
+              )
+              .map(u => (
+                <tr key={u.id}>
+                  <td>
+                    <Avatar size="default" photoURL={u.photoURL} />
+                  </td>
+                  <td>{u.displayName}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={u.claims.isAdmin}
+                      onChange={() => this.toggleAdmin(u)}
+                    />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </main>
@@ -74,12 +85,12 @@ export class Users extends React.PureComponent<UsersProps, UsersState> {
       .collection(Collections.UserMetas)
       .doc(u.id)
       .update(update)
-      .then(() => console.log('user claim updated', { u, update }))
+      .then(() => console.log("user claim updated", { u, update }))
   }
   createUserMetasSubscription = () => {
     return firestore
       .collection(Collections.UserMetas)
-      .orderBy('displayName', 'asc')
+      .orderBy("displayName", "asc")
       .onSnapshot(s => {
         const users = s.docs.map<UserMeta>(t => ({
           ...(t.data() as UserMetaDocument),

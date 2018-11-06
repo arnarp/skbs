@@ -1,14 +1,18 @@
 import * as React from "react"
 import "./DriversPage.css"
-import { EditDriverModalButton } from "./EditDriverModalButton";
-import { DeleteDriverModalButton } from "./DeleteDriverModalButton";
-import { AddDriverModalButton } from "./AddDriverModalButton";
-import { useDrivers } from "../../../firebase/firestore/drivers";
+import { EditDriverModalButton } from "./EditDriverModalButton"
+import { DeleteDriverModalButton } from "./DeleteDriverModalButton"
+import { AddDriverModalButton } from "./AddDriverModalButton"
+import { useDrivers } from "../../../firebase/firestore/drivers"
+import { Helmet } from "react-helmet"
 
 export const DriversPage: React.SFC<{}> = () => {
   const drivers = useDrivers()
   return (
     <main className="DriversPage">
+      <Helmet>
+        <title>Drivers</title>
+      </Helmet>
       <h1>Drivers</h1>
       <AddDriverModalButton />
       <table>
@@ -27,8 +31,12 @@ export const DriversPage: React.SFC<{}> = () => {
               <td>{d.name}</td>
               <td>{d.phoneNumber}</td>
               <td />
-              <td><EditDriverModalButton driver={d} /></td>
-              <td><DeleteDriverModalButton driver={d} /></td>
+              <td>
+                <EditDriverModalButton driver={d} />
+              </td>
+              <td>
+                <DeleteDriverModalButton driver={d} />
+              </td>
             </tr>
           ))}
         </tbody>

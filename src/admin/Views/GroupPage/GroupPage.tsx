@@ -31,8 +31,12 @@ export class GroupPage extends React.PureComponent<
 
   componentDidMount() {
     console.log("Group did mount", this.props.match.params.id)
-    this.cancelGroupSubscription = this.createGroupSubscription(this.props.match.params.id)
-    this.cancelBookingsSubscription = this.createBookingsSubscription(this.props.match.params.id)
+    this.cancelGroupSubscription = this.createGroupSubscription(
+      this.props.match.params.id,
+    )
+    this.cancelBookingsSubscription = this.createBookingsSubscription(
+      this.props.match.params.id,
+    )
   }
 
   componentWillUnmount() {
@@ -48,6 +52,9 @@ export class GroupPage extends React.PureComponent<
     if (this.state.group === null) {
       return (
         <main className="Group">
+          <Helmet>
+            <title>Pickup sheet not found</title>
+          </Helmet>
           <h1>Not found</h1>
         </main>
       )
@@ -128,7 +135,9 @@ export class GroupPage extends React.PureComponent<
           <div className="note">
             {this.state.group &&
               this.state.group.note &&
-              this.state.group.note.split(/\r?\n/).map((val, index) => <p key={index}>{val}</p>)}
+              this.state.group.note
+                .split(/\r?\n/)
+                .map((val, index) => <p key={index}>{val}</p>)}
           </div>
         </div>
       </main>

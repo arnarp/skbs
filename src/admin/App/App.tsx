@@ -108,7 +108,6 @@ export class App extends React.Component<AppProps, AppState> {
             <Route path="/drivers" component={DriversPage} />
             <Route path="/vehicles" component={VehiclesPage} />
             <Route path="/pickups" component={PickupsPage} />
-            <Route path="/pickups" component={PickupsPage} />
             <Route path="/tours" component={ToursPage} />
           </AppErrorBoundary>
 

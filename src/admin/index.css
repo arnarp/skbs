@@ -101,9 +101,11 @@ ul {
 table {
   border-collapse: collapse;
   text-align: left;
+  table-layout: fixed;
 }
 table td {
   padding: 0;
+  border-bottom: 1px solid var(--charcoal-05);
 }
 @media screen {
   main {

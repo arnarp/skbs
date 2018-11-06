@@ -3,11 +3,15 @@ import { useTours } from "../../../firebase/firestore/tours"
 import { AddTourModalButton } from "./AddTourModalButton"
 import { EditTourModalButton } from "./EditTourModalButton"
 import { DeleteTourModalButton } from "./DeleteTourModalButton"
+import { Helmet } from "react-helmet"
 
 export const ToursPage = () => {
   const pickups = useTours()
   return (
     <main>
+      <Helmet>
+        <title>Tours</title>
+      </Helmet>
       <h1>Tours</h1>
       <AddTourModalButton />
       <table style={{ width: "100%" }}>
