@@ -6,11 +6,12 @@ import { Driver } from "../../../shared/types/Driver"
 import { useTextInput } from "../../../shared/hooks/useTextInput"
 import { updateDriver } from "../../../firebase/firestore/drivers"
 import { logger } from "../../../shared/utils/breadcrumb"
+import { useState } from "react";
 
 export const EditDriverModalButton: React.SFC<{
   driver: Driver
 }> = ({ driver }) => {
-  const [showModal, setShowModal] = React.useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [submitting, setSubmitting] = React.useState(false)
   const [submitError, setSubmitError] = React.useState<string | undefined>(
     undefined,

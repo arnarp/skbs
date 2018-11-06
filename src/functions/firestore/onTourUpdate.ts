@@ -1,49 +1,72 @@
-import { firestore } from 'firebase-functions'
-import * as admin from 'firebase-admin'
-import { TourDocument } from '../../shared/types/Tour'
-import { newValues, chunks } from '../../shared/utils/array'
-import { FIRESTORE_MAX_BATCH_SIZE } from '../../shared/constants'
-import { Booking } from '../../shared/types/Booking'
+import { firestore } from "firebase-functions"
+import * as admin from "firebase-admin"
+import { parseTourSnapshot, Tour } from "../../shared/types/Tour"
+import { newValues, chunks } from "../../shared/utils/array"
+import { FIRESTORE_MAX_BATCH_SIZE, Collections } from "../../shared/constants"
+import { Booking } from "../../shared/types/Booking"
 
-export const onTourUpdate = firestore.document('tours/{id}').onUpdate((change, _context) => {
-  const before = change.before.data() as TourDocument
-  const after = change.after.data() as TourDocument
+export const onTourUpdate = firestore
+  .document("tours/{id}")
+  .onUpdate(async change => {
+    const before = parseTourSnapshot(change.before)
+    const after = parseTourSnapshot(change.after)
+    if (after.synonyms.length > before.synonyms.length) {
+      await linkBookings({ before, after })
+    }
+    if (before.name !== after.name) {
+      await updateBookingsTour(after)
+    }
+  })
+
+async function updateBookingsTour(tour: Tour) {
+  const bookings = await admin
+    .firestore()
+    .collection(Collections.Bookings)
+    .where("tour.id", "==", tour.id)
+    .get()
   const update: Partial<Booking> = {
     tour: {
-      name: after.name,
-      id: change.after.id,
+      name: tour.name,
+      id: tour.id,
     },
   }
-  if (after.synonyms.length > before.synonyms.length) {
-    const additions = newValues(before.synonyms, after.synonyms)
-    return Promise.all(
-      additions.map(a => {
-        console.log(`Synonym, ${a}, added for tour ${after.name}`, update)
-        return admin
-          .firestore()
-          .collection('bookings')
-          .where('tour', '==', null)
-          .where('import.tour', '==', a)
-          .get()
-          .then(s => {
-            console.log(`${s.size} number of bookings fetched`)
-            return Promise.all(
-              chunks(s.docs, FIRESTORE_MAX_BATCH_SIZE).map(chunk => {
-                const batch = admin.firestore().batch()
-                chunk.forEach(d => {
-                  const bookingRef = admin
-                    .firestore()
-                    .collection('bookings')
-                    .doc(d.id)
-                  console.log('bookingRef', bookingRef)
-                  batch.update(bookingRef, update)
-                })
-                return batch.commit().then(() => console.log(`${chunk.length} bookings updated`))
-              }),
-            )
-          })
-      }),
-    )
+  await Promise.all(
+    chunks(bookings.docs, FIRESTORE_MAX_BATCH_SIZE).map(async chunk => {
+      const batch = admin.firestore().batch()
+      chunk.forEach(i => batch.update(i.ref, update))
+      await batch.commit()
+      console.log(`${chunk.length} bookings updated`)
+    }),
+  )
+}
+
+async function linkBookings(param: { before: Tour; after: Tour }) {
+  const update: Partial<Booking> = {
+    tour: {
+      name: param.after.name,
+      id: param.after.id,
+    },
   }
-  return Promise.resolve()
-})
+  const additions = newValues(param.before.synonyms, param.after.synonyms)
+  await Promise.all(
+    additions.map(async a => {
+      console.log(`Synonym, ${a}, added for tour ${param.after.name}`, update)
+      const s = await admin
+        .firestore()
+        .collection(Collections.Bookings)
+        .where("tour", "==", null)
+        .where("import.tour", "==", a)
+        .get()
+
+      console.log(`${s.size} number of bookings fetched`)
+      await Promise.all(
+        chunks(s.docs, FIRESTORE_MAX_BATCH_SIZE).map(async chunk => {
+          const batch = admin.firestore().batch()
+          chunk.forEach(d => batch.update(d.ref, update))
+          await batch.commit()
+          console.log(`${chunk.length} bookings updated`)
+        }),
+      )
+    }),
+  )
+}

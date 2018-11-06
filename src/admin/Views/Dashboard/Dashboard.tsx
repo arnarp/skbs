@@ -23,7 +23,6 @@ import { Dropdown } from "../../../shared/components/Dropdown/Dropdown"
 import { LinkPickupLocModalButton } from "./LinkPickupLocModalButton"
 import { Collections } from "../../../shared/constants"
 import { EditBookingModalButton } from "./EditBookingModalButton"
-import { AddTourModalButton } from "../Tours/AddTourModalButton"
 
 type DashboardProps = {}
 type DashboardState = Readonly<{
@@ -123,9 +122,6 @@ export class Dashboard extends React.PureComponent<
               }}
             />
           </label>
-          <div>
-            <AddTourModalButton />
-          </div>
         </div>
         {this.state.chosenDate && (
           <React.Fragment>

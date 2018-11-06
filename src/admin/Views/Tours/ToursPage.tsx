@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useTours } from "../../../firebase/firestore/tours"
-import { AddTourModalButton } from "../Dashboard/AddTourModalButton"
+import { AddTourModalButton } from "./AddTourModalButton"
 import { EditTourModalButton } from "./EditTourModalButton"
 import { DeleteTourModalButton } from "./DeleteTourModalButton"
 

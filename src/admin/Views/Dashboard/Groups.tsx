@@ -72,8 +72,7 @@ export const Groups: React.SFC<GroupsProps> = ({
                   }
                 })
           const byPickup = groupBookinsByPickUp(bookingsForGroup)
-          console.log({ bookingsForGroup, tourPax, colorPax })
-          const pax = totalPax(bookingsForGroup)
+          const groupTotalPax = totalPax(bookingsForGroup)
           return (
             <div className="group" key={g.id}>
               <div className="groupHeader">
@@ -141,16 +140,17 @@ export const Groups: React.SFC<GroupsProps> = ({
                 <div className="ratio">
                   {colorPax.map(i => (
                     <div
+                      id={`${i.color}_${i.pax}`}
                       key={i.color}
                       style={{
                         backgroundColor: i.color,
-                        width: `${(100 * pax) / (g.maxPax || pax)}px`,
+                        width: `${(100 * i.pax) / (g.maxPax || groupTotalPax)}px`,
                       }}
                     />
                   ))}
                 </div>
                 <span>
-                  {pax}/{g.maxPax || "?"}
+                  {groupTotalPax}/{g.maxPax || "?"}
                 </span>
                 <Link to={`/group/${g.id}`}>Print</Link>
               </div>
