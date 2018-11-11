@@ -1,7 +1,7 @@
-import { initializeApp, firestore as fire, auth as a, apps } from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/messaging'
+import { initializeApp, firestore as fire, auth as a, apps } from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/messaging"
 
 if (apps.length === 0) {
   const config = {

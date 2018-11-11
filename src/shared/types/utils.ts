@@ -1,3 +1,5 @@
+import { firestore as fire } from "firebase/app"
+
 /**
  * Remove the variants of the second union of string literals from
  * the first.
@@ -27,3 +29,7 @@ export type Omit<T, K extends keyof any> = T extends any
 export type Overwrite<T, U> = Omit<T, keyof T & keyof U> & U
 
 export const propertyOf = <TObj>(name: keyof TObj) => name
+
+export type FirestoreUpdate<T> = {
+  [P in keyof T]?: T[P] | fire.FieldValue
+}

@@ -13,6 +13,8 @@ import {
 import { Tour } from "../../../shared/types/Tour"
 import { useDrivers } from "../../../firebase/firestore/drivers"
 import { useVehicles } from "../../../firebase/firestore/vehicles"
+import { FirestoreUpdate } from "../../../shared/types/utils"
+import { firestore as fire } from "firebase/app"
 
 type GroupsProps = {
   date: Date
@@ -85,10 +87,10 @@ export const Groups: React.SFC<GroupsProps> = ({
                     const newGroupDriver = drivers.find(
                       value => value.id === newGroupDriverId,
                     )
-                    const groupUpdate: Partial<GroupDocument> = {
+                    const groupUpdate: FirestoreUpdate<GroupDocument> = {
                       driver:
                         newGroupDriver === undefined
-                          ? undefined
+                          ? fire.FieldValue.delete()
                           : {
                               id: newGroupDriver.id,
                               name: newGroupDriver.name,
@@ -114,15 +116,17 @@ export const Groups: React.SFC<GroupsProps> = ({
                     const newGroupBus = vehicles.find(
                       value => value.id === newGroupBusId,
                     )
-                    const groupUpdate: Partial<GroupDocument> = {
+                    const groupUpdate: FirestoreUpdate<GroupDocument> = {
                       bus:
                         newGroupBus === undefined
-                          ? undefined
+                          ? fire.FieldValue.delete()
                           : {
                               id: newGroupBus.id,
                               name: newGroupBus.name,
                             },
-                      maxPax: newGroupBus ? newGroupBus.maxPax : undefined,
+                      maxPax: newGroupBus
+                        ? newGroupBus.maxPax
+                        : fire.FieldValue.delete(),
                     }
                     firestore
                       .collection("groups")
@@ -144,7 +148,8 @@ export const Groups: React.SFC<GroupsProps> = ({
                       key={i.color}
                       style={{
                         backgroundColor: i.color,
-                        width: `${(100 * i.pax) / (g.maxPax || groupTotalPax)}px`,
+                        width: `${(100 * i.pax) /
+                          (g.maxPax || groupTotalPax)}px`,
                       }}
                     />
                   ))}
@@ -169,11 +174,7 @@ export const Groups: React.SFC<GroupsProps> = ({
         })}
       </div>
       <div className="buttonsRow">
-        <Button
-          color="default"
-          ref={addGroupBtn}
-          onClick={addGroup}
-        >
+        <Button color="default" ref={addGroupBtn} onClick={addGroup}>
           Add group
         </Button>
       </div>
