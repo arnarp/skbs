@@ -15,6 +15,7 @@ import { useDrivers } from "../../../firebase/firestore/drivers"
 import { useVehicles } from "../../../firebase/firestore/vehicles"
 import { FirestoreUpdate } from "../../../shared/types/utils"
 import { firestore as fire } from "firebase/app"
+import { DeleteGroupButton } from "./DeleteGroupButton"
 
 type GroupsProps = {
   date: Date
@@ -36,7 +37,8 @@ export const Groups: React.SFC<GroupsProps> = ({
   const addGroup = () => {
     const newGroupDoc: GroupDocument = {
       date: date,
-      friendlyKey: groups.length + 1,
+      friendlyKey:
+        groups.map(i => i.friendlyKey).reduce((a, c) => Math.max(a, c), 0) + 1,
     }
     firestore
       .collection("groups")
@@ -158,6 +160,7 @@ export const Groups: React.SFC<GroupsProps> = ({
                   {groupTotalPax}/{g.maxPax || "?"}
                 </span>
                 <Link to={`/group/${g.id}`}>Print</Link>
+                {groupTotalPax === 0 && <DeleteGroupButton group={g} />}
               </div>
               <div className="groupContent">
                 <p>Tours: {toursInBookings(bookingsForGroup).join(", ")}</p>
