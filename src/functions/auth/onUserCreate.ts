@@ -8,17 +8,16 @@ export const onUserCreate = auth.user().onCreate(async user => {
     claims: { isAdmin: false },
     displayName: user.displayName,
     photoURL: user.photoURL,
-    email: user.email,
+    email: user.email
   }
   try {
     const result = await admin
       .firestore()
       .collection('userMetas')
       .doc(user.uid)
-      .set(newUserMetaDocument);
-    return console.log({ result });
-  }
-  catch (reason) {
-    return console.log({ reason });
+      .set(newUserMetaDocument)
+    return console.log({ result })
+  } catch (reason) {
+    return console.log({ reason })
   }
 })
