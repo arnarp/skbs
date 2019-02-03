@@ -1,38 +1,39 @@
-import * as React from "react"
-import { Vehicle, VehicleDocument } from "../../shared/types/Vehicle";
-import { firestore } from "..";
-import { Collections } from "../../shared/constants";
-import { FirebaseError } from "firebase";
+import * as React from 'react'
+import { Vehicle, VehicleDocument } from '../../shared/types/Vehicle'
+import { firestore } from '..'
+import { Collections } from '../../shared/constants'
+import { FirebaseError } from 'firebase'
 
 export function subscribeOnVehicles(params: {
-  onVehicles: (vehicles: Vehicle[]) => void,
+  onVehicles: (vehicles: Vehicle[]) => void
 }) {
-  return firestore.collection(Collections.Vehicles)
-  .orderBy("name", "desc")
-  .onSnapshot(s => {
-    const buses = s.docs.map<Vehicle>(d => ({
-      id: d.id,
-      ...(d.data() as VehicleDocument),
-    }))
-    params.onVehicles(buses)
-  })
+  return firestore
+    .collection(Collections.Vehicles)
+    .orderBy('name', 'asc')
+    .onSnapshot(s => {
+      const buses = s.docs.map<Vehicle>(d => ({
+        id: d.id,
+        ...(d.data() as VehicleDocument)
+      }))
+      params.onVehicles(buses)
+    })
 }
 
 export function useVehicles() {
   const [vehicles, onVehicles] = React.useState<Vehicle[]>([])
   React.useEffect(() => {
     return subscribeOnVehicles({
-      onVehicles,
+      onVehicles
     })
   }, [])
   return vehicles
 }
 
 export function updateVehicle(params: {
-  vehicleId: string,
-  update: Partial<Vehicle>,
-  onSuccess: () => void,
-  onReject: (reason: FirebaseError) => void,
+  vehicleId: string
+  update: Partial<Vehicle>
+  onSuccess: () => void
+  onReject: (reason: FirebaseError) => void
 }) {
   firestore
     .collection(Collections.Vehicles)

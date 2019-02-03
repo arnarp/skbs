@@ -1,19 +1,19 @@
-import * as React from "react"
-import { firestore } from ".."
-import { Collections } from "../../shared/constants"
-import { FirebaseError } from "firebase"
+import * as React from 'react'
+import { firestore } from '..'
+import { Collections } from '../../shared/constants'
+import { FirebaseError } from 'firebase'
 import {
   PickUpLocation,
   PickUpLocationDocument,
-  parsePickupSnapshot,
-} from "../../shared/types/PickUpLocation"
+  parsePickupSnapshot
+} from '../../shared/types/PickUpLocation'
 
 export function subscribeOnPickups(params: {
   onPickups: (pickups: PickUpLocation[]) => void
 }) {
   return firestore
     .collection(Collections.PickupLocations)
-    .orderBy("name", "desc")
+    .orderBy('name', 'asc')
     .onSnapshot(s => {
       const pickups = s.docs.map<PickUpLocation>(parsePickupSnapshot)
       params.onPickups(pickups)
@@ -24,7 +24,7 @@ export function usePickups() {
   const [pickups, onPickups] = React.useState<PickUpLocation[]>([])
   React.useEffect(() => {
     return subscribeOnPickups({
-      onPickups,
+      onPickups
     })
   }, [])
   return pickups

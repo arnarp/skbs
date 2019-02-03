@@ -7,7 +7,7 @@ import { Tour, parseTourSnapshot, TourDocument } from '../../shared/types/Tour'
 export function subscribeOnTours(params: { onTours: (tours: Tour[]) => void }) {
   return firestore
     .collection(Collections.Tours)
-    .orderBy('name', 'desc')
+    .orderBy('name', 'asc')
     .onSnapshot(s => {
       const tours = s.docs.map(parseTourSnapshot)
       params.onTours(tours)
