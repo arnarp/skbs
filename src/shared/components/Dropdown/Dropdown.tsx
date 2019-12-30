@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { v4 as uuid } from 'uuid'
+import { uuid } from "itils/dist/misc/uuid";
 import './Dropdown.css'
 
 type DropdownProps = {

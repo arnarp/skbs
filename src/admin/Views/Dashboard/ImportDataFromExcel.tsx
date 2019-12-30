@@ -1,6 +1,6 @@
 import * as React from "react"
 import readXlsxFile, { parseExcelDate } from "read-excel-file"
-import { v4 } from "uuid"
+import { uuid } from "itils/dist/misc/uuid";
 import { Modal } from "../../../shared/components/Modal"
 import "./ImportDataFromExcel.css"
 import { Booking, bookingId } from "../../../shared/types/Booking"
@@ -35,7 +35,7 @@ export class ImportDataFromExcel extends React.PureComponent<
 > {
   readonly state: ImportDataFromExcelState = initialState
   input: HTMLInputElement | null = null
-  inputId = v4()
+  inputId = uuid()
   cancelBookingsSubscription: () => void = () => {}
 
   componentDidUpdate(

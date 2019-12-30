@@ -11,6 +11,7 @@ export const AddDriverModalButton = () => {
   const triggerButton = React.useRef<HTMLButtonElement>()
   const [name, setName, nameInputProps] = useTextInput("")
   const [phoneNumber, setPhoneNumber, phoneNumberInputProps] = useTextInput("")
+  const [email, setEmail, emailInputProps] = useTextInput("")
   const [submitError, setSubmitError] = React.useState<string | undefined>(
     undefined,
   )
@@ -20,6 +21,7 @@ export const AddDriverModalButton = () => {
     const newDriverDoc: DriverDocument = {
       name,
       phoneNumber,
+      email,
       status: "active",
     }
     addNewDriver({
@@ -35,6 +37,7 @@ export const AddDriverModalButton = () => {
     setShowModal(false)
     setName("")
     setPhoneNumber("")
+    setEmail('')
     setSubmitError(undefined)
   }
   return (
@@ -64,6 +67,10 @@ export const AddDriverModalButton = () => {
         <label>
           Phone nr
           <input {...phoneNumberInputProps} />
+        </label>
+        <label>
+          Email
+          <input {...emailInputProps} />
         </label>
       </ModalForm>
     </React.Fragment>

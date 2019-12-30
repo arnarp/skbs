@@ -1,53 +1,57 @@
-import * as React from "react"
-import { RouteComponentProps } from "react-router-dom"
-import "./GroupPage.css"
-import { Group, GroupDocument } from "../../../shared/types/Group"
-import { firestore } from "../../../firebase"
-import { Collections } from "../../../shared/constants"
+import * as React from "react";
+import { RouteComponentProps } from "react-router-dom";
+import "./GroupPage.css";
+import { Group, GroupDocument } from "../../../shared/types/Group";
+import { firestore } from "../../../firebase";
+import { Collections } from "../../../shared/constants";
 import {
   Booking,
   toursInBookings,
   groupBookinsByPickUp,
-  totalPax,
-} from "../../../shared/types/Booking"
-import { propertyOf } from "../../../shared/types/utils"
-import Helmet from "react-helmet"
+  totalPax
+} from "../../../shared/types/Booking";
+import { propertyOf } from "../../../shared/types/utils";
+import Helmet from "react-helmet";
 
-type GroupPageProps = {}
+type GroupPageProps = {};
 type GroupPageState = Readonly<{
-  group?: Group | null
-  bookings?: Booking[]
-}>
+  group?: Group | null;
+  bookings?: Booking[];
+  note: string;
+}>;
 
-const initialState: GroupPageState = {}
+const initialState: GroupPageState = { note: "" };
 
 export class GroupPage extends React.PureComponent<
   GroupPageProps & RouteComponentProps<{ id: string }>,
   GroupPageState
 > {
-  readonly state: GroupPageState = initialState
-  cancelGroupSubscription: () => void = () => {}
-  cancelBookingsSubscription: () => void = () => {}
+  readonly state: GroupPageState = initialState;
+  cancelGroupSubscription: () => void = () => {};
+  cancelBookingsSubscription: () => void = () => {};
 
   componentDidMount() {
-    console.log("Group did mount", this.props.match.params.id)
+    console.log("Group did mount", this.props.match.params.id);
     this.cancelGroupSubscription = this.createGroupSubscription(
-      this.props.match.params.id,
-    )
+      this.props.match.params.id
+    );
     this.cancelBookingsSubscription = this.createBookingsSubscription(
-      this.props.match.params.id,
-    )
+      this.props.match.params.id
+    );
   }
 
   componentWillUnmount() {
-    this.cancelGroupSubscription()
-    this.cancelBookingsSubscription()
+    this.cancelGroupSubscription();
+    this.cancelBookingsSubscription();
+    if (this.state.note !== this.state.group?.note) {
+      this.updateNote(this.state.note);
+    }
   }
 
   render() {
-    console.log("GroupPage render", this.state)
+    console.log("GroupPage render", this.state);
     if (this.state.group === undefined) {
-      return null
+      return null;
     }
     if (this.state.group === null) {
       return (
@@ -57,7 +61,7 @@ export class GroupPage extends React.PureComponent<
           </Helmet>
           <h1>Not found</h1>
         </main>
-      )
+      );
     }
     return (
       <main className="GroupPage">
@@ -70,7 +74,7 @@ export class GroupPage extends React.PureComponent<
               weekday: "long",
               year: "numeric",
               month: "long",
-              day: "numeric",
+              day: "numeric"
             })}
             , <span>{toursInBookings(this.state.bookings || [])}</span>
           </h1>
@@ -117,19 +121,13 @@ export class GroupPage extends React.PureComponent<
         <div className="note-container">
           <textarea
             aria-label="Note"
-            rows={3}
-            value={this.state.group.note || ""}
+            rows={10}
+            value={this.state.note}
             onChange={event => {
-              const update: Partial<Group> = {
-                note: event.target.value,
-              }
-              const group = this.state.group
-              if (group) {
-                firestore
-                  .collection(Collections.Groups)
-                  .doc(group.id)
-                  .update(update)
-              }
+              this.setState({ note: event.target.value });
+            }}
+            onBlur={() => {
+              this.updateNote(this.state.note);
             }}
           />
           <div className="note">
@@ -141,7 +139,7 @@ export class GroupPage extends React.PureComponent<
           </div>
         </div>
       </main>
-    )
+    );
   }
 
   private createGroupSubscription = (id: string) => {
@@ -149,28 +147,42 @@ export class GroupPage extends React.PureComponent<
       .collection(Collections.Groups)
       .doc(id)
       .onSnapshot(doc => {
-        const data = doc.data()
+        const data = doc.data();
         if (doc.exists && data) {
           const group: Group = {
             ...(data as GroupDocument),
             date: data.date.toDate(),
-            id: doc.id,
-          }
-          this.setState(() => ({ group }))
+            id: doc.id
+          };
+          console.log("set group state");
+          this.setState(() => ({ group, note: group.note || this.state.note }));
         } else {
-          this.setState(() => ({ group: null }))
+          this.setState(() => ({ group: null }));
         }
-      })
-  }
+      });
+  };
   private createBookingsSubscription = (id: string) => {
     return firestore
       .collection(Collections.Bookings)
       .where(propertyOf<Booking>("groupId"), "==", id)
       .onSnapshot(s => {
         const bookings = s.docs.map<Booking>(b => ({
-          ...(b.data() as Booking),
-        }))
-        this.setState(() => ({ bookings }))
-      })
+          ...(b.data() as Booking)
+        }));
+        this.setState(() => ({ bookings }));
+      });
+  };
+
+  private updateNote(note: string) {
+    const update: Partial<Group> = {
+      note
+    };
+    const group = this.state.group;
+    if (group) {
+      firestore
+        .collection(Collections.Groups)
+        .doc(group.id)
+        .update(update);
+    }
   }
 }

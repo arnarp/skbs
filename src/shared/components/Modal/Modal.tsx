@@ -1,35 +1,35 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
-import { Transition } from "react-transition-group"
-import { v4 as uuid } from "uuid"
-import classnames from "classnames"
-import { Button } from "../Button"
-import "./Modal.css"
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Transition } from "react-transition-group";
+import { uuid } from "itils/dist/misc/uuid";
+import { cn } from "itils/dist/misc/cn";
+import { Button } from "../Button";
+import "./Modal.css";
 
 type ModalProps = {
   /**
    * Controls if this modal is shown or not
    */
-  show: boolean
+  show: boolean;
   /**
    * Will be called on Esc key or when user clicks close button.
    * The component user is thus expected to toggle the show prop on
    * this event.
    */
-  onClose: () => void
+  onClose: () => void;
   /**
    * Will be called after show props flips to false. This component user is
    * expected to put focus back at correct place. Usually that element would
    * be the button that triggered this modal to be opened.
    */
-  focusAfterClose: () => void
-  header: string
-  hideHeader: boolean
-  contentClassName?: string
-  fullscreen: boolean
-}
-const initialState = {}
-type ModalState = Readonly<typeof initialState>
+  focusAfterClose: () => void;
+  header: string;
+  hideHeader: boolean;
+  contentClassName?: string;
+  fullscreen: boolean;
+};
+const initialState = {};
+type ModalState = Readonly<typeof initialState>;
 
 /**
  * Modal that is trying to be as simple as possible. When shown this modal children
@@ -38,55 +38,55 @@ type ModalState = Readonly<typeof initialState>
  * and it will be unmounted on show prop turning false.
  */
 export class Modal extends React.PureComponent<ModalProps, ModalState> {
-  headingId: string
-  h2: HTMLHeadingElement | null = null
-  closeButton = React.createRef<HTMLButtonElement>()
+  headingId: string;
+  h2: HTMLHeadingElement | null = null;
+  closeButton = React.createRef<HTMLButtonElement>();
   constructor(props: ModalProps) {
-    super(props)
-    this.onKeyDown = this.onKeyDown.bind(this)
-    this.headingId = uuid()
+    super(props);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.headingId = uuid();
   }
 
   componentDidUpdate(prevProps: ModalProps) {
     if (prevProps.show === false && this.props.show === true) {
-      this.onOpen()
+      this.onOpen();
     }
     if (prevProps.show === true && this.props.show === false) {
-      this.onClose()
+      this.onClose();
     }
   }
 
   componentWillUnmount() {
-    this.cleanup()
+    this.cleanup();
   }
 
   onKeyDown(ev: React.KeyboardEvent<HTMLDivElement> | KeyboardEvent) {
     if (ev.key === "Escape") {
-      this.props.onClose()
+      this.props.onClose();
     }
   }
 
   onOpen() {
-    this.h2 && this.h2.focus()
-    document.addEventListener("keydown", this.onKeyDown)
-    const root = document.getElementById("root")
+    this.h2 && this.h2.focus();
+    document.addEventListener("keydown", this.onKeyDown);
+    const root = document.getElementById("root");
     if (root !== null) {
-      root.inert = true
+      root.inert = true;
     }
-    document.body.style.overflow = "hidden"
+    document.body.style.overflow = "hidden";
   }
   onClose() {
-    this.cleanup()
-    this.props.focusAfterClose()
+    this.cleanup();
+    this.props.focusAfterClose();
   }
 
   cleanup() {
-    document.removeEventListener("keydown", this.onKeyDown)
-    const root = document.getElementById("root")
+    document.removeEventListener("keydown", this.onKeyDown);
+    const root = document.getElementById("root");
     if (root !== null) {
-      root.inert = false
+      root.inert = false;
     }
-    document.body.style.overflow = "visible"
+    document.body.style.overflow = "visible";
   }
 
   render() {
@@ -96,8 +96,8 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
       onClose,
       children,
       contentClassName,
-      fullscreen,
-    } = this.props
+      fullscreen
+    } = this.props;
     return (
       <Transition in={show} timeout={500} unmountOnExit mountOnEnter>
         {/*
@@ -117,8 +117,8 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
             <div
               onKeyDown={this.onKeyDown}
               aria-labelledby={this.headingId}
-              className={classnames("dialog", state, {
-                fullscreen: this.props.fullscreen,
+              className={cn("dialog", state, {
+                fullscreen: this.props.fullscreen
               })}
               role="dialog"
               onClick={onClose}
@@ -141,17 +141,17 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
                     {fullscreen ? "Close dialog" : "Close"}
                   </Button>
                 </div>
-                <div className={classnames("content", contentClassName)}>
+                <div className={cn("content", contentClassName)}>
                   {children}
                 </div>
               </div>
             </div>,
-            document.body,
+            document.body
           )
         }
       </Transition>
-    )
+    );
   }
 
-  static defaultProps = { hideHeader: false, fullscreen: false }
+  static defaultProps = { hideHeader: false, fullscreen: false };
 }

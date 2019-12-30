@@ -1,13 +1,13 @@
-import * as React from "react"
-import "./DriversPage.css"
-import { EditDriverModalButton } from "./EditDriverModalButton"
-import { DeleteDriverModalButton } from "./DeleteDriverModalButton"
-import { AddDriverModalButton } from "./AddDriverModalButton"
-import { useDrivers } from "../../../firebase/firestore/drivers"
-import { Helmet } from "react-helmet"
+import * as React from "react";
+import "./DriversPage.css";
+import { EditDriverModalButton } from "./EditDriverModalButton";
+import { DeleteDriverModalButton } from "./DeleteDriverModalButton";
+import { AddDriverModalButton } from "./AddDriverModalButton";
+import { useDrivers } from "../../../firebase/firestore/drivers";
+import { Helmet } from "react-helmet";
 
 export const DriversPage: React.SFC<{}> = () => {
-  const drivers = useDrivers()
+  const drivers = useDrivers();
   return (
     <main className="DriversPage">
       <Helmet>
@@ -20,7 +20,7 @@ export const DriversPage: React.SFC<{}> = () => {
           <tr>
             <th style={{ width: "40%", minWidth: "150px" }}>Name</th>
             <th style={{ width: "20%", minWidth: "125px" }}>Phone nr</th>
-            <th style={{ width: "20%", minWidth: "125px" }} />
+            <th style={{ width: "20%", minWidth: "125px" }}>Email</th>
             <th style={{ width: "10%", minWidth: "50px" }} />
             <th style={{ width: "10%", minWidth: "50px" }} />
           </tr>
@@ -30,7 +30,7 @@ export const DriversPage: React.SFC<{}> = () => {
             <tr key={d.id}>
               <td>{d.name}</td>
               <td>{d.phoneNumber}</td>
-              <td />
+              <td>{d.email}</td>
               <td>
                 <EditDriverModalButton driver={d} />
               </td>
@@ -42,5 +42,5 @@ export const DriversPage: React.SFC<{}> = () => {
         </tbody>
       </table>
     </main>
-  )
-}
+  );
+};
