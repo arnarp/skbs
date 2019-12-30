@@ -16,7 +16,7 @@ export const EditDriverModalButton: React.SFC<{
   const [submitError, setSubmitError] = React.useState<string | undefined>(
     undefined
   );
-  const button = React.useRef<HTMLButtonElement>();
+  const button = React.useRef<HTMLButtonElement>(null);
   const [name, setName, nameInputProps] = useTextInput(driver.name);
   const [phoneNumber, setPhoneNr, phoneNrInputProps] = useTextInput(
     driver.phoneNumber || ""

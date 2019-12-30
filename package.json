@@ -20,7 +20,16 @@
     "deploy:firestore:dev": "firebase deploy --only firestore -P dev",
     "deploy:prod": "firebase deploy -P default",
     "run:datamigration:dev": "rm -rf dist/datamigration && tsc -p tsconfig.datamigration.json && NODE_ENV=development node dist/datamigration/datamigration/index.js",
-    "run:datamigration:prod": "rm -rf dist/datamigration && tsc -p tsconfig.datamigration.json && NODE_ENV=production node dist/datamigration/datamigration/index.js"
+    "run:datamigration:prod": "rm -rf dist/datamigration && tsc -p tsconfig.datamigration.json && NODE_ENV=production node dist/datamigration/datamigration/index.js",
+    "version:major": "npm version major && git push --follow-tags",
+    "version:premajor": "npm version premajor && git push --follow-tags",
+    "version:minor": "npm version minor && git push --follow-tags",
+    "version:preminor": "npm version preminor && git push --follow-tags",
+    "version:patch": "npm version patch && git push --follow-tags",
+    "version:prepatch": "npm version prepatch && git push --follow-tags",
+    "version:prerelease": "npm version prerelease && git push --follow-tags",
+    "preversion": "npm run check",
+    "check": "tsc -p tsconfig.check.json"
   },
   "keywords": [],
   "author": "",

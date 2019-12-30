@@ -1,16 +1,16 @@
-import * as React from "react"
-import { Vehicle } from "../../../shared/types/Vehicle"
-import { IconButton } from "../../../shared/components/IconButton"
-import { DeleteIcon } from "../../../shared/icons/DeleteIcon"
-import { ConfirmationModal } from "../../../shared/components/ConfirmationModal"
-import { deleteVehicle } from "../../../firebase/firestore/vehicles"
-import { logger } from "../../../shared/utils/breadcrumb"
+import * as React from "react";
+import { Vehicle } from "../../../shared/types/Vehicle";
+import { IconButton } from "../../../shared/components/IconButton";
+import { DeleteIcon } from "../../../shared/icons/DeleteIcon";
+import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
+import { deleteVehicle } from "../../../firebase/firestore/vehicles";
+import { logger } from "../../../shared/utils/breadcrumb";
 
 export const DeleteVehicleModalButton: React.SFC<{
-  vehicle: Vehicle
+  vehicle: Vehicle;
 }> = ({ vehicle }) => {
-  const [show, setShow] = React.useState(false)
-  const trigger = React.useRef<HTMLButtonElement>()
+  const [show, setShow] = React.useState(false);
+  const trigger = React.useRef<HTMLButtonElement>(null);
   return (
     <React.Fragment>
       <IconButton
@@ -23,24 +23,24 @@ export const DeleteVehicleModalButton: React.SFC<{
         show={show}
         onClose={() => setShow(false)}
         onConfirmed={() => {
-          setShow(false)
+          setShow(false);
           deleteVehicle({
             vehicleId: vehicle.id,
             onSuccess: () => {
-              logger("Vehicle deleted", "info", vehicle)
+              logger("Vehicle deleted", "info", vehicle);
             },
             onReject: reason => {
-              logger("Vehicle delete error", "error", reason)
-            },
-          })
+              logger("Vehicle delete error", "error", reason);
+            }
+          });
         }}
         focusAfterClose={() => {
-          trigger.current && trigger.current.focus()
+          trigger.current && trigger.current.focus();
         }}
         header={`Delete vehicle`}
       >
         <p>Confirm deleting vehicle {vehicle.name}</p>
       </ConfirmationModal>
     </React.Fragment>
-  )
-}
+  );
+};

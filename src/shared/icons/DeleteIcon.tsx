@@ -1,16 +1,16 @@
-import * as React from "react"
-import { IconProps } from "./IconProps"
-import "./icons.css"
-import classnames = require("classnames")
+import * as React from "react";
+import { IconProps } from "./IconProps";
+import "./icons.css";
+import { cn } from "itils/dist/misc/cn";
 
 export const DeleteIcon = (props: IconProps) => (
   <svg
     viewBox="0 0 64 64"
-    className={classnames(
+    className={cn(
       "Svg",
       `Stroke-${props.color}`,
       `Size-${props.size}`,
-      props.className,
+      props.className
     )}
   >
     <path
@@ -30,4 +30,4 @@ export const DeleteIcon = (props: IconProps) => (
       strokeLinecap="round"
     />
   </svg>
-)
+);

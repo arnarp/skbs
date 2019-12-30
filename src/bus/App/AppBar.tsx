@@ -1,28 +1,28 @@
-import * as React from 'react'
-import './AppBar.css'
-import { UserInfo } from '../../shared/types/User/UserInfo'
-import { Modal } from '../../shared/components/Modal'
-import { Avatar } from '../../shared/components/Avatar'
-import { Button } from '../../shared/components/Button'
+import * as React from "react";
+import "./AppBar.css";
+import { UserInfo } from "../../shared/types/User/UserInfo";
+import { Modal } from "../../shared/components/Modal";
+import { Avatar } from "../../shared/components/Avatar";
+import { Button } from "../../shared/components/Button";
 
 type AppBarProps = {
-  userInfo: UserInfo | null
-  signOut: () => void
-}
+  userInfo: UserInfo | null | undefined;
+  signOut: () => void;
+};
 
 const initialState = {
-  userModalIsOpen: false,
-}
-type AppBarState = Readonly<typeof initialState>
+  userModalIsOpen: false
+};
+type AppBarState = Readonly<typeof initialState>;
 
 export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
-  readonly state: AppBarState = initialState
-  toggleUserModalButton = React.createRef<HTMLButtonElement>()
-  signOutTimeout: NodeJS.Timer | undefined
+  readonly state: AppBarState = initialState;
+  toggleUserModalButton = React.createRef<HTMLButtonElement>();
+  signOutTimeout: NodeJS.Timer | undefined;
 
   componentWillUnmount() {
     if (this.signOutTimeout) {
-      clearTimeout(this.signOutTimeout)
+      clearTimeout(this.signOutTimeout);
     }
   }
 
@@ -43,7 +43,10 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
               hideHeader={true}
               show={this.state.userModalIsOpen}
               onClose={() => this.toggleUserModal()}
-              focusAfterClose={() => this.toggleUserModalButton.current && this.toggleUserModalButton.current.focus()}
+              focusAfterClose={() =>
+                this.toggleUserModalButton.current &&
+                this.toggleUserModalButton.current.focus()
+              }
               header={`Innskráður sem ${this.props.userInfo.displayName}`}
               contentClassName="userModalContent"
             >
@@ -56,11 +59,11 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
                 <Button
                   color="default"
                   onClick={() => {
-                    this.toggleUserModal()
+                    this.toggleUserModal();
                     this.signOutTimeout = setTimeout(
                       () => this.props.signOut(),
-                      300,
-                    )
+                      300
+                    );
                   }}
                 >
                   Útskrá
@@ -70,12 +73,12 @@ export class AppBar extends React.PureComponent<AppBarProps, AppBarState> {
           </React.Fragment>
         )}
       </div>
-    )
+    );
   }
 
   private toggleUserModal() {
     this.setState(previusState => ({
-      userModalIsOpen: !previusState.userModalIsOpen,
-    }))
+      userModalIsOpen: !previusState.userModalIsOpen
+    }));
   }
 }

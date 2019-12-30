@@ -1,11 +1,17 @@
-import * as React from 'react'
-import classnames from 'classnames'
-import { IconProps } from './IconProps'
-import './icons.css'
+import * as React from "react";
+import { cn } from "itils/dist/misc/cn";
+import { IconProps } from "./IconProps";
+import "./icons.css";
 
 export const EditIcon = (props: IconProps) => (
-  <svg viewBox="0 0 64 64"
-  className={classnames('Svg', `Stroke-${props.color}`, `Size-${props.size}`, props.className)}
+  <svg
+    viewBox="0 0 64 64"
+    className={cn(
+      "Svg",
+      `Stroke-${props.color}`,
+      `Size-${props.size}`,
+      props.className
+    )}
   >
     <path
       d="M54.368 17.674l6.275-6.267-8.026-8.025-6.274 6.267"
@@ -26,4 +32,4 @@ export const EditIcon = (props: IconProps) => (
       strokeLinecap="round"
     />
   </svg>
-)
+);

@@ -1,82 +1,79 @@
-import * as React from "react"
-import { Link } from "react-router-dom"
-import "./Groups.css"
-import { Button } from "../../../shared/components/Button"
-import { firestore } from "../../../firebase"
-import { GroupDocument, Group } from "../../../shared/types/Group"
+import * as React from "react";
+import { Link } from "react-router-dom";
+import "./Groups.css";
+import { Button } from "../../../shared/components/Button";
+import { firestore } from "../../../firebase";
+import { GroupDocument, Group } from "../../../shared/types/Group";
 import {
   Booking,
   groupBookinsByPickUp,
   totalPax,
-  toursInBookings,
-} from "../../../shared/types/Booking"
-import { Tour } from "../../../shared/types/Tour"
-import { useDrivers } from "../../../firebase/firestore/drivers"
-import { useVehicles } from "../../../firebase/firestore/vehicles"
-import { FirestoreUpdate } from "../../../shared/types/utils"
-import { firestore as fire } from "firebase/app"
-import { DeleteGroupButton } from "./DeleteGroupButton"
+  toursInBookings
+} from "../../../shared/types/Booking";
+import { Tour } from "../../../shared/types/Tour";
+import { useDrivers } from "../../../firebase/firestore/drivers";
+import { useVehicles } from "../../../firebase/firestore/vehicles";
+import { FirestoreUpdate } from "../../../shared/types/utils";
+import { firestore as fire } from "firebase/app";
+import { DeleteGroupButton } from "./DeleteGroupButton";
 
 type GroupsProps = {
-  date: Date
-  groups: Group[]
-  bookings: Booking[]
-  tours: Tour[]
-}
+  date: Date;
+  groups: Group[];
+  bookings: Booking[];
+  tours: Tour[];
+};
 
 export const Groups: React.SFC<GroupsProps> = ({
   date,
   groups,
   bookings,
-  tours,
+  tours
 }) => {
-  const addGroupBtn = React.useRef<HTMLButtonElement>()
-  const drivers = useDrivers()
-  const vehicles = useVehicles()
+  const addGroupBtn = React.useRef<HTMLButtonElement>(null);
+  const drivers = useDrivers();
+  const vehicles = useVehicles();
 
   const addGroup = () => {
     const newGroupDoc: GroupDocument = {
       date: date,
       friendlyKey:
-        groups.map(i => i.friendlyKey).reduce((a, c) => Math.max(a, c), 0) + 1,
-    }
+        groups.map(i => i.friendlyKey).reduce((a, c) => Math.max(a, c), 0) + 1
+    };
     firestore
       .collection("groups")
       .add(newGroupDoc)
       .then(() => {
-        console.log("Saved group")
-      })
-  }
+        console.log("Saved group");
+      });
+  };
 
   return (
     <div className="groups">
       <h2>Groups</h2>
       <div className="groupsCol">
         {groups.map(g => {
-          const bookingsForGroup = bookings.filter(b => b.groupId === g.id)
-          const tourPax = bookingsForGroup.reduce(
-            (acc, val) => {
-              const tourId = val.tour === null ? "unknown" : val.tour.id
-              if (acc[tourId] === undefined) {
-                acc[tourId] = 0
-              }
-              acc[tourId] = acc[tourId] + val.pax
-              return acc
-            },
-            {} as { [tourId: string]: number },
-          )
+          const bookingsForGroup = bookings.filter(b => b.groupId === g.id);
+          const tourPax = bookingsForGroup.reduce((acc, val) => {
+            const tourId = val.tour === null ? "unknown" : val.tour.id;
+            if (acc[tourId] === undefined) {
+              acc[tourId] = 0;
+            }
+            acc[tourId] = acc[tourId] + val.pax;
+            return acc;
+          }, {} as { [tourId: string]: number });
           const colorPax =
             tours.length === 0
               ? []
               : Object.entries(tourPax).map(i => {
-                  const tour = tours.find(t => t.id === i[0])
+                  const tour = tours.find(t => t.id === i[0]);
                   return {
                     color: tour === undefined ? "#24292eb3" : tour.color,
-                    pax: i[1],
-                  }
-                })
-          const byPickup = groupBookinsByPickUp(bookingsForGroup)
-          const groupTotalPax = totalPax(bookingsForGroup)
+                    pax: i[1]
+                  };
+                });
+          const byPickup = groupBookinsByPickUp(bookingsForGroup);
+          const groupTotalPax = totalPax(bookingsForGroup);
           return (
             <div className="group" key={g.id}>
               <div className="groupHeader">
@@ -84,24 +81,24 @@ export const Groups: React.SFC<GroupsProps> = ({
                 <select
                   value={g.driver === undefined ? "" : g.driver.id}
                   onChange={event => {
-                    const newGroupDriverId = event.target.value
-                    console.log("onChange", { newGroupDriverId })
+                    const newGroupDriverId = event.target.value;
+                    console.log("onChange", { newGroupDriverId });
                     const newGroupDriver = drivers.find(
-                      value => value.id === newGroupDriverId,
-                    )
+                      value => value.id === newGroupDriverId
+                    );
                     const groupUpdate: FirestoreUpdate<GroupDocument> = {
                       driver:
                         newGroupDriver === undefined
                           ? fire.FieldValue.delete()
                           : {
                               id: newGroupDriver.id,
-                              name: newGroupDriver.name,
-                            },
-                    }
+                              name: newGroupDriver.name
+                            }
+                    };
                     firestore
                       .collection("groups")
                       .doc(g.id)
-                      .update(groupUpdate)
+                      .update(groupUpdate);
                   }}
                 >
                   <option value=""> - Select driver - </option>
@@ -114,26 +111,26 @@ export const Groups: React.SFC<GroupsProps> = ({
                 <select
                   value={g.bus === undefined ? "" : g.bus.id}
                   onChange={event => {
-                    const newGroupBusId = event.target.value
+                    const newGroupBusId = event.target.value;
                     const newGroupBus = vehicles.find(
-                      value => value.id === newGroupBusId,
-                    )
+                      value => value.id === newGroupBusId
+                    );
                     const groupUpdate: FirestoreUpdate<GroupDocument> = {
                       bus:
                         newGroupBus === undefined
                           ? fire.FieldValue.delete()
                           : {
                               id: newGroupBus.id,
-                              name: newGroupBus.name,
+                              name: newGroupBus.name
                             },
                       maxPax: newGroupBus
                         ? newGroupBus.maxPax
-                        : fire.FieldValue.delete(),
-                    }
+                        : fire.FieldValue.delete()
+                    };
                     firestore
                       .collection("groups")
                       .doc(g.id)
-                      .update(groupUpdate)
+                      .update(groupUpdate);
                   }}
                 >
                   <option value=""> - Select vehicle - </option>
@@ -151,7 +148,7 @@ export const Groups: React.SFC<GroupsProps> = ({
                       style={{
                         backgroundColor: i.color,
                         width: `${(100 * i.pax) /
-                          (g.maxPax || groupTotalPax)}px`,
+                          (g.maxPax || groupTotalPax)}px`
                       }}
                     />
                   ))}
@@ -173,7 +170,7 @@ export const Groups: React.SFC<GroupsProps> = ({
                 </ul>
               </div>
             </div>
-          )
+          );
         })}
       </div>
       <div className="buttonsRow">
@@ -182,5 +179,5 @@ export const Groups: React.SFC<GroupsProps> = ({
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};

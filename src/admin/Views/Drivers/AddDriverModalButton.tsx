@@ -1,45 +1,45 @@
-import * as React from "react"
-import { Button } from "../../../shared/components/Button"
-import { ModalForm } from "../../../shared/components/ModalForm"
-import { DriverDocument } from "../../../shared/types/Driver"
-import { useTextInput } from "../../../shared/hooks/useTextInput"
-import { addNewDriver } from "../../../firebase/firestore/drivers"
-import { logger } from "../../../shared/utils/breadcrumb"
+import * as React from "react";
+import { Button } from "../../../shared/components/Button";
+import { ModalForm } from "../../../shared/components/ModalForm";
+import { DriverDocument } from "../../../shared/types/Driver";
+import { useTextInput } from "../../../shared/hooks/useTextInput";
+import { addNewDriver } from "../../../firebase/firestore/drivers";
+import { logger } from "../../../shared/utils/breadcrumb";
 
 export const AddDriverModalButton = () => {
-  const [showModal, setShowModal] = React.useState(false)
-  const triggerButton = React.useRef<HTMLButtonElement>()
-  const [name, setName, nameInputProps] = useTextInput("")
-  const [phoneNumber, setPhoneNumber, phoneNumberInputProps] = useTextInput("")
-  const [email, setEmail, emailInputProps] = useTextInput("")
+  const [showModal, setShowModal] = React.useState(false);
+  const triggerButton = React.useRef<HTMLButtonElement>(null);
+  const [name, setName, nameInputProps] = useTextInput("");
+  const [phoneNumber, setPhoneNumber, phoneNumberInputProps] = useTextInput("");
+  const [email, setEmail, emailInputProps] = useTextInput("");
   const [submitError, setSubmitError] = React.useState<string | undefined>(
-    undefined,
-  )
+    undefined
+  );
 
   const onSubmit = (event: React.FormEvent<{}>) => {
-    event.preventDefault()
+    event.preventDefault();
     const newDriverDoc: DriverDocument = {
       name,
       phoneNumber,
       email,
-      status: "active",
-    }
+      status: "active"
+    };
     addNewDriver({
       newDriverDoc,
       onSuccess: setInitialState,
       onReject: reason => {
-        setSubmitError(reason.message)
-        logger("Create new driver error", "error", reason)
-      },
-    })
-  }
+        setSubmitError(reason.message);
+        logger("Create new driver error", "error", reason);
+      }
+    });
+  };
   const setInitialState = () => {
-    setShowModal(false)
-    setName("")
-    setPhoneNumber("")
-    setEmail('')
-    setSubmitError(undefined)
-  }
+    setShowModal(false);
+    setName("");
+    setPhoneNumber("");
+    setEmail("");
+    setSubmitError(undefined);
+  };
   return (
     <React.Fragment>
       <Button
@@ -74,5 +74,5 @@ export const AddDriverModalButton = () => {
         </label>
       </ModalForm>
     </React.Fragment>
-  )
-}
+  );
+};
